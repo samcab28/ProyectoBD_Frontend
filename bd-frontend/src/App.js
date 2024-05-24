@@ -1,25 +1,27 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+
+//importaciones del homescreen
+import HomeScreen from './homeScreen/HomeScreen';
+import Login from "./homeScreen/Login";
+import About from "./homeScreen/About";
+
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    return (
+        <div>
+            <BrowserRouter>
+                <Routes>
+                    //path inicial
+                    <Route path='/' element={<HomeScreen />} />
+
+                    <Route path='login' element={<Login />} />
+                    <Route path='about' element ={<About/>}/>
+
+                </Routes>
+            </BrowserRouter>
+        </div>
+    );
 }
 
 export default App;
