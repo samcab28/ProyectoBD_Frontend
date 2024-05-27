@@ -1,4 +1,4 @@
-// src/routes/AdminRoutes.js
+// src/router/RouteAdmin.js
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 
@@ -9,8 +9,8 @@ import Prueba from "../CRUD_Folder/prueba";
 const RouteAdmin = () => {
     return (
         <Routes>
-            <Route path='/admin' element={<InitialAdmin />} />
-            <Route path='/admin/prueba' element={<Prueba />} />
+            <Route path='/' element={<InitialAdmin />} />
+            <Route path='/prueba' element={<Prueba />} />
             {/* Agrega más rutas de administración aquí según sea necesario */}
         </Routes>
     );

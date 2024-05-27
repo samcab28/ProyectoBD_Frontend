@@ -8,9 +8,9 @@ import Login from './homeScreen/Login';
 import About from './homeScreen/About';
 
 // Importación de rutas separadas
-import RouteAdmin from "./router/RouteAdmin";
-import RouteGerente from "./router/RouteGerente";
-import RouteCliente from "./router/RouteCliente";
+import RouteAdmin from './router/RouteAdmin';
+import RouteCliente from './router/RouteCliente';
+import RouteGerente from './router/RouteGerente';
 import RouteVeterinario from './router/RouteVeterinario';
 
 function App() {
@@ -26,10 +26,10 @@ function App() {
                     <Route path='/about' element={<About />} />
 
                     {/* Paths de initial */}
-                    <Route path='/*' element={<RouteVeterinario />} />
-                    <Route path='/*' element={<RouteGerente />} />
-                    <Route path='/*' element={<RouteCliente />} />
-                    <Route path='/*' element={<RouteAdmin />} />
+                    <Route path='/veterinario/*' element={<RouteVeterinario />} />
+                    <Route path='/gerente/*' element={<RouteGerente />} />
+                    <Route path='/cliente/*' element={<RouteCliente />} />
+                    <Route path='/admin/*' element={<RouteAdmin />} />
                 </Routes>
             </BrowserRouter>
         </div>

@@ -8,7 +8,7 @@ import InitialVeterinario from '../initialScreen/InitialVeterinario';
 const RouteVeterinario = () => {
     return (
         <Routes>
-            <Route path='/veterinario' element={<InitialVeterinario />} />
+            <Route path='/' element={<InitialVeterinario />} />
             {/* Agrega más rutas de veterinario aquí según sea necesario */}
         </Routes>
     );
