@@ -13,7 +13,6 @@ function CreatePersona() {
     function handleSubmit(e) {
         e.preventDefault();
 
-        // Convertir tipo de persona a formato requerido
         let tipoPersonaValue;
         switch (tipo) {
             case 'Administrador':
@@ -29,10 +28,9 @@ function CreatePersona() {
                 tipoPersonaValue = 4;
                 break;
             default:
-                tipoPersonaValue = 3; // Por defecto, enviar como cliente
+                tipoPersonaValue = 3;
         }
 
-        // Convertir sexo a formato requerido
         let sexoValue;
         switch (sexo) {
             case 'masculino':
@@ -45,7 +43,7 @@ function CreatePersona() {
                 sexoValue = 3;
                 break;
             default:
-                sexoValue = 3; // Por defecto, enviar como no especificado
+                sexoValue = 3;
         }
 
         const order = ["TipoPersona", "Sexo", "NombrePersona", "ApellidoPersona", "TelefonoPersona", "CorreoPersona", "UsuarioPersona", "PasswordPersona"];
@@ -84,11 +82,6 @@ function CreatePersona() {
 
         console.log(formData);
 
-// Envía formData al servidor
-
-
-        // Simulate a fetch request to a specific URL
-        // Replace 'your-api-endpoint' with your actual API endpoint
         fetch('http://localhost:3001/persona', {
             method: 'POST',
             headers: {
@@ -98,51 +91,39 @@ function CreatePersona() {
         })
             .then(response => {
                 if (response.ok) {
-                    // Handle successful response, e.g., show a success message
-                    console.log('Persona creada exitosamente');
+                    alert('Persona creada exitosamente');
+                    window.location.reload(); // Recargar la página
                 } else {
-                    // Handle error response, e.g., show an error message
                     console.error('Error al crear persona');
                 }
             })
             .catch(error => {
-                // Handle fetch error, e.g., show a generic error message
                 console.error('Error en la solicitud:', error);
             });
-
     }
-
-
 
     return (
         <div>
             <div>Crear persona</div>
-
             <form onSubmit={handleSubmit}>
                 <label>
                     Nombre: <input name="nombre" type="text" value={nombre} onChange={e => setNombre(e.target.value)} />
                 </label><br/>
-
                 <label>
                     Apellido: <input name="apellido" type="text" value={apellido} onChange={e => setApellido(e.target.value)} />
                 </label><br/>
-
                 <label>
                     Correo: <input name="correo" type="email" value={correo} onChange={e => setCorreo(e.target.value)} />
                 </label><br/>
-
                 <label>
                     Teléfono: <input name="telefono" type="tel" value={telefono} onChange={e => setTelefono(e.target.value)} />
                 </label><br/>
-
                 <label>
                     Usuario: <input name="usuario" type="text" value={usuario} onChange={e => setUsuario(e.target.value)} />
                 </label><br/>
-
                 <label>
                     Contraseña: <input name="contrasena" type="password" value={contrasena} onChange={e => setContrasena(e.target.value)} />
                 </label><br/>
-
                 <label>
                     Tipo de persona:
                     <select name="tipo" value={tipo} onChange={e => setTipo(e.target.value)}>
@@ -150,21 +131,18 @@ function CreatePersona() {
                         <option value="Administrador">Administrador</option>
                         <option value="Gerente">Gerente</option>
                         <option value="Veterinario">Veterinario</option>
-
                     </select>
                 </label><br/>
-
                 <label>
                     Sexo:
                     <select name="sexo" value={sexo} onChange={e => setSexo(e.target.value)}>
-                    <option value="masculino">Masculino</option>
+                        <option value="masculino">Masculino</option>
                         <option value="femenino">Femenino</option>
                         <option value="otro">Otro</option>
                     </select>
                 </label><br/>
-
-                <button type="reset"> Reset data</button>
-                <button type="submit"> Guardar</button>
+                <button type="reset">Reset data</button>
+                <button type="submit">Guardar</button>
             </form>
         </div>
     );

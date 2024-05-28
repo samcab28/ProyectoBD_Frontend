@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import CreatePersona from "./CreatePersona";
 
 function PersonaList() {
     const [personas, setPersonas] = useState([]);
@@ -34,6 +35,7 @@ function PersonaList() {
 
     return (
         <div>
+            <CreatePersona/>
             <h2>Listado de Personas</h2>
             <table>
                 <thead>
