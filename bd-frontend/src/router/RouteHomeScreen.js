@@ -13,7 +13,6 @@ const RouteAdmin = () => {
             <Route path='/' element={<HomeScreen />} />
             <Route path='/about' element={<About />} />
             <Route path='/login' element={<Login />} />
-            {/* Agrega más rutas de administración aquí según sea necesario */}
         </Routes>
     );
 };

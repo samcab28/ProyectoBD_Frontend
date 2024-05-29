@@ -1,20 +1,27 @@
+// InitialVeterinario.js
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import '../Styles/PageContainer.css'; // Importa el archivo de estilos
 
-function InitialVetereniario() {
-    const navigate = useNavigate();
-
-    const handleRegresar = () => {
-        navigate('/'); // Cambia '/another' por la ruta deseada
-    };
-
+function InitialVeterinario() {
     return (
-        <div>
-            <div>Pagina central de Veterinario</div>
-            <button onClick={handleRegresar}>Regresar</button>
+        <div className="home-screen">
+            <header className="header">
+                <img src="https://via.placeholder.com/1500x150" alt="Banner" className="header-image" />
+            </header>
+            <nav className="sidebar">
+                <h2>Navegación</h2>
+                <ul>
+                    <li>Veterinarian Navigation Item 1</li>
+                    <li>Veterinarian Navigation Item 2</li>
+                    <li>Veterinarian Navigation Item 3</li>
+                </ul>
+            </nav>
+            <main className="main-content">
+                <h2>Initial Veterinarian Page</h2>
+                <p>Welcome, Veterinarian!</p>
+            </main>
         </div>
     );
-
 }
 
-export default InitialVetereniario;
+export default InitialVeterinario;

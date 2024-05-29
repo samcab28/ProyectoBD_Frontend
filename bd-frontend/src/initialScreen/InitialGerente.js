@@ -1,17 +1,25 @@
+// InitialGerente.js
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import '../Styles/PageContainer.css'; // Importa el archivo de estilos
 
 function InitialGerente() {
-    const navigate = useNavigate();
-
-    const handleRegresar = () => {
-        navigate('/'); // Cambia '/another' por la ruta deseada
-    };
-
     return (
-        <div>
-            <div>Pagina central de gerente</div>
-            <button onClick={handleRegresar}>Regresar</button>
+        <div className="home-screen">
+            <header className="header">
+                <img src="https://via.placeholder.com/1500x150" alt="Banner" className="header-image" />
+            </header>
+            <nav className="sidebar">
+                <h2>Navegación</h2>
+                <ul>
+                    <li>Manager Navigation Item 1</li>
+                    <li>Manager Navigation Item 2</li>
+                    <li>Manager Navigation Item 3</li>
+                </ul>
+            </nav>
+            <main className="main-content">
+                <h2>Initial Manager Page</h2>
+                <p>Welcome, Manager!</p>
+            </main>
         </div>
     );
 }
