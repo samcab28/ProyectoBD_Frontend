@@ -1,7 +1,13 @@
 import React, {useState, useEffect}  from "react";
 import CreateAnimal from "./CreateAnimal";
+import { useNavigate } from 'react-router-dom';
+
 function AnimalList(){
+    const navigate = useNavigate();
     const [animales, setAnimales] = useState([]);
+    const handleRegresar = () => {
+        navigate('/crud'); // Cambia '/another' por la ruta deseada
+    };
 
     function handleDelete(id) {
         // Simulate a fetch request to delete a persona
@@ -60,6 +66,8 @@ function AnimalList(){
                 ))}
                 </tbody>
             </table>
+
+            <button onClick={handleRegresar}>Regresar</button>
         </div>
     );
 }

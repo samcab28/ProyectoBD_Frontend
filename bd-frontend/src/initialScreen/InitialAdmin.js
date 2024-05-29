@@ -8,10 +8,14 @@ function InitialAdmin() {
         navigate('/'); // Cambia '/another' por la ruta deseada
     };
 
+    const handleCrud = () => {
+      navigate('/crud/')
+    };
+
     return (
         <div>
             <div>Pagina central de admin</div>
-            <button>CRUD</button>
+            <button onClick={handleCrud}>CRUD</button>
             <button onClick={handleRegresar}>Regresar</button>
         </div>
     );

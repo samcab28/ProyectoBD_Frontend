@@ -1,10 +1,18 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import CreatePersona from "./CreatePersona";
 
+
+
 function PersonaList() {
+    const navigate = useNavigate();
     const [personas, setPersonas] = useState([]);
     const [tiposPersona, setTiposPersona] = useState({});
     const [sexos, setSexos] = useState({});
+
+    const handleRegresar = () => {
+        navigate('/crud'); // Cambia '/another' por la ruta deseada
+    };
 
     useEffect(() => {
         // Fetch personas
@@ -66,43 +74,45 @@ function PersonaList() {
 
     return (
         <div>
-            <CreatePersona />
+            <CreatePersona/>
             <h2>Listado de Personas</h2>
             <table>
                 <thead>
-                    <tr>
-                        <th>Id</th>
-                        <th>Nombre</th>
-                        <th>Apellido</th>
-                        <th>Correo</th>
-                        <th>Teléfono</th>
-                        <th>Usuario</th>
-                        <th>Contraseña</th>
-                        <th>Puesto</th>
-                        <th>Sexo</th>
-                        <th>Acciones</th>
-                    </tr>
+                <tr>
+                    <th>Id</th>
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+                    <th>Correo</th>
+                    <th>Teléfono</th>
+                    <th>Usuario</th>
+                    <th>Contraseña</th>
+                    <th>Puesto</th>
+                    <th>Sexo</th>
+                    <th>Acciones</th>
+                </tr>
                 </thead>
                 <tbody>
-                    {personas.map(persona => (
-                        <tr key={persona.IdPersona}>
-                            <td>{persona.IdPersona}</td>
-                            <td>{persona.NombrePersona}</td>
-                            <td>{persona.ApellidoPersona}</td>
-                            <td>{persona.CorreoPersona}</td>
-                            <td>{persona.TelefonoPersona}</td>
-                            <td>{persona.UsuarioPersona}</td>
-                            <td>{persona.PasswordPersona}</td>
-                            <td>{tiposPersona[persona.TipoPersona]}</td>
-                            <td>{sexos[persona.Sexo]}</td>
-                            <td>
-                                <button onClick={() => handleDelete(persona.IdPersona)}>Eliminar</button>
-                                <button onClick={() => handleMod(persona.IdPersona)}>Modificar</button>
-                            </td>
-                        </tr>
-                    ))}
+                {personas.map(persona => (
+                    <tr key={persona.IdPersona}>
+                        <td>{persona.IdPersona}</td>
+                        <td>{persona.NombrePersona}</td>
+                        <td>{persona.ApellidoPersona}</td>
+                        <td>{persona.CorreoPersona}</td>
+                        <td>{persona.TelefonoPersona}</td>
+                        <td>{persona.UsuarioPersona}</td>
+                        <td>{persona.PasswordPersona}</td>
+                        <td>{tiposPersona[persona.TipoPersona]}</td>
+                        <td>{sexos[persona.Sexo]}</td>
+                        <td>
+                            <button onClick={() => handleDelete(persona.IdPersona)}>Eliminar</button>
+                            <button onClick={() => handleMod(persona.IdPersona)}>Modificar</button>
+                        </td>
+                    </tr>
+                ))}
                 </tbody>
             </table>
+
+            <button onClick={handleRegresar}>Regresar</button>
         </div>
     );
 }

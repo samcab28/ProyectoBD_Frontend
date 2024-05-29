@@ -20,12 +20,15 @@ function CrudMaster () {
         navigate('/crud/mascota')
     };
 
+
     return (
         <div>
             <div>Crud Master</div>
             <button onClick={handlePersona}>crud de personas</button>
             <button onClick={handleAnimal}>Crud de animales</button>
             <button onClick={handleMascota}>Crud de mascotas</button>
+
+            <br/>
             <button onClick={handleRegresar}>Regresar</button>
         </div>
 

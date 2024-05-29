@@ -7,7 +7,7 @@ import CrudMaster from "../CRUD_Folder/CrudMaster";
 //importacion de diferentes crud
 import RudPersona from "../CRUD_Folder/crudPersona/CrudPersona";
 import CrudAnimal from "../CRUD_Folder/crudAnimal/CrudAnimal";
-import InitialAdmin from "../initialScreen/InitialAdmin";
+import CrudMascota from "../CRUD_Folder/crudMascota/CrudMascota";
 
 const RouteCRUD = () => {
     return (
@@ -15,6 +15,7 @@ const RouteCRUD = () => {
             <Route path='/' element={<CrudMaster />} />
             <Route path='/persona' element={<RudPersona />} />;
             <Route path='/animal' element={<CrudAnimal />} />;
+            <Route path='/mascota' element={<CrudMascota />} />;
         </Routes>
     );
 };
