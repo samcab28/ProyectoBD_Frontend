@@ -1,5 +1,5 @@
 import React, {useState, useEffect}  from "react";
-
+import CreateAnimal from "./CreateAnimal";
 function AnimalList(){
     const [animales, setAnimales] = useState([]);
 
@@ -13,8 +13,9 @@ function AnimalList(){
                 if (response.ok) {
                     // Remove the deleted persona from the state
                     setAnimales(animales.filter(persona => persona.IdAnimal !== id));
+                    window.location.reload();
                 } else {
-                    console.error('Error deleting Animal');
+                    alert('Error deleting Animal');
                 }
             })
             .catch(error => console.error('Error deleting animal:', error));
@@ -35,6 +36,7 @@ function AnimalList(){
 
     return (
         <div>
+            <CreateAnimal/>
             <h2>Listado de Animales</h2>
             <table>
                 <thead>

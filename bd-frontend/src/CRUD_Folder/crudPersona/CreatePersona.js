@@ -94,7 +94,7 @@ function CreatePersona() {
                     alert('Persona creada exitosamente');
                     window.location.reload(); // Recargar la página
                 } else {
-                    console.error('Error al crear persona');
+                    alert('Error al crear persona');
                 }
             })
             .catch(error => {

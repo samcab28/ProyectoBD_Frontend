@@ -26,8 +26,9 @@ function PersonaList() {
                 if (response.ok) {
                     // Remove the deleted persona from the state
                     setPersonas(personas.filter(persona => persona.IdPersona !== id));
+                    window.location.reload();
                 } else {
-                    console.error('Error deleting persona');
+                    alert('Error deleting persona');
                 }
             })
             .catch(error => console.error('Error deleting persona:', error));

@@ -10,7 +10,7 @@ import RouteAdmin from './router/RouteAdmin';
 import RouteCliente from './router/RouteCliente';
 import RouteGerente from './router/RouteGerente';
 import RouteVeterinario from './router/RouteVeterinario';
-
+import RouteCRUD from "./router/RouteCRUD";
 function App() {
     return (
         <div>
@@ -24,6 +24,7 @@ function App() {
                     <Route path='/gerente/*' element={<RouteGerente />} />
                     <Route path='/cliente/*' element={<RouteCliente />} />
                     <Route path='/admin/*' element={<RouteAdmin />} />
+                    <Route path='/crud/*' element={<RouteCRUD />} />
                 </Routes>
             </BrowserRouter>
         </div>
