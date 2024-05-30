@@ -23,9 +23,10 @@ function HomeScreen() {
             <nav className="sidebar">
                 <h2>Navegación</h2>
                 <ul>
-                    <li><Link to="/"><button>Home</button></Link></li>
+                    <li><Link to="/home"><button>Home</button></Link></li>
                     <li><Link to="/about"><button>About</button></Link></li>
-                    <li><Link to="/login"><button>Login</button></Link></li>
+                    <li><Link to="/"><button>Login</button></Link></li>
+                    <li><Link to="/carrito"><button>Carrito</button></Link></li>
                 </ul>
             </nav>
             <main className="main-content">
