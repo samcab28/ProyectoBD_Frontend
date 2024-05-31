@@ -1,11 +1,11 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { UserContext } from '../context/UserContext'; // Importa el contexto de usuario
-import '../Styles/PageContainer.css'; // Asegúrate de importar el archivo CSS
-import fondoVet from '../Imagenes/FondoVet.jpg';
+import { UserContext } from '../../context/UserContext'; // Importa el contexto de usuario
+import '../../Styles/PageContainer.css'; // Asegúrate de importar el archivo CSS
+import fondoVet from '../../Imagenes/FondoVet.jpg';
+import NavCliente from "./NavCliente";
 
-
-function HomeScreen() {
+function ProductoCliente() {
     const [products, setProducts] = useState([]);
     const { user } = useContext(UserContext); // Obtén la información del usuario del contexto
 
@@ -40,26 +40,16 @@ function HomeScreen() {
                 .catch(error => console.error('Error al agregar producto al carrito:', error));
         } else {
             console.error('Usuario no autenticado');
-            // Aquí podrías redirigir al usuario a la página de login o mostrar un mensaje
+            // Aquí podrías redirigir al usuario a la página de pantallaLogin o mostrar un mensaje
         }
     };
 
     return (
         <div className="home-screen">
             <header className="header">
-            <img src={fondoVet} alt="Veterinary Clinic" className="header-image" />
+                <img src={fondoVet} alt="Veterinary Clinic" className="header-image" />
             </header>
-            <nav className="sidebar">
-                <h2>Navegación</h2>
-                <ul>
-                    <li><Link to="/home"><button>Products</button></Link></li>
-                    <li><Link to="/about"><button>About</button></Link></li>
-                    <li><Link to="/"><button>Logout</button></Link></li>
-                    <li><Link to="/carrito"><button>Carrito</button></Link></li>
-                    <li><Link to="/mascotas"><button>Mascotas</button></Link></li>
-                    <li><Link to="/citasmedicas"><button>Citas Médicas</button></Link></li>
-                </ul>
-            </nav>
+            <NavCliente />
             <main className="main-content">
                 <h2>Lista de Productos</h2>
                 <div className="product-grid">
@@ -81,4 +71,4 @@ function HomeScreen() {
     );
 }
 
-export default HomeScreen;
+export default ProductoCliente;

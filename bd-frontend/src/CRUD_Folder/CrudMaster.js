@@ -32,6 +32,11 @@ function CrudMaster() {
                     </Link>
                 </li>
                 <li>
+                    <Link to="/crud/resena">
+                        <button>Crud de resena</button>
+                    </Link>
+                </li>
+                <li>
                     <Link to="/">
                         <button>regresar</button>
                     </Link>

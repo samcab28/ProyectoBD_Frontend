@@ -3,19 +3,23 @@ import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 
 // Importación de componentes de administración
-import InitialAdmin from '../initialScreen/InitialAdmin';
+import InitialAdmin from '../pantallas/pantallaAdmin/InitialAdmin';
 
-//crud de personas
-import RudPersona from "../CRUD_Folder/crudPersona/CrudPersona";
-import CrudAnimal from "../CRUD_Folder/crudAnimal/CrudAnimal";
+//importaciones de admin
+import CitasMedicasAdmin from "../pantallas/pantallaAdmin/CitasMedicasAdmin";
+import CobroAdmin from "../pantallas/pantallaAdmin/CobroAdmin";
+import ExpedienteClienteAdmin from "../pantallas/pantallaAdmin/ExpedienteClienteAdmin";
+import ProductoAdmin from "../pantallas/pantallaAdmin/ProductoAdmin";
 
 
 const RouteAdmin = () => {
     return (
         <Routes>
             <Route path='/' element={<InitialAdmin />} />
-            <Route path='/crud/persona' element={<RudPersona />} />;
-            <Route path='/crud/animal' element={<CrudAnimal />} />;
+            <Route path='/citasMedica' element={<CitasMedicasAdmin />} />
+            <Route path='/cobro' element={<CobroAdmin />} />
+            <Route path='/expedienteCliente' element={<ExpedienteClienteAdmin />} />
+            <Route path='/producto' element={<ProductoAdmin />} />
         </Routes>
     );
 };
