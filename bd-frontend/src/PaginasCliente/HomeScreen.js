@@ -4,7 +4,6 @@ import { UserContext } from '../context/UserContext'; // Importa el contexto de 
 import '../Styles/PageContainer.css'; // Asegúrate de importar el archivo CSS
 import fondoVet from '../Imagenes/FondoVet.jpg';
 
-
 function HomeScreen() {
     const [products, setProducts] = useState([]);
     const { user } = useContext(UserContext); // Obtén la información del usuario del contexto
@@ -15,6 +14,7 @@ function HomeScreen() {
             .then(data => {
                 console.log("Productos fetched:", data); // Debug line
                 setProducts(data);
+                data.forEach(product => console.log("Image URL:", product.IdURL)); // Imprimir las URLs de las imágenes
             })
             .catch(error => console.error('Error fetching productos:', error));
     }, []);
@@ -47,7 +47,7 @@ function HomeScreen() {
     return (
         <div className="home-screen">
             <header className="header">
-            <img src={fondoVet} alt="Veterinary Clinic" className="header-image" />
+                <img src={fondoVet} alt="Veterinary Clinic" className="header-image" />
             </header>
             <nav className="sidebar">
                 <h2>Navegación</h2>
@@ -66,11 +66,11 @@ function HomeScreen() {
                     {products.map(product => (
                         <div className="product-card" key={product.IdProducto}>
                             <div className="product-info">
+                                <img src={`http://localhost:3001/images/${product.IdURL}`} alt={product.NombreProducto} className="product-image" />
                                 <p><strong>Nombre:</strong> {product.NombreProducto}</p>
                                 <p><strong>Precio:</strong> {product.PrecioProducto}</p>
                                 <p><strong>Disponibles:</strong> {product.CantidadDisponible}</p>
                                 <p><strong>Descripción:</strong> {product.DescripcionProducto}</p>
-                                <p><strong>URL:</strong> {product.IdURL}</p>
                                 <button onClick={() => handleAddToCart(product.IdProducto)}>Agregar al Carrito</button>
                             </div>
                         </div>
