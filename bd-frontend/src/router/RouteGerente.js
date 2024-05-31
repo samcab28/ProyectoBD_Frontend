@@ -3,13 +3,21 @@ import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 
 // Importación de componentes de gerente
-import InitialGerente from '../initialScreen/InitialGerente';
+import InitialGerente from '../pantallas/pantallaGerente/InitialGerente';
+import CitaMedicaGerente from "../pantallas/pantallaGerente/CitaMedicaGerente";
+import CobroGerente from "../pantallas/pantallaGerente/CobroGerente";
+import ExpedienteGerente from "../pantallas/pantallaGerente/ExpedienteGerente";
+import ProductoGerente from "../pantallas/pantallaGerente/ProductoGerente";
+
 
 const RouteGerente = () => {
     return (
         <Routes>
             <Route path='/' element={<InitialGerente />} />
-            {/* Agrega más rutas de gerente aquí según sea necesario */}
+            <Route path='/citaMedica' element={<CitaMedicaGerente />} />
+            <Route path='/cobro' element={<CobroGerente />} />
+            <Route path='/expediente' element={<ExpedienteGerente />} />
+            <Route path='/producto' element={<ProductoGerente />} />
         </Routes>
     );
 };

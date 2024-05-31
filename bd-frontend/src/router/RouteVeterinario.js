@@ -3,13 +3,19 @@ import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 
 // Importación de componentes de veterinario
-import InitialVeterinario from '../initialScreen/InitialVeterinario';
+import InitialVeterinario from '../pantallas/pantallaVeterinario/InitialVeterinario';
+
+import CitaMedicaVet from "../pantallas/pantallaVeterinario/CitaMedicaVet";
+import MascotaVet from "../pantallas/pantallaVeterinario/MascotaVet";
+import MedicamentoVet from "../pantallas/pantallaVeterinario/MedicamentoVet";
 
 const RouteVeterinario = () => {
     return (
         <Routes>
             <Route path='/' element={<InitialVeterinario />} />
-            {/* Agrega más rutas de veterinario aquí según sea necesario */}
+            <Route path='/citaMedica' element={<CitaMedicaVet />} />
+            <Route path='/mascota' element={<MascotaVet />} />
+            <Route path='/medicamento' element={<MedicamentoVet />} />
         </Routes>
     );
 };
