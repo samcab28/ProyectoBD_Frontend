@@ -8,6 +8,7 @@ import About from "../PaginasCliente/About";
 import Login from "../PaginasCliente/Login";
 import Carrito from "../PaginasCliente/Carrito"
 import Mascotas from '../PaginasCliente/Mascotas';
+import CitasMedicas from '../PaginasCliente/CitasCliente';
 
 const RouteHomeScreen = () => {
     return (
@@ -18,6 +19,7 @@ const RouteHomeScreen = () => {
             <Route path='/login' element={<Login />} />
             <Route path='/carrito' element={<Carrito />} />
             <Route path='/mascotas' element={<Mascotas />} />
+            <Route path='/citasmedicas' element={<CitasMedicas />} />
         </Routes>
     );
 };
