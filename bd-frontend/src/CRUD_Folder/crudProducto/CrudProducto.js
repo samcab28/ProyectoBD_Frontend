@@ -62,14 +62,15 @@ function ProductoList(){
                 <tbody>
                 {productos.map(productos => (
                     <tr key={productos.IdProducto}>
+                        <td>{productos.IdProducto}</td>
                         <td>{productos.NombreProducto}</td>
                         <td>{productos.PrecioProducto}</td>
                         <td>{productos.DescripcionProducto}</td>
                         <td>{productos.CantidadDisponible}</td>
-                        <td>{productos.NonbreSucursal}</td>
+                        <td>{productos.NombreSucursal}</td>
                         <td>{productos.TipoProducto}</td>
                         <td>{productos.NombreMarcaPro}</td>
-                        <td>{productos.Dirreccion}</td>
+                        <td>{productos.Dirrecion}</td>
                         <td>
                             <button onClick={() => handleDelete(productos.IdProducto)}>Eliminar</button>
                             <button onClick={() => handleMod(productos.IdProducto)}>Modificar</button>
