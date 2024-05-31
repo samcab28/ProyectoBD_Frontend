@@ -10,7 +10,7 @@ import CrudAnimal from "../CRUD_Folder/crudAnimal/CrudAnimal";
 import CrudMascota from "../CRUD_Folder/crudMascota/CrudMascota";
 import CrudSucursal from "../CRUD_Folder/crudSucursal/CrudSucursal";
 import CrudProducto from "../CRUD_Folder/crudProducto/CrudProducto";
-
+import CrudResena from "../CRUD_Folder/crudResena/CrudResena";
 
 const RouteCRUD = () => {
     return (
@@ -21,6 +21,7 @@ const RouteCRUD = () => {
             <Route path='/mascota' element={<CrudMascota />} />;
             <Route path='/sucursal' element={<CrudSucursal />} />;
             <Route path='/producto' element={<CrudProducto />} />;
+            <Route path='/resena' element={<CrudResena />} />;
         </Routes>
     );
 };
