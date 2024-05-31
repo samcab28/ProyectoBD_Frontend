@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom'
+import CreateProducto from './CreateProducto';
 
 function ProductoList(){
     const navigate = useNavigate();
@@ -44,6 +45,7 @@ function ProductoList(){
     return(
         <div>
             <h1>Crud de productos</h1>
+            <CreateProducto/>
             <h2>Listado de productos</h2>
             <table>
                 <thead>
