@@ -10,12 +10,7 @@ function Mascotas() {
     useEffect(() => {
         if (user && user.IdPersona) {
             fetch(`http://localhost:3001/mascotaDuenio/${user.IdPersona}`)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json();
-                })
+                .then(response => response.json())
                 .then(data => {
                     console.log("Mascotas fetched:", data);
                     setMascotas(data);

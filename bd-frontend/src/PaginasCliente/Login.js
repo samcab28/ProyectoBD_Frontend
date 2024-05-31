@@ -1,17 +1,16 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import '../Styles/Login.css'; // Importa el archivo de estilos del login
-import { UserContext } from '../context/UserContext.js'; // Importa el UserContext
+import { UserContext } from '../context/UserContext';
+import '../Styles/Login.css';
 
 function Login() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [personas, setPersonas] = useState([]);
+    const { setUser } = useContext(UserContext);
     const navigate = useNavigate();
-    const { setUser } = useContext(UserContext); // Usa el UserContext
 
     useEffect(() => {
-        // Fetch personas
         fetch('http://localhost:3001/persona')
             .then(response => response.json())
             .then(data => {
@@ -21,28 +20,20 @@ function Login() {
             .catch(error => console.error('Error fetching personas:', error));
     }, []);
 
-    // Function to handle changes in the username input
     const handleChangeUsername = (event) => {
         setUsername(event.target.value);
     };
 
-    // Function to handle changes in the password input
     const handleChangePassword = (event) => {
         setPassword(event.target.value);
     };
 
-    // Function to handle form submission
     const handleSubmit = (event) => {
         event.preventDefault();
-        console.log('Username:', username);
-        console.log('Password:', password);
-
-        // Find if the provided username and password match any persona
         const foundPersona = personas.find(persona => persona.UsuarioPersona === username && persona.PasswordPersona === password);
 
         if (foundPersona) {
-            console.log('Login successful');
-            setUser(foundPersona); // Actualiza el estado del usuario en el contexto
+            setUser(foundPersona); // Almacena el usuario en el contexto y en localStorage
             switch (foundPersona.TipoPersona) {
                 case 1:
                     navigate('/admin');
@@ -61,15 +52,12 @@ function Login() {
             }
         } else {
             console.log('Invalid username or password');
-            // Display an error message or perform any other action for invalid login
         }
 
-        // Reset form fields after submission
         setUsername('');
         setPassword('');
     };
 
-    // Function to handle "Continue without logging in" button
     const handleContinueWithoutLogin = () => {
         navigate('/cliente');
     };
