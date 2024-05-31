@@ -1,20 +1,27 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { UserContext } from '../context/UserContext'; // Importa el contexto de usuario
-import '../Styles/PageContainer.css'; // Asegúrate de importar el archivo CSS
+import { UserContext } from '../context/UserContext';
+import '../Styles/PageContainer.css';
 
 function Mascotas() {
     const [mascotas, setMascotas] = useState([]);
-    const { user } = useContext(UserContext); // Obtén la información del usuario del contexto
+    const { user } = useContext(UserContext);
 
     useEffect(() => {
-        fetch(`http://localhost:3001/mascotas?userId=${user.IdPersona}`)
-            .then(response => response.json())
-            .then(data => {
-                console.log("Mascotas fetched:", data); // Debug line
-                setMascotas(data);
-            })
-            .catch(error => console.error('Error fetching mascotas:', error));
+        if (user && user.IdPersona) {
+            fetch(`http://localhost:3001/mascotaDuenio/${user.IdPersona}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log("Mascotas fetched:", data);
+                    setMascotas(data);
+                })
+                .catch(error => console.error('Error fetching mascotas:', error));
+        }
     }, [user]);
 
     return (
@@ -39,13 +46,12 @@ function Mascotas() {
                         <div className="product-card" key={mascota.IdMascota}>
                             <div className="product-info">
                                 <p><strong>Nombre:</strong> {mascota.NombreMascota}</p>
-                                <p><strong>Raza:</strong> {mascota.Raza}</p>
+                                <p><strong>Raza:</strong> {mascota.RazaAnimal}</p>
                                 <p><strong>Edad:</strong> {mascota.Edad}</p>
                             </div>
                         </div>
                     ))}
                 </div>
-                {user && <p>Bienvenido, {user.NombrePersona}</p>}
             </main>
         </div>
     );

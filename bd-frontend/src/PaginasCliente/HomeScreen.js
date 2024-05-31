@@ -47,7 +47,6 @@ function HomeScreen() {
                         </div>
                     ))}
                 </div>
-                {user && <p>Bienvenido, {user.NombrePersona}</p>}
             </main>
         </div>
     );
