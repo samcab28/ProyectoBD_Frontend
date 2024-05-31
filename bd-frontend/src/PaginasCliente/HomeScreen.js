@@ -2,6 +2,8 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { UserContext } from '../context/UserContext'; // Importa el contexto de usuario
 import '../Styles/PageContainer.css'; // Asegúrate de importar el archivo CSS
+import fondoVet from '../Imagenes/FondoVet.jpg';
+
 
 function HomeScreen() {
     const [products, setProducts] = useState([]);
@@ -17,10 +19,35 @@ function HomeScreen() {
             .catch(error => console.error('Error fetching productos:', error));
     }, []);
 
+    const handleAddToCart = (IdProducto) => {
+        if (user && user.IdPersona) {
+            fetch('http://localhost:3001/carrito', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    IdPersona: user.IdPersona,
+                    IdProducto: IdProducto,
+                    Cantidad: 1
+                })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log("Producto agregado al carrito:", data);
+                    // Aquí podrías añadir algún mensaje de confirmación para el usuario
+                })
+                .catch(error => console.error('Error al agregar producto al carrito:', error));
+        } else {
+            console.error('Usuario no autenticado');
+            // Aquí podrías redirigir al usuario a la página de login o mostrar un mensaje
+        }
+    };
+
     return (
         <div className="home-screen">
             <header className="header">
-                <img src="https://via.placeholder.com/1500x150" alt="Banner" className="header-image" />
+            <img src={fondoVet} alt="Veterinary Clinic" className="header-image" />
             </header>
             <nav className="sidebar">
                 <h2>Navegación</h2>
@@ -44,6 +71,7 @@ function HomeScreen() {
                                 <p><strong>Disponibles:</strong> {product.CantidadDisponible}</p>
                                 <p><strong>Descripción:</strong> {product.DescripcionProducto}</p>
                                 <p><strong>URL:</strong> {product.IdURL}</p>
+                                <button onClick={() => handleAddToCart(product.IdProducto)}>Agregar al Carrito</button>
                             </div>
                         </div>
                     ))}
