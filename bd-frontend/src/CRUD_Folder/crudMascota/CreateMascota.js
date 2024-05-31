@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 
+
 function CreateMascota() {
     const [nombreMascota, setNombreMascota] = useState('');
     const [edad, setEdad] = useState('');
