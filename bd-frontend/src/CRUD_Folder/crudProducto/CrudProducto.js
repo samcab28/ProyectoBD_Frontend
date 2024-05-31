@@ -3,7 +3,42 @@ import { useNavigate } from 'react-router-dom'
 
 function ProductoList(){
     const navigate = useNavigate();
-    const [mascotas, setMascotas] = useState([]);
+    const [productos, setProductos] = useState([]);
+    
+    // fetch producto
+    useEffect(() => {
+        // Fetch personas
+        fetch('http://localhost:3001/producto')
+            .then(response => response.json())
+            .then(data => {
+                console.log("Productos fetched:", data); // Debug line
+                setProductos(data);
+            })
+            .catch(error => console.error('Error fetching producto:', error));
+    }, [])
+
+    function handleDelete(id) {
+        fetch(`http://localhost:3001/producto/${id}`, {
+            method: 'DELETE',
+        })
+            .then(response => {
+                if (response.ok) {
+                    setProductos(productos.filter(productos => productos.IdProducto!== id));
+                    window.location.reload();
+                } else {
+                    alert('Error deleting producto');
+                }
+            })
+            .catch(error => console.error('Error deleting producto:', error));
+    }
+
+    const handleRegresar = () => {
+        navigate('/crud'); // Cambia '/another' por la ruta deseada
+    };
+
+    const handleMod = () => {
+        console.log("implementar");
+    };
 
 
     return(
@@ -15,24 +50,29 @@ function ProductoList(){
                 <tr>
                     <th>Id</th>
                     <th>Nombre</th>
-                    <th>Edad</th>
-                    <th>Sexo</th>
-                    <th>Animal</th>
-                    <th>Nombre Duegno</th>
+                    <th>Precio</th>
+                    <th>Decripcion</th>
+                    <th>Cantidad</th>
+                    <th>Sucursal</th>
+                    <th>Tipo de producto</th>
+                    <th>Marca</th>
+                    <th>URL</th>
                 </tr>
                 </thead>
                 <tbody>
-                {mascotas.map(mascota => (
-                    <tr key={mascota.IdMascota}>
-                        <td>{mascota.IdMascota}</td>
-                        <td>{mascota.NombreMascota}</td>
-                        <td>{mascota.Edad}</td>
-                        <td>{mascota.TipoSexo}</td>
-                        <td>{mascota.NombreAnimal}</td>
-                        <td>{mascota.NombrePersona}</td>
+                {productos.map(productos => (
+                    <tr key={productos.IdProducto}>
+                        <td>{productos.NombreProducto}</td>
+                        <td>{productos.PrecioProducto}</td>
+                        <td>{productos.DescripcionProducto}</td>
+                        <td>{productos.CantidadDisponible}</td>
+                        <td>{productos.NonbreSucursal}</td>
+                        <td>{productos.TipoProducto}</td>
+                        <td>{productos.NombreMarcaPro}</td>
+                        <td>{productos.Dirreccion}</td>
                         <td>
-                            <button onClick={() => handleDelete(mascota.IdMascota)}>Eliminar</button>
-                            <button onClick={() => handleMod(mascota.IdMascota)}>Modificar</button>
+                            <button onClick={() => handleDelete(productos.IdProducto)}>Eliminar</button>
+                            <button onClick={() => handleMod(productos.IdProducto)}>Modificar</button>
                         </td>
                     </tr>
                 ))}

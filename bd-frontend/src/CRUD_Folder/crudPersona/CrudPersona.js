@@ -103,7 +103,7 @@ function PersonaList() {
                         <td>{persona.PasswordPersona}</td>
                         <td>{tiposPersona[persona.TipoPersona]}</td>
                         <td>{sexos[persona.Sexo]}</td>
-                   
+                        
                     </tr>
                 ))}
                 </tbody>
