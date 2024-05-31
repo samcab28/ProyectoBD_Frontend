@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { UserContext } from '../context/UserContext'; // Importa el contexto de usuario
 import '../Styles/PageContainer.css'; // Asegúrate de importar el archivo CSS
 
 function HomeScreen() {
     const [products, setProducts] = useState([]);
+    const { user } = useContext(UserContext); // Obtén la información del usuario del contexto
 
     useEffect(() => {
         fetch('http://localhost:3001/producto')
@@ -23,10 +25,11 @@ function HomeScreen() {
             <nav className="sidebar">
                 <h2>Navegación</h2>
                 <ul>
-                    <li><Link to="/home"><button>Home</button></Link></li>
+                    <li><Link to="/home"><button>Products</button></Link></li>
                     <li><Link to="/about"><button>About</button></Link></li>
-                    <li><Link to="/"><button>Login</button></Link></li>
+                    <li><Link to="/"><button>Logout</button></Link></li>
                     <li><Link to="/carrito"><button>Carrito</button></Link></li>
+                    <li><Link to="/mascotas"><button>Mascotas</button></Link></li>
                 </ul>
             </nav>
             <main className="main-content">
@@ -44,6 +47,7 @@ function HomeScreen() {
                         </div>
                     ))}
                 </div>
+                {user && <p>Bienvenido, {user.NombrePersona}</p>}
             </main>
         </div>
     );

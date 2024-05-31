@@ -3,19 +3,19 @@ import { Link } from 'react-router-dom';
 import { UserContext } from '../context/UserContext'; // Importa el contexto de usuario
 import '../Styles/PageContainer.css'; // Asegúrate de importar el archivo CSS
 
-function InitialCliente() {
-    const [products, setProducts] = useState([]);
+function Mascotas() {
+    const [mascotas, setMascotas] = useState([]);
     const { user } = useContext(UserContext); // Obtén la información del usuario del contexto
 
     useEffect(() => {
-        fetch('http://localhost:3001/producto')
+        fetch(`http://localhost:3001/mascotas?userId=${user.IdPersona}`)
             .then(response => response.json())
             .then(data => {
-                console.log("Productos fetched:", data); // Debug line
-                setProducts(data);
+                console.log("Mascotas fetched:", data); // Debug line
+                setMascotas(data);
             })
-            .catch(error => console.error('Error fetching productos:', error));
-    }, []);
+            .catch(error => console.error('Error fetching mascotas:', error));
+    }, [user]);
 
     return (
         <div className="home-screen">
@@ -33,16 +33,14 @@ function InitialCliente() {
                 </ul>
             </nav>
             <main className="main-content">
-                <h2>Lista de Productos</h2>
+                <h2>Lista de Mascotas</h2>
                 <div className="product-grid">
-                    {products.map(product => (
-                        <div className="product-card" key={product.IdProducto}>
+                    {mascotas.map(mascota => (
+                        <div className="product-card" key={mascota.IdMascota}>
                             <div className="product-info">
-                                <p><strong>Nombre:</strong> {product.NombreProducto}</p>
-                                <p><strong>Precio:</strong> {product.PrecioProducto}</p>
-                                <p><strong>Disponibles:</strong> {product.CantidadDisponible}</p>
-                                <p><strong>Descripción:</strong> {product.DescripcionProducto}</p>
-                                <p><strong>URL:</strong> {product.IdURL}</p>
+                                <p><strong>Nombre:</strong> {mascota.NombreMascota}</p>
+                                <p><strong>Raza:</strong> {mascota.Raza}</p>
+                                <p><strong>Edad:</strong> {mascota.Edad}</p>
                             </div>
                         </div>
                     ))}
@@ -53,4 +51,4 @@ function InitialCliente() {
     );
 }
 
-export default InitialCliente;
+export default Mascotas;

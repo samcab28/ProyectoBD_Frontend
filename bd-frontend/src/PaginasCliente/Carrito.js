@@ -4,7 +4,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import '../Styles/PageContainer.css'; // Importa el archivo de estilos
 
-function About() {
+function Carrito() {
     return (
         <div className="home-screen">
             <header className="header">
@@ -13,10 +13,11 @@ function About() {
             <nav className="sidebar">
                 <h2>Navegación</h2>
                 <ul>
-                    <li><Link to="/home"><button>Home</button></Link></li>
+                    <li><Link to="/home"><button>Products</button></Link></li>
                     <li><Link to="/about"><button>About</button></Link></li>
-                    <li><Link to="/"><button>Login</button></Link></li>
+                    <li><Link to="/"><button>Logout</button></Link></li>
                     <li><Link to="/carrito"><button>Carrito</button></Link></li>
+                    <li><Link to="/mascotas"><button>Mascotas</button></Link></li>
                 </ul>
             </nav>
             <main className="main-content">
@@ -31,4 +32,4 @@ function About() {
     );
 }
 
-export default About;
+export default Carrito;

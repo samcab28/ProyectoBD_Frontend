@@ -1,14 +1,15 @@
-// src/router/RouteAdmin.js
+// src/router/RouteHomeScreen.js
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 
 // Importación de componentes de administración
-import HomeScreen from "../homeScreen/HomeScreen";
-import About from "../homeScreen/About";
-import Login from "../homeScreen/Login";
-import Carrito from "../homeScreen/Carrito"
+import HomeScreen from "../PaginasCliente/HomeScreen";
+import About from "../PaginasCliente/About";
+import Login from "../PaginasCliente/Login";
+import Carrito from "../PaginasCliente/Carrito"
+import Mascotas from '../PaginasCliente/Mascotas';
 
-const RouteAdmin = () => {
+const RouteHomeScreen = () => {
     return (
         <Routes>
             <Route path='/' element={<Login />} />
@@ -16,8 +17,9 @@ const RouteAdmin = () => {
             <Route path='/about' element={<About />} />
             <Route path='/login' element={<Login />} />
             <Route path='/carrito' element={<Carrito />} />
+            <Route path='/mascotas' element={<Mascotas />} />
         </Routes>
     );
 };
 
-export default RouteAdmin;
+export default RouteHomeScreen;

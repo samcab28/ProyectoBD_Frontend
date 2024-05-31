@@ -1,12 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../Styles/Login.css'; // Importa el archivo de estilos del login
+import { UserContext } from '../context/UserContext.js'; // Importa el UserContext
 
 function Login() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [personas, setPersonas] = useState([]);
     const navigate = useNavigate();
+    const { setUser } = useContext(UserContext); // Usa el UserContext
 
     useEffect(() => {
         // Fetch personas
@@ -40,6 +42,7 @@ function Login() {
 
         if (foundPersona) {
             console.log('Login successful');
+            setUser(foundPersona); // Actualiza el estado del usuario en el contexto
             switch (foundPersona.TipoPersona) {
                 case 1:
                     navigate('/admin');
