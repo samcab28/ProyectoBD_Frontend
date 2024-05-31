@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { UserContext } from '../context/UserContext'; // Importa el contexto de usuario
 import '../Styles/PageContainer.css'; // Asegúrate de importar el archivo CSS
 
-function InitialCliente() {
+function HomeScreen() {
     const [products, setProducts] = useState([]);
     const { user } = useContext(UserContext); // Obtén la información del usuario del contexto
 
@@ -16,6 +16,31 @@ function InitialCliente() {
             })
             .catch(error => console.error('Error fetching productos:', error));
     }, []);
+
+    const handleAddToCart = (IdProducto) => {
+        if (user && user.IdPersona) {
+            fetch('http://localhost:3001/carrito', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    IdPersona: user.IdPersona,
+                    IdProducto: IdProducto,
+                    Cantidad: 1
+                })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log("Producto agregado al carrito:", data);
+                    // Aquí podrías añadir algún mensaje de confirmación para el usuario
+                })
+                .catch(error => console.error('Error al agregar producto al carrito:', error));
+        } else {
+            console.error('Usuario no autenticado');
+            // Aquí podrías redirigir al usuario a la página de login o mostrar un mensaje
+        }
+    };
 
     return (
         <div className="home-screen">
@@ -44,6 +69,7 @@ function InitialCliente() {
                                 <p><strong>Disponibles:</strong> {product.CantidadDisponible}</p>
                                 <p><strong>Descripción:</strong> {product.DescripcionProducto}</p>
                                 <p><strong>URL:</strong> {product.IdURL}</p>
+                                <button onClick={() => handleAddToCart(product.IdProducto)}>Agregar al Carrito</button>
                             </div>
                         </div>
                     ))}
@@ -53,4 +79,4 @@ function InitialCliente() {
     );
 }
 
-export default InitialCliente;
+export default HomeScreen;

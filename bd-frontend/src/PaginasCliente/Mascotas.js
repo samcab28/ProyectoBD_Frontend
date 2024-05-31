@@ -42,6 +42,7 @@ function Mascotas() {
                         <div className="product-card" key={mascota.IdMascota}>
                             <div className="product-info">
                                 <p><strong>Nombre:</strong> {mascota.NombreMascota}</p>
+                                <p><strong>Animal:</strong> {mascota.NombreAnimal}</p>
                                 <p><strong>Raza:</strong> {mascota.RazaAnimal}</p>
                                 <p><strong>Edad:</strong> {mascota.Edad}</p>
                             </div>
