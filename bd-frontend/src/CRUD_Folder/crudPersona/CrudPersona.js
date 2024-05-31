@@ -103,17 +103,14 @@ function PersonaList() {
                         <td>{persona.PasswordPersona}</td>
                         <td>{tiposPersona[persona.TipoPersona]}</td>
                         <td>{sexos[persona.Sexo]}</td>
-                        <td>
-                            <button onClick={() => handleDelete(persona.IdPersona)}>Eliminar</button>
-                            <button onClick={() => handleMod(persona.IdPersona)}>Modificar</button>
-                        </td>
+                   
                     </tr>
                 ))}
                 </tbody>
             </table>
 
-            <button onClick={handleRegresar}>Regresar</button>
-        </div>
+     
+       </div>
     );
 }
 
