@@ -3,6 +3,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { UserContext } from '../context/UserContext';
 import '../Styles/PageContainer.css';
+import fondoVet from '../Imagenes/FondoVet.jpg';
 
 function CitasMedicas() {
     const [citas, setCitas] = useState([]);
@@ -28,7 +29,7 @@ function CitasMedicas() {
     return (
         <div className="home-screen">
             <header className="header">
-                <img src="https://via.placeholder.com/1500x150" alt="Banner" className="header-image" />
+                <img src={fondoVet} alt="Veterinary Clinic" className="header-image" />
             </header>
             <nav className="sidebar">
                 <h2>Navegación</h2>

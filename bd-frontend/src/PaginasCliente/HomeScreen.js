@@ -2,6 +2,8 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { UserContext } from '../context/UserContext'; // Importa el contexto de usuario
 import '../Styles/PageContainer.css'; // Asegúrate de importar el archivo CSS
+import fondoVet from '../Imagenes/FondoVet.jpg';
+
 
 function HomeScreen() {
     const [products, setProducts] = useState([]);
@@ -45,7 +47,7 @@ function HomeScreen() {
     return (
         <div className="home-screen">
             <header className="header">
-                <img src="https://via.placeholder.com/1500x150" alt="Banner" className="header-image" />
+            <img src={fondoVet} alt="Veterinary Clinic" className="header-image" />
             </header>
             <nav className="sidebar">
                 <h2>Navegación</h2>
