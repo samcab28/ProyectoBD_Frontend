@@ -3,12 +3,13 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import '../Styles/PageContainer.css'; // Importa el archivo de estilos
+import fondoVet from '../Imagenes/FondoVet.jpg';
 
 function About() {
     return (
         <div className="home-screen">
             <header className="header">
-                <img src="https://via.placeholder.com/1500x150" alt="Banner" className="header-image" />
+                <img src={fondoVet} alt="Veterinary Clinic" className="header-image" />
             </header>
             <nav className="sidebar">
                 <h2>Navegación</h2>
