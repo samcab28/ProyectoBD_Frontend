@@ -9,6 +9,7 @@ import InitialAdmin from '../initialScreen/InitialAdmin';
 import RudPersona from "../CRUD_Folder/crudPersona/CrudPersona";
 import CrudAnimal from "../CRUD_Folder/crudAnimal/CrudAnimal";
 
+
 const RouteAdmin = () => {
     return (
         <Routes>
