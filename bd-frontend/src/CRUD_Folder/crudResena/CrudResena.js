@@ -38,6 +38,8 @@ function ResenaList(){
                     <th>TituloResena</th>
                     <th>ContenidoResena</th>
                     <th>Autor</th>
+                    </tr> 
+                    </thead>
                     <tbody>
                 {resenas.map(resena => (
                     <tr key={resena.IdResPro}>
@@ -52,9 +54,7 @@ function ResenaList(){
                         </td>
                     </tr>
                 ))}
-                </tbody>    </tr>    
-                </thead>
-
+                </tbody>       
             </table>
             
             <button onClick={handleRegresar}>Regresar</button>

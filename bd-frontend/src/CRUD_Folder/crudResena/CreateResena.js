@@ -7,16 +7,26 @@ function CreateResena(){
     const [Producto, setNombreProducto] = useState('');
 
     const [personas, setPersonas] = useState([]);
+    const [productos, setProductos] = useState([]);
 
     useEffect(() => {
         // Fetch personas (gerentes)
-        fetch('http://localhost:3001/persona/tipo/3')
+        fetch('http://localhost:3001/persona/') // Corregir, debe ser unicamente tipo 3(cliente)
             .then(response => response.json())
             .then(data => {
                 console.log("personas fetched:", data); // Debug line
                 setPersonas(data);
             })
             .catch(error => console.error('Error fetching personas:', error));
+        
+        // Fetch animales
+        fetch('http://localhost:3001/producto')
+            .then(response => response.json())
+            .then(data => {
+                console.log("productos fetched:", data); // Debug line
+                setProductos(data);
+            })
+            .catch(error => console.error('Error fetching productos:', error));
     }, []);
 
     function handleSubmit(e) {
@@ -71,6 +81,34 @@ function CreateResena(){
                         value={ContenidoRes}
                         onChange={e => setContenidoRes(e.target.value)}
                     />
+                </label>
+                <br/>
+                <label>
+                    Autor:
+                    <select
+                        name="autor"
+                        value={Autor}
+                        onChange={e => setNombrePersona(e.target.value)}
+                    >
+                        <option value="">Selecciona un autor</option>
+                        {personas.map(persona => (
+                            <option key={persona.IdPersona} value={persona.IdPersona}>{persona.NombrePersona} {persona.ApellidoPersona}</option>
+                        ))}
+                    </select>
+                </label>
+                <br/>
+                <label>
+                    Producto:
+                    <select
+                        name="producto"
+                        value={Producto}
+                        onChange={e => setNombreProducto(e.target.value)}
+                    >
+                        <option value="">Selecciona un producto</option>
+                        {productos.map(producto => (
+                            <option key={producto.IdPersona} value={producto.IdProducto}>{producto.NombreProducto} </option>
+                        ))}
+                    </select>
                 </label>
                 <br/>
                 <button type="reset">Reset data</button>
