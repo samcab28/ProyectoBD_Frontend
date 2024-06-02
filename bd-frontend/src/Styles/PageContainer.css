@@ -32,7 +32,7 @@ body {
 
 .header-image {
     width: 100%;
-    height: 150PX; 
+    height: 150PX;
     object-fit: cover;
 }
 
@@ -78,7 +78,13 @@ body {
 
 .product-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.resena-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(3500px, 1fr));
     gap: 20px;
 }
 
@@ -149,3 +155,6 @@ body {
 .product-card button:hover {
     background-color: #0056b3;
 }
+
+
+
