@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 
+
 function CreatePersona() {
     const [nombre, setNombre] = useState('');
     const [apellido, setApellido] = useState('');

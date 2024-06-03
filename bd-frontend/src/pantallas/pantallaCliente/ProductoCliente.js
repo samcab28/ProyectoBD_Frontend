@@ -1,19 +1,22 @@
+// src/PaginasCliente/ProductoCliente.js
 import React, { useContext, useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { UserContext } from '../../context/UserContext'; // Importa el contexto de usuario
-import '../../Styles/PageContainer.css'; // Asegúrate de importar el archivo CSS
+import {  useNavigate } from 'react-router-dom';
+import { UserContext } from '../../context/UserContext';
+import '../../Styles/PageContainer.css';
 import fondoVet from '../../Imagenes/FondoVet.jpg';
 import NavCliente from "./NavCliente";
+import ProductImage from '../../Imagenes/ProductImage.js'; // Importa el nuevo componente
 
 function ProductoCliente() {
+    const navigate = useNavigate();
     const [products, setProducts] = useState([]);
-    const { user } = useContext(UserContext); // Obtén la información del usuario del contexto
+    const { user } = useContext(UserContext);
 
     useEffect(() => {
         fetch('http://localhost:3001/producto')
             .then(response => response.json())
             .then(data => {
-                console.log("Productos fetched:", data); // Debug line
+                console.log("Productos fetched:", data);
                 setProducts(data);
             })
             .catch(error => console.error('Error fetching productos:', error));
@@ -35,33 +38,39 @@ function ProductoCliente() {
                 .then(response => response.json())
                 .then(data => {
                     console.log("Producto agregado al carrito:", data);
-                    // Aquí podrías añadir algún mensaje de confirmación para el usuario
+                    alert("producto agregado al carrito");
                 })
                 .catch(error => console.error('Error al agregar producto al carrito:', error));
         } else {
             console.error('Usuario no autenticado');
-            // Aquí podrías redirigir al usuario a la página de pantallaLogin o mostrar un mensaje
         }
+    };
+
+    const handleResenaGo = (IdProducto) => {
+        navigate(`/cliente/resena/${IdProducto}`);
     };
 
     return (
         <div className="home-screen">
             <header className="header">
-                <img src={fondoVet} alt="Veterinary Clinic" className="header-image" />
+                <img src={fondoVet} alt="Veterinary Clinic" className="header-image"/>
             </header>
-            <NavCliente />
+            <NavCliente/>
             <main className="main-content">
                 <h2>Lista de Productos</h2>
                 <div className="product-grid">
                     {products.map(product => (
                         <div className="product-card" key={product.IdProducto}>
+                            <ProductImage url={product.IdURL} alt={product.NombreProducto} />
                             <div className="product-info">
                                 <p><strong>Nombre:</strong> {product.NombreProducto}</p>
                                 <p><strong>Precio:</strong> {product.PrecioProducto}</p>
+                                <p><strong>Marca:</strong> {product.NombreMarcaPro}</p>
                                 <p><strong>Disponibles:</strong> {product.CantidadDisponible}</p>
                                 <p><strong>Descripción:</strong> {product.DescripcionProducto}</p>
                                 <p><strong>URL:</strong> {product.IdURL}</p>
-                                <button onClick={() => handleAddToCart(product.IdProducto)}>Agregar al Carrito</button>
+                                <button style={{ marginBottom: '10px', marginRight: '10px' }} onClick={() => handleResenaGo(product.IdProducto)} className="form-button">Resena</button>
+                                <button onClick={() => handleAddToCart(product.IdProducto)} className="form-button">Agregar al Carrito</button>
                             </div>
                         </div>
                     ))}
