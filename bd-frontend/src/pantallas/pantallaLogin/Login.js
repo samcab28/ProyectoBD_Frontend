@@ -59,8 +59,18 @@ function Login() {
     };
 
     const handleContinueWithoutLogin = () => {
-        navigate('/cliente');
+        const foundPersona = personas.find(persona => persona.UsuarioPersona === "UsuarioInvitado" && persona.PasswordPersona === "123");
+
+
+        if(foundPersona){
+            setUser(foundPersona)
+            navigate('/cliente');
+        }
+        else{
+            alert("error a la hora de la sesion")
+        }
     };
+
 
     return (
         <div className="login-body">

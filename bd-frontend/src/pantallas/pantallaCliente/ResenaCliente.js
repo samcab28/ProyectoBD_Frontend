@@ -107,7 +107,7 @@ function ResenaCliente() {
                         <div className="product-grid">
                             {resenas.map(resena => (
                                 <div className="product-card" key={resena.IdResPro}>
-                                    <p><strong>Autora:</strong> {resena.Nombre_Completo}</p>
+                                    <p><strong>Autor:</strong> {resena.Nombre_Completo}</p>
                                     <p><strong>Titulo:</strong> {resena.TituloRes}</p>
                                     <p><strong>Descripcion:</strong> {resena.ContenidoRes}</p>
                                     <p><strong>Puntuacion:</strong> {resena.Puntuacion}</p>
