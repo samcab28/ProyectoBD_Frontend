@@ -38,6 +38,8 @@ function ResenaList(){
                     <th>TituloResena</th>
                     <th>ContenidoResena</th>
                     <th>Autor</th>
+                    <th>Producto</th>
+                    <th>Puntuacion</th>
                     </tr> 
                     </thead>
                     <tbody>
@@ -47,6 +49,8 @@ function ResenaList(){
                         <td>{resena.TituloRes}</td>
                         <td>{resena.ContenidoRes}</td>
                         <td>{resena.Nombre_Completo}</td>
+                        <td>{resena.NombreProducto}</td>
+                        <td>{resena.Puntuacion}</td>
 
                         <td>
                             <button onClick={() => handleDelete(resena.IdResPro)}>Eliminar</button>
