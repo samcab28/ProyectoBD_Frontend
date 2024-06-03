@@ -68,8 +68,8 @@ function ProductoCliente() {
                                 <p><strong>Disponibles:</strong> {product.CantidadDisponible}</p>
                                 <p><strong>Descripción:</strong> {product.DescripcionProducto}</p>
                                 <p><strong>URL:</strong> {product.IdURL}</p>
-                                <button style={{ marginBottom: '10px', marginRight: '10px' }} onClick={() => handleResenaGo(product.IdProducto)}>Resena</button>
-                                <button onClick={() => handleAddToCart(product.IdProducto)}>Agregar al Carrito</button>
+                                <button style={{ marginBottom: '10px', marginRight: '10px' }} onClick={() => handleResenaGo(product.IdProducto)} className="form-button">Resena</button>
+                                <button onClick={() => handleAddToCart(product.IdProducto)} className="form-button">Agregar al Carrito</button>
                             </div>
                         </div>
                     ))}
