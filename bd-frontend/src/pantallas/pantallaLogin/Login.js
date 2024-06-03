@@ -53,14 +53,12 @@ function Login() {
         } else {
             console.log('Invalid username or password');
         }
-
         setUsername('');
         setPassword('');
     };
 
     const handleContinueWithoutLogin = () => {
         const foundPersona = personas.find(persona => persona.UsuarioPersona === "UsuarioInvitado" && persona.PasswordPersona === "123");
-
 
         if(foundPersona){
             setUser(foundPersona)

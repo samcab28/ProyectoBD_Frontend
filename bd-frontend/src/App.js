@@ -13,6 +13,10 @@ import RouteGerente from './router/RouteGerente';
 import RouteVeterinario from './router/RouteVeterinario';
 import RouteCRUD from "./router/RouteCRUD";
 
+//importacion y declaracion de inactividad
+import Innactividad from "./seguridad/Innactividad";
+Innactividad.startAutoLogout();
+
 function App() {
     return (
         <UserProvider>

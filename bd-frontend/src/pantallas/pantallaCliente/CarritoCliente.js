@@ -8,6 +8,7 @@ import NavCliente from "./NavCliente";
 function CarritoCliente() {
     const [carrito, setCarrito] = useState([]);
     const { user } = useContext(UserContext);
+    const [monto, setMonto] = useState(0);
 
     useEffect(() => {
         if (user && user.IdPersona) {
@@ -43,6 +44,14 @@ function CarritoCliente() {
             .catch(error => console.error('Error updating quantity:', error));
     };
 
+    const handlePrecioFinal = () => {
+        // Suma el precio de cada producto multiplicado por su cantidad
+        const total = carrito.reduce((accumulator, item) => accumulator + (item.PrecioProducto * item.Cantidad), 0);
+        // Actualiza el estado con el monto total
+        setMonto(total);
+    };
+
+
     return (
         <div className="home-screen">
             <header className="header">
@@ -50,8 +59,11 @@ function CarritoCliente() {
             </header>
             <NavCliente/>
             <main className="main-content">
+                {/* Encabezado */}
                 <h2>Carrito de Compras</h2>
                 {user && <p>Bienvenido, {user.NombrePersona}</p>}
+
+                {/* Lista de productos en el carrito */}
                 <div className="product-grid">
                     {carrito.map(item => (
                         <div className="product-card" key={item.IdCarrito}>
@@ -61,22 +73,34 @@ function CarritoCliente() {
                                 <p><strong>Cantidad:</strong> {item.Cantidad}</p>
                                 <p><strong>Disponibles:</strong> {item.CantidadDisponible}</p>
                                 <div className="quantity-control">
-                                    <button  style={{ marginBottom: '3px' }} className="form-button" onClick={() => handleQuantityChange(item.IdCarrito, item.Cantidad - 1)}
+                                    <button style={{marginBottom: '3px'}} className="form-button"
+                                            onClick={() => handleQuantityChange(item.IdCarrito, item.Cantidad - 1)}
                                             disabled={item.Cantidad <= 1}>-
                                     </button>
                                     <span>{item.Cantidad}</span>
-                                    <button  style={{ marginBottom: '3px', marginRight: '10px' }} className="form-button" onClick={() => handleQuantityChange(item.IdCarrito, item.Cantidad + 1)}
+                                    <button style={{marginBottom: '3px', marginRight: '10px'}} className="form-button"
+                                            onClick={() => handleQuantityChange(item.IdCarrito, item.Cantidad + 1)}
                                             disabled={item.Cantidad >= item.CantidadDisponible}>+
                                     </button>
                                 </div>
-                                <button onClick={() => handleDelete(item.IdCarrito)} className="form-button">Eliminar</button>
+                                <button onClick={() => handleDelete(item.IdCarrito)} className="form-button">Eliminar
+                                </button>
                             </div>
                         </div>
                     ))}
                 </div>
+
+                {/* Botón para proceder a la compra */}
+                <button style={{marginTop: '50px'}} className="form-button" onClick={handlePrecioFinal}>Calcular precio
+                    final
+                </button>
+                <h2>El monto total del pedido es de: {monto}</h2>
+                <button style={{marginTop: '10px'}} className="form-button" >Proceder con compra
+                </button>
             </main>
         </div>
     );
+
 }
 
 export default CarritoCliente;

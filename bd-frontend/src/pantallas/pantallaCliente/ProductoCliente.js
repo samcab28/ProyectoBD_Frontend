@@ -38,6 +38,7 @@ function ProductoCliente() {
                 .then(response => response.json())
                 .then(data => {
                     console.log("Producto agregado al carrito:", data);
+                    alert("producto agregado al carrito");
                 })
                 .catch(error => console.error('Error al agregar producto al carrito:', error));
         } else {
