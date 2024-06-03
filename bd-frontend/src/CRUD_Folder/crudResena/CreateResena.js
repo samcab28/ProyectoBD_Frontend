@@ -5,9 +5,15 @@ function CreateResena(){
     const [ContenidoRes, setContenidoRes] = useState('');
     const [Autor, setNombrePersona] = useState('');
     const [Producto, setNombreProducto] = useState('');
+    const [Calificacion, setCalificacion] = useState('');
 
     const [personas, setPersonas] = useState([]);
     const [productos, setProductos] = useState([]);
+
+    const opcionesCalificacion = [];
+    for (let i = 1; i <= 10; i++) {
+        opcionesCalificacion.push(<option key={i} value={i}>{i}</option>);
+    }
 
     useEffect(() => {
         // Fetch personas (gerentes)
@@ -36,7 +42,8 @@ function CreateResena(){
             tituloRes: TituloRes,
             contenidoRes: ContenidoRes,
             autor: parseInt(Autor),
-            producto: parseInt(Producto)
+            producto: parseInt(Producto),
+            calificacion : parseInt(Calificacion)
         };
 
         fetch('http://localhost:3001/resena', {
@@ -108,6 +115,18 @@ function CreateResena(){
                         {productos.map(producto => (
                             <option key={producto.IdPersona} value={producto.IdProducto}>{producto.NombreProducto} </option>
                         ))}
+                    </select>
+                </label>
+                <br/>
+                <label>
+                    Calificacion:
+                    <select
+                        name="calificacion"
+                        value={Calificacion}
+                        onChange={e => setCalificacion(e.target.value)}
+                    >
+                        <option value="">Selecciona una calificacion</option>
+                        {opcionesCalificacion}
                     </select>
                 </label>
                 <br/>
