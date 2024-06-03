@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import '../../Styles/PageContainer.css';
 import fondoVet from '../../Imagenes/FondoVet.jpg';
 import NavCliente from "./NavCliente";
+import {UserContext} from "../../context/UserContext";
 
 function ResenaCliente() {
     const navigate = useNavigate();
@@ -10,6 +11,10 @@ function ResenaCliente() {
     const { id } = useParams();
     const [resenas, setResenas] = useState([]);
     const [puntuacion, setPuntuacion] = useState([]);
+    const [titulo, setTitulo] = useState('');
+    const [contenido, setContenido] = useState('');
+    const { user } = useContext(UserContext);
+    const [puntuacionNumero, setPuntuacionNumero] = useState(0);
 
     const handleRegresar = () => {
         navigate('/cliente/producto'); // Cambia '/another' por la ruta deseada
@@ -49,7 +54,44 @@ function ResenaCliente() {
     }, [id]);
 
 
+    function handleSubmit(e){
+        e.preventDefault();
 
+        console.log("usuario de persona",user.IdPersona);
+        if (!user || !user.IdPersona) {
+            alert('Por favor, inicie sesión para dejar una reseña.');
+            return;
+        }
+
+        const formData = {
+            TituloRes: titulo,
+            ContenidoRes: contenido,
+            IdAutor: user.IdPersona,
+            IdProducto: parseInt(id),
+            Puntuacion: parseInt(puntuacionNumero)
+        };
+
+        console.log(formData);
+
+        fetch('http://localhost:3001/resena', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formData)
+        })
+            .then(response => {
+                if (response.ok) {
+                    alert('resena creada exitosamente');
+                    window.location.reload(); // Recargar la página
+                } else {
+                    alert('Error al crear la resena');
+                }
+            })
+            .catch(error => {
+                console.error('Error en la solicitud:', error);
+            });
+    }
 
     return (
         <div className="home-screen">
@@ -60,7 +102,8 @@ function ResenaCliente() {
             <main className="main-content">
                 {product && puntuacion && (
                     <>
-                        <h2>Reseña de {product[0].NombreProducto} de la marca {product[0].NombreMarcaPro} puntuacion de {puntuacion[0].PuntuacionPromedio}</h2>
+                        <h2>Reseña de {product[0].NombreProducto} de la marca {product[0].NombreMarcaPro} puntuacion
+                            de {puntuacion[0].PuntuacionPromedio}</h2>
                         <div className="product-grid">
                             {resenas.map(resena => (
                                 <div className="product-card" key={resena.IdResPro}>
@@ -71,7 +114,34 @@ function ResenaCliente() {
                                 </div>
                             ))}
                         </div>
-                        <button>Agregar Resena</button>
+
+                        <h2>Deja tu propia resena sobre este producto</h2>
+                        <form onSubmit={handleSubmit}>
+                            <label>
+                                Titulo de la resena: <input name="titulo" type="text" value={titulo}
+                                                            onChange={e => setTitulo(e.target.value)}/>
+                            </label><br/>
+                            <label>
+                                Contenido de la resena: <input name="contenido" type="text" value={contenido}
+                                                               onChange={e => setContenido(e.target.value)}/>
+                            </label><br/>
+
+                            <label>
+                                Puntuacion:
+                                <select
+                                    name="puntuacion"
+                                    value={puntuacionNumero}
+                                    onChange={e => setPuntuacionNumero(e.target.value)}
+                                >
+                                    {Array.from({length: 11}, (_, i) => (
+                                        <option key={i} value={i}>{i}</option>
+                                    ))}
+                                </select>
+                            </label><br/>
+                            
+                            <button type="submit">Guardar</button>
+                        </form>
+                        <br/>
                         <button onClick={handleRegresar}>Regresar</button>
                     </>
                 )}
@@ -79,7 +149,6 @@ function ResenaCliente() {
             </main>
         </div>
     );
-
 }
 
 export default ResenaCliente;
