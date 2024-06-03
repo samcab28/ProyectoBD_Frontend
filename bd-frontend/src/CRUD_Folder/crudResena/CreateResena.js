@@ -5,7 +5,7 @@ function CreateResena(){
     const [ContenidoRes, setContenidoRes] = useState('');
     const [Autor, setNombrePersona] = useState('');
     const [Producto, setNombreProducto] = useState('');
-    const [Calificacion, setCalificacion] = useState('');
+    const [Puntuacion, setCalificacion] = useState('');
 
     const [personas, setPersonas] = useState([]);
     const [productos, setProductos] = useState([]);
@@ -17,7 +17,7 @@ function CreateResena(){
 
     useEffect(() => {
         // Fetch personas (gerentes)
-        fetch('http://localhost:3001/persona/') // Corregir, debe ser unicamente tipo 3(cliente)
+        fetch('http://localhost:3001/persona/tipo/3') 
             .then(response => response.json())
             .then(data => {
                 console.log("personas fetched:", data); // Debug line
@@ -39,11 +39,11 @@ function CreateResena(){
         e.preventDefault();
 
         const newResena = {
-            tituloRes: TituloRes,
-            contenidoRes: ContenidoRes,
-            autor: parseInt(Autor),
-            producto: parseInt(Producto),
-            calificacion : parseInt(Calificacion)
+            TituloRes: TituloRes,
+            ContenidoRes: ContenidoRes,
+            IdAutor: parseInt(Autor),
+            IdProducto: parseInt(Producto),
+            Puntuacion : parseInt(Puntuacion)
         };
 
         fetch('http://localhost:3001/resena', {
@@ -119,13 +119,13 @@ function CreateResena(){
                 </label>
                 <br/>
                 <label>
-                    Calificacion:
+                    Puntuacion:
                     <select
                         name="calificacion"
-                        value={Calificacion}
+                        value={Puntuacion}
                         onChange={e => setCalificacion(e.target.value)}
                     >
-                        <option value="">Selecciona una calificacion</option>
+                        <option value="">Selecciona una puntuacion</option>
                         {opcionesCalificacion}
                     </select>
                 </label>

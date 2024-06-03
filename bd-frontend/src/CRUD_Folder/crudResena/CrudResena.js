@@ -13,6 +13,17 @@ function ResenaList(){
         fetch(`http://localhost:3001/resena/${id}`, {
             method: 'DELETE',
         })
+        .then(response => {
+            if (response.ok) {
+                // Remove the deleted persona from the state
+                setResenas(resenas.filter(resena => resena.IdAnimal !== id));
+                window.location.reload();
+            } else {
+                alert('Error deleting sucursal');
+            }
+        })
+        .catch(error => console.error('Error deleting sucursal:', error));
+
     }
 
     function handleMod(id){
