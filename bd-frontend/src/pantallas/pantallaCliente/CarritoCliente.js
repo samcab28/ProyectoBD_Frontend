@@ -61,15 +61,15 @@ function CarritoCliente() {
                                 <p><strong>Cantidad:</strong> {item.Cantidad}</p>
                                 <p><strong>Disponibles:</strong> {item.CantidadDisponible}</p>
                                 <div className="quantity-control">
-                                    <button onClick={() => handleQuantityChange(item.IdCarrito, item.Cantidad - 1)}
+                                    <button  style={{ marginBottom: '3px' }} className="form-button" onClick={() => handleQuantityChange(item.IdCarrito, item.Cantidad - 1)}
                                             disabled={item.Cantidad <= 1}>-
                                     </button>
                                     <span>{item.Cantidad}</span>
-                                    <button onClick={() => handleQuantityChange(item.IdCarrito, item.Cantidad + 1)}
+                                    <button  style={{ marginBottom: '3px', marginRight: '10px' }} className="form-button" onClick={() => handleQuantityChange(item.IdCarrito, item.Cantidad + 1)}
                                             disabled={item.Cantidad >= item.CantidadDisponible}>+
                                     </button>
                                 </div>
-                                <button onClick={() => handleDelete(item.IdCarrito)}>Eliminar</button>
+                                <button onClick={() => handleDelete(item.IdCarrito)} className="form-button">Eliminar</button>
                             </div>
                         </div>
                     ))}
