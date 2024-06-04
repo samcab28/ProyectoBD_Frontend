@@ -13,6 +13,17 @@ function ResenaList(){
         fetch(`http://localhost:3001/resena/${id}`, {
             method: 'DELETE',
         })
+        .then(response => {
+            if (response.ok) {
+                // Remove the deleted persona from the state
+                setResenas(resenas.filter(resena => resena.IdAnimal !== id));
+                window.location.reload();
+            } else {
+                alert('Error deleting sucursal');
+            }
+        })
+        .catch(error => console.error('Error deleting sucursal:', error));
+
     }
 
     function handleMod(id){
@@ -38,6 +49,10 @@ function ResenaList(){
                     <th>TituloResena</th>
                     <th>ContenidoResena</th>
                     <th>Autor</th>
+                    <th>Producto</th>
+                    <th>Puntuacion</th>
+                    </tr> 
+                    </thead>
                     <tbody>
                 {resenas.map(resena => (
                     <tr key={resena.IdResPro}>
@@ -45,6 +60,8 @@ function ResenaList(){
                         <td>{resena.TituloRes}</td>
                         <td>{resena.ContenidoRes}</td>
                         <td>{resena.Nombre_Completo}</td>
+                        <td>{resena.NombreProducto}</td>
+                        <td>{resena.Puntuacion}</td>
 
                         <td>
                             <button onClick={() => handleDelete(resena.IdResPro)}>Eliminar</button>
@@ -52,9 +69,7 @@ function ResenaList(){
                         </td>
                     </tr>
                 ))}
-                </tbody>    </tr>    
-                </thead>
-
+                </tbody>       
             </table>
             
             <button onClick={handleRegresar}>Regresar</button>
