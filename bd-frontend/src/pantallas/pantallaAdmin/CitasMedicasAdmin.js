@@ -12,7 +12,10 @@ function CitasCliente(){
             </header>
             <NavAdmin/>
             <main className="main-content">
-                <h2>citas medicas admin</h2>
+                <h2>Citas Medicas admin</h2>
+                <ul>
+                
+                </ul>
             </main>
         </div>
     );
