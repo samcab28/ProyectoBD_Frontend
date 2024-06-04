@@ -15,16 +15,6 @@ function ProductoCliente() {
     const { user } = useContext(UserContext);
 
     useEffect(() => {
-        fetch('http://localhost:3001/producto')
-            .then(response => response.json())
-            .then(data => {
-                console.log("Productos fetched:", data);
-                setProducts(data);
-            })
-            .catch(error => console.error('Error fetching productos:', error));
-    }, []);
-
-    useEffect(() => {
         fetch('http://localhost:3001/sucursal')
             .then(response => response.json())
             .then(data => {
@@ -40,6 +30,18 @@ function ProductoCliente() {
             })
             .catch(error => console.error('Error fetching sucursales:', error));
     }, []);
+
+    useEffect(() => {
+        if (selectedSucursal) {
+            fetch(`http://localhost:3001/producto/sucursal/${selectedSucursal.IdSucursal}`)
+                .then(response => response.json())
+                .then(data => {
+                    console.log("Productos fetched:", data);
+                    setProducts(data);
+                })
+                .catch(error => console.error('Error fetching productos:', error));
+        }
+    }, [selectedSucursal]);
 
     const handleAddToCart = (IdProducto) => {
         if (user && user.IdPersona) {
@@ -75,7 +77,6 @@ function ProductoCliente() {
         setSelectedSucursal(selected);
         console.log(selected);
     };
-
 
     return (
         <div className="home-screen">
