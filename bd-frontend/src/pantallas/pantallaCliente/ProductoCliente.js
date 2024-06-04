@@ -1,4 +1,3 @@
-// src/PaginasCliente/ProductoCliente.js
 import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { UserContext } from '../../context/UserContext';
@@ -53,13 +52,14 @@ function ProductoCliente() {
                 body: JSON.stringify({
                     IdPersona: user.IdPersona,
                     IdProducto: IdProducto,
+                    IdSucursal: selectedSucursal.IdSucursal, // Pasar la sucursal seleccionada
                     Cantidad: 1
                 })
             })
                 .then(response => response.json())
                 .then(data => {
                     console.log("Producto agregado al carrito:", data);
-                    alert("producto agregado al carrito");
+                    alert("Producto agregado al carrito");
                 })
                 .catch(error => console.error('Error al agregar producto al carrito:', error));
         } else {
@@ -112,8 +112,9 @@ function ProductoCliente() {
                                 <p><strong>Nombre:</strong> {product.NombreProducto}</p>
                                 <p><strong>Precio:</strong> {product.PrecioProducto}</p>
                                 <p><strong>Marca:</strong> {product.NombreMarcaPro}</p>
-                                <p><strong>Disponibles:</strong> {product.CantidadDisponible}</p>
+                                <p><strong>Disponibles:</strong> {product.Cantidad}</p>
                                 <p><strong>Descripción:</strong> {product.DescripcionProducto}</p>
+                                <p><strong>Sucursal:</strong> {product.NombreSucursal}</p>
                                 <button style={{ marginBottom: '10px', marginRight: '10px' }} onClick={() => handleResenaGo(product.IdProducto)} className="form-button">Reseña</button>
                                 <button onClick={() => handleAddToCart(product.IdProducto)} className="form-button">Agregar al Carrito</button>
                             </div>
