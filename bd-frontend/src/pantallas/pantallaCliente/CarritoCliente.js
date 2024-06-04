@@ -9,77 +9,8 @@ function CarritoCliente() {
     const [carrito, setCarrito] = useState([]);
     const { user } = useContext(UserContext);
     const [monto, setMonto] = useState(0);
-    const [divisas, setDivisas] = useState([]);
-    const [selectedDivisa, setSelectedDivisa] = useState("");
-    const [metodosPago, setMetodosPago] = useState([]);
-    const [selectedMetodoPago, setSelectedMetodoPago] = useState("");
+
     const navigate = useNavigate();
-
-    //funcion encargada del submit
-    function handleSubmit(e) {
-        e.preventDefault();
-
-        // Debugging logs
-        console.log("Selected Divisa:", selectedDivisa);
-        console.log("Selected MetodoPago:", selectedMetodoPago);
-
-        const newCobro = {
-            IdDivisa: parseInt(selectedDivisa),
-            IdMetPago: parseInt(selectedMetodoPago)
-        };
-
-        fetch('http://localhost:3001/cobro', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(newCobro)
-        })
-            .then(response => {
-                if (response.ok) {
-                    alert('peticion de cobro creada exitosamente');
-                    //window.location.reload();
-                    navigate('/cliente/direccion');
-                } else {
-                    alert('Error al crear peticion de cobro');
-                }
-            })
-            .catch(error => {
-                console.error('Error en la solicitud:', error);
-            });
-    }
-
-    //funcion que trae la divisas
-    useEffect(() => {
-        if (user && user.IdPersona) {
-            fetch(`http://localhost:3001/divisa`)
-                .then(response => response.json())
-                .then(data => {
-                    console.log("divisas: ", data);
-                    setDivisas(data);
-                    if (data.length > 0) {
-                        setSelectedDivisa(data[0].IdDivisa); // Set the first divisa as selected
-                    }
-                })
-                .catch(error => console.error('error en el fetch de divisas:', error));
-        }
-    }, [user]);
-
-    //funcion que trae los metodos de pago
-    useEffect(() => {
-        if (user && user.IdPersona) {
-            fetch(`http://localhost:3001/metodoPago`)
-                .then(response => response.json())
-                .then(data => {
-                    console.log("metodos de pago fetched:", data);
-                    setMetodosPago(data);
-                    if (data.length > 0) {
-                        setSelectedMetodoPago(data[0].IdMetPago); // Set the first payment method as selected
-                    }
-                })
-                .catch(error => console.error('Error fetching metodos de pago:', error));
-        }
-    }, [user]);
 
     //funcion para traer informacion del carrito a una persona
     useEffect(() => {
@@ -173,40 +104,6 @@ function CarritoCliente() {
                     final
                 </button>
                 <h2>El monto total del pedido es de: {monto}</h2>
-                <h2>Por favor seleccione un metodo de pago:</h2>
-                <form onSubmit={handleSubmit}>
-                    <label>
-                        Metodo de pago:
-                        <select
-                            name="metodoPago"
-                            value={selectedMetodoPago}
-                            onChange={e => setSelectedMetodoPago(e.target.value)}
-                        >
-                            {metodosPago.map(metodo => (
-                                <option key={metodo.IdMetPago}
-                                        value={metodo.IdMetPago}>{metodo.TipoMetPago} </option>
-                            ))}
-                        </select>
-                    </label>
-                    <br/>
-
-                    <label>
-                        Seleccionar divisa:
-                        <select
-                            name="divisa"
-                            value={selectedDivisa}
-                            onChange={e => setSelectedDivisa(e.target.value)}
-                        >
-                            {divisas.map(divisa => (
-                                <option key={divisa.IdDivisa}
-                                        value={divisa.IdDivisa}>{divisa.TipoDivisa} </option>
-                            ))}
-                        </select>
-                    </label>
-                    <br/>
-                    <button style={{marginTop: '10px'}} className="form-button" type="submit">Proceder con compra
-                    </button>
-                </form>
             </main>
         </div>
     );
