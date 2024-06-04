@@ -19,6 +19,9 @@ function NavCliente() {
                 <li><Link to="/cliente/carrito">
                     <button className="nav-button">Carrito</button>
                 </Link></li>
+                <li><Link to="/cliente/historial">
+                    <button className="nav-button">Historial compras</button>
+                </Link></li>
                 <li><Link to="/cliente/mascotas">
                     <button className="nav-button">Mascotas</button>
                 </Link></li>
