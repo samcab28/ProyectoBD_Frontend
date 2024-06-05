@@ -10,6 +10,7 @@ import CitasMedicasAdmin from "../pantallas/pantallaAdmin/CitasMedicasAdmin";
 import CobroAdmin from "../pantallas/pantallaAdmin/CobroAdmin";
 import ExpedienteClienteAdmin from "../pantallas/pantallaAdmin/ExpedienteClienteAdmin";
 import ProductoAdmin from "../pantallas/pantallaAdmin/ProductoAdmin";
+import GestionCitas from '../pantallas/pantallaAdmin/GestionCitas';
 
 
 const RouteAdmin = () => {
@@ -17,6 +18,7 @@ const RouteAdmin = () => {
         <Routes>
             <Route path='/' element={<InitialAdmin />} />
             <Route path='/citasMedica' element={<CitasMedicasAdmin />} />
+            <Route path='/citasMedica/gestion' element={<GestionCitas />} />
             <Route path='/cobro' element={<CobroAdmin />} />
             <Route path='/expedienteCliente' element={<ExpedienteClienteAdmin />} />
             <Route path='/producto' element={<ProductoAdmin />} />
