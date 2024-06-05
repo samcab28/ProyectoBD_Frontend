@@ -39,23 +39,31 @@ function TarjetaForm({ onSubmit }) {
     );
 }
 
-function ComprobanteForm({ onSubmit }) {
-    const [numComprobante, setNumComprobante] = useState('');
+function DireccionForm({ onSubmit }) {
+    const [direccionCompleta, setDireccionCompleta] = useState('');
+    const [codigoPostal, setCodigoPostal] = useState('');
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        onSubmit({ NumComprobante: numComprobante });
+        onSubmit({
+            DireccionCompleta: direccionCompleta,
+            CodigoPostal: codigoPostal
+        });
     };
 
     return (
         <form onSubmit={handleSubmit}>
             <label>
-                Número de Comprobante:
-                <input type="text" value={numComprobante} onChange={(e) => setNumComprobante(e.target.value)} required />
+                Dirección Completa:
+                <input type="text" value={direccionCompleta} onChange={(e) => setDireccionCompleta(e.target.value)} required />
             </label>
-            <button type="submit">Agregar Comprobante</button>
+            <label>
+                Código Postal:
+                <input type="text" value={codigoPostal} onChange={(e) => setCodigoPostal(e.target.value)} required />
+            </label>
+            <button type="submit">Agregar Dirección</button>
         </form>
     );
 }
 
-export { TarjetaForm, ComprobanteForm };
+export { TarjetaForm , DireccionForm };

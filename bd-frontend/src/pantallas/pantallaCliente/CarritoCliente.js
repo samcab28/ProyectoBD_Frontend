@@ -4,7 +4,7 @@ import { UserContext } from '../../context/UserContext';
 import '../../Styles/PageContainer.css';
 import fondoVet from '../../Imagenes/FondoVet.jpg';
 import NavCliente from "./NavCliente";
-import { TarjetaForm } from '../../seguridad/Forms.js';
+import { TarjetaForm, DireccionForm } from '../../seguridad/Forms.js';
 
 function CarritoCliente() {
     const [carrito, setCarrito] = useState([]);
@@ -16,7 +16,10 @@ function CarritoCliente() {
     const [divisaSeleccionada, setDivisaSeleccionada] = useState(null);
     const [tarjetas, setTarjetas] = useState([]);
     const [tarjetaSeleccionada, setTarjetaSeleccionada] = useState(null);
+    const [direcciones, setDirecciones] = useState([]);
+    const [direccionSeleccionada, setDireccionSeleccionada] = useState(null);
     const [showTarjetaForm, setShowTarjetaForm] = useState(false);
+    const [showDireccionForm, setShowDireccionForm] = useState(false);
     const [numComprobante, setNumComprobante] = useState('');
     const [showComprobanteForm, setShowComprobanteForm] = useState(false);
     const navigate = useNavigate();
@@ -31,6 +34,14 @@ function CarritoCliente() {
                     handlePrecioFinal(data); 
                 })
                 .catch(error => console.error('Error fetching carrito:', error));
+
+            fetch(`http://localhost:3001/dirPersonaByPer/${user.IdPersona}`)
+                .then(response => response.json())
+                .then(data => {
+                    console.log("Direcciones fetched:", data);
+                    setDirecciones(data);
+                })
+                .catch(error => console.error('Error fetching direcciones:', error));
         }
     }, [user]);
 
@@ -127,7 +138,9 @@ function CarritoCliente() {
             DetallesPedido: carrito.map(item => ({
                 Cantidad: item.Cantidad,
                 MontoTotal: item.PrecioProducto * item.Cantidad,
-                IdProducto: item.IdProducto
+                IdProducto: item.IdProducto,
+                IdSucursal: item.IdSucursal,
+                NuevaCantidad: item.CantidadDisponible - item.Cantidad
             }))
         };
 
@@ -150,10 +163,7 @@ function CarritoCliente() {
             setTarjetaSeleccionada(null);
             setNumComprobante('');
         })
-        .catch(error => {
-            console.error('Error creando pedido:', error);
-            alert('Error creando pedido. Verifique los datos e intente nuevamente.');
-        });
+            .catch(error => console.error('Error creando pedido:', error));
     };
 
     const handleAgregarTarjeta = (tarjetaData) => {
@@ -172,6 +182,24 @@ function CarritoCliente() {
                 setTarjetas([...tarjetas, data]); 
             })
             .catch(error => console.error('Error agregando tarjeta:', error));
+    };
+
+    const handleAgregarDireccion = (direccionData) => {
+        fetch(`http://localhost:3001/dirPersona`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ ...direccionData, IdPersona: user.IdPersona }),
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log("Dirección creada:", data);
+                alert("Dirección agregada exitosamente.");
+                setShowDireccionForm(false);
+                setDirecciones([...direcciones, data]);
+            })
+            .catch(error => console.error('Error agregando dirección:', error));
     };
 
     return (
@@ -245,6 +273,27 @@ function CarritoCliente() {
                         ))}
                     </select>
                 </div>
+
+                <div className="direccion-selection">
+                    <label htmlFor="direccion">Seleccione una dirección:</label>
+                    <select 
+                        id="direccion" 
+                        value={direccionSeleccionada || ''}
+                        onChange={(e) => setDireccionSeleccionada(parseInt(e.target.value))}
+                    >
+                        <option value="" disabled>Seleccione una dirección</option>
+                        {direcciones.map(direccion => (
+                            <option key={direccion.IdDireccionPersona} value={direccion.IdDireccionPersona}>
+                                {direccion.DireccionCompleta}
+                            </option>
+                        ))}
+                    </select>
+                    <button onClick={() => setShowDireccionForm(!showDireccionForm)}>
+                        {showDireccionForm ? 'Cancelar' : 'Agregar nueva dirección'}
+                    </button>
+                </div>
+
+                {showDireccionForm && <DireccionForm onSubmit={handleAgregarDireccion} />}
 
                 {(metodoPagoSeleccionado === 3 || metodoPagoSeleccionado === 4) && (
                     <div className="tarjeta-selection">
