@@ -4,13 +4,13 @@ import { UserContext } from '../../context/UserContext';
 import '../../Styles/PageContainer.css';
 import fondoVet from '../../Imagenes/FondoVet.jpg';
 import NavCliente from "./NavCliente";
-import ProductImage from '../../Imagenes/ProductImage'; // Asegúrate de que ProductImage.js existe y exporta un componente
+import ProductImage from '../../Imagenes/ProductImage';
 
 function ProductoCliente() {
     const navigate = useNavigate();
     const [products, setProducts] = useState([]);
     const [sucursales, setSucursales] = useState([]);
-    const [selectedSucursal, setSelectedSucursal] = useState(null); // Estado para almacenar la sucursal seleccionada
+    const [selectedSucursal, setSelectedSucursal] = useState(null);
     const { user } = useContext(UserContext);
 
     useEffect(() => {
@@ -21,7 +21,7 @@ function ProductoCliente() {
                 if (Array.isArray(data)) {
                     setSucursales(data);
                     if (data.length > 0) {
-                        setSelectedSucursal(data[0]); // Establecer la primera sucursal como seleccionada
+                        setSelectedSucursal(data[0]);
                     }
                 } else {
                     console.error('La respuesta de sucursales no es un array:', data);
@@ -52,7 +52,7 @@ function ProductoCliente() {
                 body: JSON.stringify({
                     IdPersona: user.IdPersona,
                     IdProducto: IdProducto,
-                    IdSucursal: selectedSucursal.IdSucursal, // Pasar la sucursal seleccionada
+                    IdSucursal: selectedSucursal.IdSucursal,
                     Cantidad: 1
                 })
             })
@@ -107,7 +107,7 @@ function ProductoCliente() {
                 <div className="product-grid">
                     {products.map(product => (
                         <div className="product-card" key={product.IdProducto}>
-                            <ProductImage url={product.IdURL} alt={product.NombreProducto}/>
+                            <ProductImage url={product.Dirrecion} alt={product.NombreProducto} />
                             <div className="product-info">
                                 <p><strong>Nombre:</strong> {product.NombreProducto}</p>
                                 <p><strong>Precio:</strong> {product.PrecioProducto}</p>

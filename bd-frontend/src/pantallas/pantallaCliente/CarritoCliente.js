@@ -4,14 +4,27 @@ import { UserContext } from '../../context/UserContext';
 import '../../Styles/PageContainer.css';
 import fondoVet from '../../Imagenes/FondoVet.jpg';
 import NavCliente from "./NavCliente";
+import { TarjetaForm, DireccionForm } from '../../seguridad/Forms';
+import '../../Styles/FormsTarjeta.css'; // Asegúrate de importar el archivo CSS aquí
 
 function CarritoCliente() {
     const [carrito, setCarrito] = useState([]);
     const { user } = useContext(UserContext);
     const [monto, setMonto] = useState(0);
+    const [metodosPago, setMetodosPago] = useState([]);
+    const [metodoPagoSeleccionado, setMetodoPagoSeleccionado] = useState(null);
+    const [divisas, setDivisas] = useState([]);
+    const [divisaSeleccionada, setDivisaSeleccionada] = useState(null);
+    const [tarjetas, setTarjetas] = useState([]);
+    const [tarjetaSeleccionada, setTarjetaSeleccionada] = useState(null);
+    const [direcciones, setDirecciones] = useState([]);
+    const [direccionSeleccionada, setDireccionSeleccionada] = useState(null);
+    const [showTarjetaForm, setShowTarjetaForm] = useState(false);
+    const [showDireccionForm, setShowDireccionForm] = useState(false);
+    const [numComprobante, setNumComprobante] = useState('');
+    const [showComprobanteForm, setShowComprobanteForm] = useState(false);
     const navigate = useNavigate();
 
-    // Función para traer información del carrito de una persona
     useEffect(() => {
         if (user && user.IdPersona) {
             fetch(`http://localhost:3001/carrito/${user.IdPersona}`)
@@ -19,13 +32,52 @@ function CarritoCliente() {
                 .then(data => {
                     console.log("CarritoCliente fetched:", data);
                     setCarrito(data);
-                    handlePrecioFinal(data); // Calcular el precio final después de obtener los datos del carrito
+                    handlePrecioFinal(data); 
                 })
                 .catch(error => console.error('Error fetching carrito:', error));
+
+            fetch(`http://localhost:3001/dirPersonaByPer/${user.IdPersona}`)
+                .then(response => response.json())
+                .then(data => {
+                    console.log("Direcciones fetched:", data);
+                    setDirecciones(data);
+                })
+                .catch(error => console.error('Error fetching direcciones:', error));
         }
     }, [user]);
 
-    // Manejo de borrado del carrito
+    useEffect(() => {
+        fetch(`http://localhost:3001/metodoPago`)
+            .then(response => response.json())
+            .then(data => {
+                console.log("Metodos de Pago fetched:", data);
+                setMetodosPago(data);
+            })
+            .catch(error => console.error('Error fetching metodos de pago:', error));
+    }, []);
+
+    useEffect(() => {
+        fetch(`http://localhost:3001/divisa`)
+            .then(response => response.json())
+            .then(data => {
+                console.log("Divisas fetched:", data);
+                setDivisas(data);
+            })
+            .catch(error => console.error('Error fetching divisas:', error));
+    }, []);
+
+    useEffect(() => {
+        if (user && (metodoPagoSeleccionado === 3 || metodoPagoSeleccionado === 4)) {
+            fetch(`http://localhost:3001/infoTarjeta/${user.IdPersona}`)
+                .then(response => response.json())
+                .then(data => {
+                    console.log("Tarjetas fetched:", data);
+                    setTarjetas(data);
+                })
+                .catch(error => console.error('Error fetching tarjetas:', error));
+        }
+    }, [user, metodoPagoSeleccionado]);
+
     const handleDelete = (idCarrito) => {
         fetch(`http://localhost:3001/carrito/${idCarrito}`, {
             method: 'DELETE',
@@ -34,12 +86,11 @@ function CarritoCliente() {
             .then(() => {
                 const updatedCarrito = carrito.filter(item => item.IdCarrito !== idCarrito);
                 setCarrito(updatedCarrito);
-                handlePrecioFinal(updatedCarrito); // Calcular el precio final después de eliminar un producto
+                handlePrecioFinal(updatedCarrito); 
             })
             .catch(error => console.error('Error deleting item:', error));
     };
 
-    // Manejo de la cantidad del carrito
     const handleQuantityChange = (idCarrito, newQuantity) => {
         fetch(`http://localhost:3001/carrito/${idCarrito}/${newQuantity}`, {
             method: 'PUT',
@@ -50,17 +101,113 @@ function CarritoCliente() {
                     item.IdCarrito === idCarrito ? { ...item, Cantidad: newQuantity } : item
                 );
                 setCarrito(updatedCarrito);
-                handlePrecioFinal(updatedCarrito); // Calcular el precio final después de actualizar la cantidad
+                handlePrecioFinal(updatedCarrito); 
             })
             .catch(error => console.error('Error updating quantity:', error));
     };
 
-    // Manejo del precio final del carrito
     const handlePrecioFinal = (carrito) => {
-        // Suma el precio de cada producto multiplicado por su cantidad
         const total = carrito.reduce((accumulator, item) => accumulator + (item.PrecioProducto * item.Cantidad), 0);
-        // Actualiza el estado con el monto total
-        setMonto(total);
+        setMonto(total.toFixed(2));
+    };
+
+    const handleCrearPedido = () => {
+        if (!metodoPagoSeleccionado) {
+            alert("Seleccione un método de pago.");
+            return;
+        }
+
+        if (!divisaSeleccionada) {
+            alert("Seleccione una divisa.");
+            return;
+        }
+
+        if (!direccionSeleccionada) {
+            alert("Seleccione una dirección.");
+            return;
+        }
+
+        if ((metodoPagoSeleccionado === 2 || metodoPagoSeleccionado === 5) && numComprobante.trim() === '') {
+            alert("Debe ingresar un número de comprobante.");
+            return;
+        }
+
+        const pedidoData = {
+            IdPersona: user.IdPersona,
+            MontoTotal: monto,
+            IdMetPago: metodoPagoSeleccionado,
+            IdDivisa: divisaSeleccionada,
+            IdInformacionTarjeta: metodoPagoSeleccionado === 3 || metodoPagoSeleccionado === 4 ? tarjetaSeleccionada : null,
+            NumComprobante: metodoPagoSeleccionado === 2 || metodoPagoSeleccionado === 5 ? numComprobante : null,
+            FechaPedido: new Date().toISOString().split('T')[0],
+            EstadoPedido: 1,
+            DetallesPedido: carrito.map(item => ({
+                Cantidad: item.Cantidad,
+                MontoTotal: item.PrecioProducto * item.Cantidad,
+                IdProducto: item.IdProducto,
+                IdSucursal: item.IdSucursal, // Agrega el IdSucursal en el detalle
+                NuevaCantidad: item.CantidadDisponible - item.Cantidad // Calcula la nueva cantidad
+            })),
+            IdDireccion: direccionSeleccionada // Agregar la dirección seleccionada
+        };
+
+        fetch(`http://localhost:3001/pedido`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(pedidoData),
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log("Pedido creado:", data);
+            alert("Pedido creado exitosamente.");
+            carrito.forEach(item => handleDelete(item.IdCarrito)); // Eliminar cada artículo del carrito
+            setCarrito([]);
+            setMonto(0);
+            setMetodoPagoSeleccionado(null);
+            setDivisaSeleccionada(null);
+            setTarjetaSeleccionada(null);
+            setNumComprobante('');
+            setDireccionSeleccionada(null);
+        })
+            .catch(error => console.error('Error creando pedido:', error));
+    };
+
+    const handleAgregarTarjeta = (tarjetaData) => {
+        fetch(`http://localhost:3001/infoTarjeta`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ ...tarjetaData, IdPersona: user.IdPersona }),
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log("Tarjeta creada:", data);
+                alert("Tarjeta agregada exitosamente.");
+                setShowTarjetaForm(false);
+                setTarjetas([...tarjetas, data]); 
+            })
+            .catch(error => console.error('Error agregando tarjeta:', error));
+    };
+
+    const handleAgregarDireccion = (direccionData) => {
+        fetch(`http://localhost:3001/dirPersona`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ ...direccionData, IdPersona: user.IdPersona }),
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log("Dirección creada:", data);
+                alert("Dirección agregada exitosamente.");
+                setShowDireccionForm(false);
+                setDirecciones([...direcciones, data]);
+            })
+            .catch(error => console.error('Error agregando dirección:', error));
     };
 
     return (
@@ -70,11 +217,9 @@ function CarritoCliente() {
             </header>
             <NavCliente />
             <main className="main-content">
-                {/* Encabezado */}
                 <h2>Carrito de Compras</h2>
                 {user && <p>Bienvenido, {user.NombrePersona}</p>}
 
-                {/* Lista de productos en el carrito */}
                 <div className="product-grid">
                     {carrito.map(item => (
                         <div className="product-card" key={item.IdCarrito}>
@@ -101,11 +246,101 @@ function CarritoCliente() {
                         </div>
                     ))}
                 </div>
-
-                {/* Botón para proceder a la compra */}
-                <button style={{ marginTop: '50px' }} className="form-button" onClick={() => handlePrecioFinal(carrito)}>Calcular precio final
-                </button>
                 <h2>El monto total del pedido es de: {monto}</h2>
+
+                <div className="payment-method-selection">
+                    <label htmlFor="metodoPago">Seleccione método de pago:</label>
+                    <select 
+                        id="metodoPago" 
+                        value={metodoPagoSeleccionado || ''}
+                        onChange={(e) => {
+                            setMetodoPagoSeleccionado(parseInt(e.target.value));
+                            setShowComprobanteForm(parseInt(e.target.value) === 2 || parseInt(e.target.value) === 5);
+                        }}
+                    >
+                        <option value="" disabled>Seleccione un método de pago</option>
+                        {metodosPago.map(metodo => (
+                            <option key={metodo.IdMetPago} value={metodo.IdMetPago}>
+                                {metodo.TipoMetPago}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+
+                <div className="divisa-selection">
+                    <label htmlFor="divisa">Seleccione divisa:</label>
+                    <select 
+                        id="divisa" 
+                        value={divisaSeleccionada || ''}
+                        onChange={(e) => setDivisaSeleccionada(parseInt(e.target.value))}
+                    >
+                        <option value="" disabled>Seleccione una divisa</option>
+                        {divisas.map(divisa => (
+                            <option key={divisa.IdDivisa} value={divisa.IdDivisa}>
+                                {divisa.TipoDivisa}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+
+                <div className="direccion-selection">
+                    <label htmlFor="direccion">Seleccione una dirección:</label>
+                    <select 
+                        id="direccion" 
+                        value={direccionSeleccionada || ''}
+                        onChange={(e) => setDireccionSeleccionada(parseInt(e.target.value))}
+                    >
+                        <option value="" disabled>Seleccione una dirección</option>
+                        {direcciones.map(direccion => (
+                            <option key={direccion.IdDireccionPer} value={direccion.IdDireccionPer}>
+                                {direccion.DireccionCompleta}
+                            </option>
+                        ))}
+                    </select>
+                    <button onClick={() => setShowDireccionForm(!showDireccionForm)}>
+                        {showDireccionForm ? 'Cancelar' : 'Agregar nueva dirección'}
+                    </button>
+                </div>
+
+                {showDireccionForm && <DireccionForm onSubmit={handleAgregarDireccion} />}
+
+                {(metodoPagoSeleccionado === 3 || metodoPagoSeleccionado === 4) && (
+                    <div className="tarjeta-selection">
+                        <label htmlFor="tarjeta">Seleccione una tarjeta:</label>
+                        <select 
+                            id="tarjeta" 
+                            value={tarjetaSeleccionada || ''}
+                            onChange={(e) => setTarjetaSeleccionada(parseInt(e.target.value))}
+                        >
+                            <option value="" disabled>Seleccione una tarjeta</option>
+                            {tarjetas.map(tarjeta => (
+                                <option key={tarjeta.IdInformacionTarjeta} value={tarjeta.IdInformacionTarjeta}>
+                                    {`${tarjeta.NombrePropietario} - ${tarjeta.NumeroTarjeta}`}
+                                </option>
+                            ))}
+                        </select>
+                        <button onClick={() => setShowTarjetaForm(!showTarjetaForm)}>
+                            {showTarjetaForm ? 'Cancelar' : 'Agregar nueva tarjeta'}
+                        </button>
+                    </div>
+                )}
+
+                {showTarjetaForm && <TarjetaForm onSubmit={handleAgregarTarjeta} />}
+                
+                {showComprobanteForm && (
+                    <div className="comprobante-form">
+                        <label htmlFor="comprobante">Número de Comprobante:</label>
+                        <input 
+                            type="text" 
+                            id="comprobante" 
+                            value={numComprobante}
+                            onChange={(e) => setNumComprobante(e.target.value)}
+                            required 
+                        />
+                    </div>
+                )}
+
+                <button style={{ marginTop: '50px' }} className="form-button" onClick={handleCrearPedido}>Generar Pedido</button>
             </main>
         </div>
     );

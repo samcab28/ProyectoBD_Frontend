@@ -1,9 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
 import { UserContext } from '../../context/UserContext';
 import '../../Styles/PageContainer.css';
+import '../../Styles/FormsTarjeta.css';
 import fondoVet from '../../Imagenes/FondoVet.jpg';
-import NavCliente from '../../pantallas/pantallaCliente/NavCliente'
+import NavCliente from '../../pantallas/pantallaCliente/NavCliente';
 
 function CitasMedicas() {
     const [citas, setCitas] = useState([]);
@@ -132,29 +132,31 @@ function CitasMedicas() {
             <main className="main-content">
                 <h2>Crear Nueva Cita Médica</h2>
                 {error && <p className="error-message">{error}</p>}
-                <form onSubmit={handleSubmit}>
-                    <label>Fecha: </label>
-                    <input type="date" name="FechaCita" value={nuevaCita.FechaCita} onChange={handleChange} required />
-                    <label>Duración: </label>
-                    <input type="number" name="DuracionCita" value={nuevaCita.DuracionCita} onChange={handleChange} min="1" max="3" required />
-                    <label>Mascota: </label>
-                    <select name="IdMascota" value={nuevaCita.IdMascota} onChange={handleChange} required>
-                        <option value="">-- Seleccione una Mascota --</option>
-                        {mascotas.map(mascota => (
-                            <option key={mascota.IdMascota} value={mascota.IdMascota}>{mascota.NombreMascota}</option>
-                        ))}
-                    </select>
-                    <label>Veterinario: </label>
-                    <select name="IdEncargado" value={nuevaCita.IdEncargado} onChange={handleChange} required>
-                        <option value="">-- Seleccione un Veterinario --</option>
-                        {veterinarios.map(vet => (
-                            <option key={vet.IdPersona} value={vet.IdPersona}>{vet.NombrePersona} {vet.ApellidoPersona}</option>
-                        ))}
-                    </select>
-                    <button type="submit">Crear Cita</button>
-                </form>
+                <div className="form-container">
+                    <form onSubmit={handleSubmit}>
+                        <label>Fecha: </label>
+                        <input type="date" name="FechaCita" value={nuevaCita.FechaCita} onChange={handleChange} required />
+                        <label>Duración en horas: </label>
+                        <input type="number" name="DuracionCita" value={nuevaCita.DuracionCita} onChange={handleChange} min="1" max="3" required />
+                        <label>Mascota: </label>
+                        <select name="IdMascota" value={nuevaCita.IdMascota} onChange={handleChange} required>
+                            <option value="">-- Seleccione una Mascota --</option>
+                            {mascotas.map(mascota => (
+                                <option key={mascota.IdMascota} value={mascota.IdMascota}>{mascota.NombreMascota}</option>
+                            ))}
+                        </select>
+                        <label>Veterinario: </label>
+                        <select name="IdEncargado" value={nuevaCita.IdEncargado} onChange={handleChange} required>
+                            <option value="">-- Seleccione un Veterinario --</option>
+                            {veterinarios.map(vet => (
+                                <option key={vet.IdPersona} value={vet.IdPersona}>{vet.NombrePersona} {vet.ApellidoPersona}</option>
+                            ))}
+                        </select>
+                        <button type="submit">Crear Cita</button>
+                    </form>
+                </div>
                 <h2>Lista de Citas Médicas</h2>
-                <div>
+                <div className="form-container">
                     <label>Estado de la Cita: </label>
                     <select value={estadoCita} onChange={handleEstadoChange}>
                         <option value="1">Atendida</option>
@@ -172,7 +174,7 @@ function CitasMedicas() {
                                 <p><strong>Veterinario:</strong> {cita.NombreVeterinario || 'N/A'} {cita.ApellidoVeterinario || 'N/A'}</p>
                                 <p><strong>Mascota:</strong> {cita.NombreMascota}</p>
                                 <p><strong>Animal:</strong> {cita.NombreAnimal}</p>
-                                <button onClick={() => handleDelete(cita.IdCitaMed)}>Eliminar</button>
+                                <button className="form-button" onClick={() => handleDelete(cita.IdCitaMed)}>Eliminar</button>
                             </div>
                         </div>
                     ))}
