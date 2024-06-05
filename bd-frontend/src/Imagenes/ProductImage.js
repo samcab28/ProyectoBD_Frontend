@@ -1,30 +1,27 @@
-// src/components/ProductImage.js
 import React from 'react';
-import '../Styles/PageContainer.css';
-
-const getDriveImageUrl = (url) => {
-    console.log('Original URL:', url);
-    if (typeof url === 'string' && url.includes('drive.google.com')) {
-        const match = url.match(/[-\w]{25,}/);
-        if (match) {
-            const imageUrl = `https://drive.google.com/uc?export=view&id=${match[0]}`;
-            console.log(`Extracted Google Drive ID: ${match[0]}`);
-            console.log(`Generated Image URL: ${imageUrl}`);
-            return imageUrl;
-        }
-    }
-    return '';
-};
 
 const ProductImage = ({ url, alt }) => {
+    // Asegúrate de que la URL es válida para Google Drive
+    const getDirectImageUrl = (driveUrl) => {
+        const match = driveUrl.match(/\/d\/(.*)\//);
+        if (match && match[1]) {
+            return `https://drive.google.com/uc?export=view&id=${match[1]}`;
+        }
+        return null;
+    };
+
+    const directImageUrl = getDirectImageUrl(url);
+
+    console.log('Original URL:', url);
+    console.log('Transformed URL:', directImageUrl);
+
     return (
-        <div className="product-image-container">
-            {typeof url === 'string' && url.includes('drive.google.com') ? (
-                <img src={getDriveImageUrl(url)} alt={alt} className="product-image" />
-            ) : (
-                <p>Imagen no disponible</p>
-            )}
-        </div>
+        <img 
+            src={directImageUrl || 'https://via.placeholder.com/150'} 
+            alt={alt} 
+            onError={(e) => { e.target.src = 'https://via.placeholder.com/150'; }} 
+            style={{ width: '150px', height: '150px' }} // Ajusta el tamaño de la imagen según sea necesario
+        />
     );
 };
 
