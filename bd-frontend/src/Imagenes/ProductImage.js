@@ -12,8 +12,8 @@ const ProductImage = ({ url, alt }) => {
 
     const directImageUrl = getDirectImageUrl(url);
 
-    console.log('Original URL:', url);
-    console.log('Transformed URL:', directImageUrl);
+    //console.log('Original URL:', url);
+    //console.log('Transformed URL:', directImageUrl);
 
     return (
         <img 
