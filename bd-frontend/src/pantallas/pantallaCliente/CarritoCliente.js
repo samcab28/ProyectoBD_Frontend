@@ -4,7 +4,8 @@ import { UserContext } from '../../context/UserContext';
 import '../../Styles/PageContainer.css';
 import fondoVet from '../../Imagenes/FondoVet.jpg';
 import NavCliente from "./NavCliente";
-import { TarjetaForm, DireccionForm } from '../../seguridad/Forms.js';
+import { TarjetaForm, DireccionForm } from '../../seguridad/Forms';
+import '../../Styles/FormsTarjeta.css'; // Asegúrate de importar el archivo CSS aquí
 
 function CarritoCliente() {
     const [carrito, setCarrito] = useState([]);
@@ -107,7 +108,7 @@ function CarritoCliente() {
 
     const handlePrecioFinal = (carrito) => {
         const total = carrito.reduce((accumulator, item) => accumulator + (item.PrecioProducto * item.Cantidad), 0);
-        setMonto(total);
+        setMonto(total.toFixed(2));
     };
 
     const handleCrearPedido = () => {
@@ -245,6 +246,7 @@ function CarritoCliente() {
                         </div>
                     ))}
                 </div>
+                <h2>El monto total del pedido es de: {monto}</h2>
 
                 <div className="payment-method-selection">
                     <label htmlFor="metodoPago">Seleccione método de pago:</label>
@@ -339,7 +341,6 @@ function CarritoCliente() {
                 )}
 
                 <button style={{ marginTop: '50px' }} className="form-button" onClick={handleCrearPedido}>Generar Pedido</button>
-                <h2>El monto total del pedido es de: {monto}</h2>
             </main>
         </div>
     );
