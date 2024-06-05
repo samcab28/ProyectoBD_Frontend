@@ -4,7 +4,7 @@ import { UserContext } from '../../context/UserContext';
 import '../../Styles/PageContainer.css';
 import fondoVet from '../../Imagenes/FondoVet.jpg';
 import NavCliente from "./NavCliente";
-import { TarjetaForm, ComprobanteForm } from '../../seguridad/Forms.js';
+import { TarjetaForm } from '../../seguridad/Forms.js';
 
 function CarritoCliente() {
     const [carrito, setCarrito] = useState([]);
@@ -123,7 +123,12 @@ function CarritoCliente() {
             IdInformacionTarjeta: metodoPagoSeleccionado === 3 || metodoPagoSeleccionado === 4 ? tarjetaSeleccionada : null,
             NumComprobante: metodoPagoSeleccionado === 2 || metodoPagoSeleccionado === 5 ? numComprobante : null,
             FechaPedido: new Date().toISOString().split('T')[0],
-            EstadoPedido: 1
+            EstadoPedido: 1,
+            DetallesPedido: carrito.map(item => ({
+                Cantidad: item.Cantidad,
+                MontoTotal: item.PrecioProducto * item.Cantidad,
+                IdProducto: item.IdProducto
+            }))
         };
 
         fetch(`http://localhost:3001/pedido`, {
@@ -133,19 +138,22 @@ function CarritoCliente() {
             },
             body: JSON.stringify(pedidoData),
         })
-            .then(response => response.json())
-            .then(data => {
-                console.log("Pedido creado:", data);
-                alert("Pedido creado exitosamente.");
-                carrito.forEach(item => handleDelete(item.IdCarrito)); // Eliminar cada artículo del carrito
-                setCarrito([]);
-                setMonto(0);
-                setMetodoPagoSeleccionado(null);
-                setDivisaSeleccionada(null);
-                setTarjetaSeleccionada(null);
-                setNumComprobante('');
-            })
-            .catch(error => console.error('Error creando pedido:', error));
+        .then(response => response.json())
+        .then(data => {
+            console.log("Pedido creado:", data);
+            alert("Pedido creado exitosamente.");
+            carrito.forEach(item => handleDelete(item.IdCarrito)); // Eliminar cada artículo del carrito
+            setCarrito([]);
+            setMonto(0);
+            setMetodoPagoSeleccionado(null);
+            setDivisaSeleccionada(null);
+            setTarjetaSeleccionada(null);
+            setNumComprobante('');
+        })
+        .catch(error => {
+            console.error('Error creando pedido:', error);
+            alert('Error creando pedido. Verifique los datos e intente nuevamente.');
+        });
     };
 
     const handleAgregarTarjeta = (tarjetaData) => {
@@ -210,7 +218,7 @@ function CarritoCliente() {
                         value={metodoPagoSeleccionado || ''}
                         onChange={(e) => {
                             setMetodoPagoSeleccionado(parseInt(e.target.value));
-                            setShowComprobanteForm(e.target.value === "2" || e.target.value === "5");
+                            setShowComprobanteForm(parseInt(e.target.value) === 2 || parseInt(e.target.value) === 5);
                         }}
                     >
                         <option value="" disabled>Seleccione un método de pago</option>
