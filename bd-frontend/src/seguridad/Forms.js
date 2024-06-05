@@ -1,4 +1,3 @@
-// Forms.js
 import React, { useState } from 'react';
 
 function TarjetaForm({ onSubmit }) {
@@ -40,4 +39,23 @@ function TarjetaForm({ onSubmit }) {
     );
 }
 
-export default TarjetaForm;
+function ComprobanteForm({ onSubmit }) {
+    const [numComprobante, setNumComprobante] = useState('');
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        onSubmit({ NumComprobante: numComprobante });
+    };
+
+    return (
+        <form onSubmit={handleSubmit}>
+            <label>
+                Número de Comprobante:
+                <input type="text" value={numComprobante} onChange={(e) => setNumComprobante(e.target.value)} required />
+            </label>
+            <button type="submit">Agregar Comprobante</button>
+        </form>
+    );
+}
+
+export { TarjetaForm, ComprobanteForm };
