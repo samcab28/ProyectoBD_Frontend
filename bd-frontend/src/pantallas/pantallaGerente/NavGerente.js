@@ -15,6 +15,7 @@ function NavAdmin() {
                 <li><Link to="/gerente/cobro"><button className="nav-button">Cobro</button></Link></li>
                 <li><Link to="/gerente/expediente"><button className="nav-button">Expediente Cliente</button></Link></li>
                 <li><Link to="/gerente/producto"><button className="nav-button">Producto</button></Link></li>
+                <li><Link to="/gerente/gestion"><button className="nav-button">Gestión de usuarios</button></Link></li>
                 <li><Link to="/"><button className="nav-button">Logout</button></Link></li>
             </ul>
         </nav>

@@ -8,7 +8,7 @@ import CitaMedicaGerente from "../pantallas/pantallaGerente/CitaMedicaGerente";
 import CobroGerente from "../pantallas/pantallaGerente/CobroGerente";
 import ExpedienteGerente from "../pantallas/pantallaGerente/ExpedienteGerente";
 import ProductoGerente from "../pantallas/pantallaGerente/ProductoGerente";
-
+import CrudMaster from '../CRUD_Folder/CrudMaster';
 
 const RouteGerente = () => {
     return (
@@ -18,6 +18,8 @@ const RouteGerente = () => {
             <Route path='/cobro' element={<CobroGerente />} />
             <Route path='/expediente' element={<ExpedienteGerente />} />
             <Route path='/producto' element={<ProductoGerente />} />
+            <Route path='/gestion' element={<CrudMaster />} />
+            
         </Routes>
     );
 };
