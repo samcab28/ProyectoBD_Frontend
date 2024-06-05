@@ -7,6 +7,7 @@ function ExpedienteClienteAdmin(){
 
     const [busqueda, setBusqueda] = useState('');
     const [expedientes, setExpedientes] = useState([]);
+    const [expedientesFiltrados, setExpedientesFiltrados] = useState([]);
 
     const handleInputChange = (event) => {
         setBusqueda(event.target.value);
@@ -45,7 +46,7 @@ function ExpedienteClienteAdmin(){
                     <tr>
                     <th>Id</th>
                     <th>Comentarios</th>
-                    <th>IdCita</th>{/* <th>Fecha_Cita</th> */}
+                    <th>Fecha_Cita</th> 
                     <th>Encargado</th>
                     <th>Mascota</th>
                     <th>ProductosRecetados</th>
@@ -56,9 +57,9 @@ function ExpedienteClienteAdmin(){
                     <tr key={expediente.IdExpediente}>
                         <td>{expediente.IdExpediente}</td>
                         <td>{expediente.Comentarios}</td>
-                        <td>{expediente.IdCita}</td>
-                        <td>{expediente.veterinario}</td>
-                        <td>{expediente.mascota}</td>
+                        <td>{expediente.FechaCita}</td>
+                        <td>{expediente.Veterinario}</td>
+                        <td>{expediente.Duegno}</td>
                         <td>{expediente.ProductosRecetados}</td>
                     </tr>
                 ))}
