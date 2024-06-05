@@ -12,7 +12,7 @@ function CreateCita(){
     const [estados, setEstados] = useState([]);
 
     useEffect(() => {
-        // Fetch personas (gerentes)
+        // Fetch personas (veterinarios)
         fetch('http://localhost:3001/persona/tipo/2') 
             .then(response => response.json())
             .then(data => {
