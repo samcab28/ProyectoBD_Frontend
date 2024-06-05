@@ -121,6 +121,11 @@ function CarritoCliente() {
             return;
         }
 
+        if (!direccionSeleccionada) {
+            alert("Seleccione una dirección.");
+            return;
+        }
+
         if ((metodoPagoSeleccionado === 2 || metodoPagoSeleccionado === 5) && numComprobante.trim() === '') {
             alert("Debe ingresar un número de comprobante.");
             return;
@@ -139,9 +144,10 @@ function CarritoCliente() {
                 Cantidad: item.Cantidad,
                 MontoTotal: item.PrecioProducto * item.Cantidad,
                 IdProducto: item.IdProducto,
-                IdSucursal: item.IdSucursal,
-                NuevaCantidad: item.CantidadDisponible - item.Cantidad
-            }))
+                IdSucursal: item.IdSucursal, // Agrega el IdSucursal en el detalle
+                NuevaCantidad: item.CantidadDisponible - item.Cantidad // Calcula la nueva cantidad
+            })),
+            IdDireccion: direccionSeleccionada // Agregar la dirección seleccionada
         };
 
         fetch(`http://localhost:3001/pedido`, {
@@ -162,6 +168,7 @@ function CarritoCliente() {
             setDivisaSeleccionada(null);
             setTarjetaSeleccionada(null);
             setNumComprobante('');
+            setDireccionSeleccionada(null);
         })
             .catch(error => console.error('Error creando pedido:', error));
     };
@@ -283,7 +290,7 @@ function CarritoCliente() {
                     >
                         <option value="" disabled>Seleccione una dirección</option>
                         {direcciones.map(direccion => (
-                            <option key={direccion.IdDireccionPersona} value={direccion.IdDireccionPersona}>
+                            <option key={direccion.IdDireccionPer} value={direccion.IdDireccionPer}>
                                 {direccion.DireccionCompleta}
                             </option>
                         ))}
