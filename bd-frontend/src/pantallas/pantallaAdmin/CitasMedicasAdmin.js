@@ -20,7 +20,7 @@ function CitasCliente(){
                     </Link>
                 </li>
                 <li>
-                    <Link to="/crud">
+                    <Link to="/admin/citasMedica/asignacionPersonal">
                         <button>Asignar Personal</button>
                     </Link>
                 </li>
