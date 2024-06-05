@@ -34,7 +34,7 @@ function ExpedienteClienteAdmin(){
             </header>
             <NavAdmin/>
             <main className="main-content">
-                <h2>Expedentes de los clientes</h2>
+                <h2>Expedientes de los clientes</h2>
                 <input
                     type="text"
                     placeholder="Buscar..."
@@ -48,6 +48,7 @@ function ExpedienteClienteAdmin(){
                     <th>Comentarios</th>
                     <th>Fecha_Cita</th> 
                     <th>Encargado</th>
+                    <th>Duegno</th>
                     <th>Mascota</th>
                     <th>ProductosRecetados</th>
                     </tr> 
@@ -60,6 +61,7 @@ function ExpedienteClienteAdmin(){
                         <td>{expediente.FechaCita}</td>
                         <td>{expediente.Veterinario}</td>
                         <td>{expediente.Duegno}</td>
+                        <td>{expediente.NombreMascota}</td>
                         <td>{expediente.ProductosRecetados}</td>
                     </tr>
                 ))}
