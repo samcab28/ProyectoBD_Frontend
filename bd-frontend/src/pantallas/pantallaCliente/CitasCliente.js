@@ -99,28 +99,39 @@ function CitasMedicas() {
             },
             body: JSON.stringify(citaData)
         })
-        .then(response => {
-            if (!response.ok) {
-                return response.json().then(error => { throw new Error(error.message) });
-            }
-            return response.json();
-        })
-        .then(data => {
-            console.log('Respuesta del servidor:', data);
-            setCitas([...citas, data]);
-        })
-        .catch(error => console.error('Error creating cita:', error.message));
+            .then(response => {
+                if (!response.ok) {
+                    return response.json().then(error => { throw new Error(error.message) });
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Respuesta del servidor:', data);
+                setCitas([...citas, data]);
+            })
+            .catch(error => console.error('Error creating cita:', error.message));
     };
 
     const handleDelete = (id) => {
-        fetch(`http://localhost:3001/citaMedica/${id}`, {
-            method: 'DELETE'
+        console.log("IdCitaMed to delete:", id); // Debug line
+        if (id === undefined) {
+            console.error('IdCitaMed es undefined');
+            return;
+        }
+        fetch(`http://localhost:3001/cita/cancelar/${id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            }
         })
-        .then(response => response.json())
-        .then(data => {
-            setCitas(citas.filter(cita => cita.IdCitaMed !== id));
-        })
-        .catch(error => console.error('Error deleting cita:', error));
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Error al cancelar la cita');
+                }
+                // Actualizar la lista de citas después de la cancelación
+                setCitas(citas.filter(cita => cita.IdCitaMed !== id));
+            })
+            .catch(error => console.error('Error canceling cita:', error.message));
     };
 
     return (
@@ -165,19 +176,28 @@ function CitasMedicas() {
                     </select>
                 </div>
                 <div className="product-grid">
-                    {citas.map(cita => (
-                        <div className="product-card" key={cita.IdCitaMed}>
-                            <div className="product-info">
-                                <p><strong>Fecha:</strong> {cita.FechaCita}</p>
-                                <p><strong>Duración:</strong> {cita.DuracionCita}</p>
-                                <p><strong>Estado:</strong> {cita.EstadoCita}</p>
-                                <p><strong>Veterinario:</strong> {cita.NombreVeterinario || 'N/A'} {cita.ApellidoVeterinario || 'N/A'}</p>
-                                <p><strong>Mascota:</strong> {cita.NombreMascota}</p>
-                                <p><strong>Animal:</strong> {cita.NombreAnimal}</p>
-                                <button className="form-button" onClick={() => handleDelete(cita.IdCitaMed)}>Eliminar</button>
+                    {citas.map((cita, index) => {
+                        console.log("Cita individual: ", cita); // Debug line
+                        return (
+                            <div className="product-card" key={index}>
+                                <div className="product-info">
+                                    <p><strong>Fecha:</strong> {cita.FechaCita}</p>
+                                    <p><strong>Duración:</strong> {cita.DuracionCita}</p>
+                                    <p><strong>Estado:</strong> {cita.EstadoCita}</p>
+                                    <p>
+                                        <strong>Veterinario:</strong> {cita.NombreVeterinario || 'N/A'} {cita.ApellidoVeterinario || 'N/A'}
+                                    </p>
+                                    <p><strong>Mascota:</strong> {cita.NombreMascota}</p>
+                                    <p><strong>Animal:</strong> {cita.NombreAnimal}</p>
+                                    {cita.EstadoCita === 2 && (
+                                        <button className="form-button" onClick={() => handleDelete(cita.IdCitaMed)}>Eliminar</button>
+                                    )}
+
+
+                                </div>
                             </div>
-                        </div>
-                    ))}
+                        );
+                    })}
                 </div>
             </main>
         </div>
