@@ -22,6 +22,11 @@ function CrudMaster() {
                     </Link>
                 </li>
                 <li>
+                    <Link to="/crud/medicamento">
+                        <button>Crud de medicamentos</button>
+                    </Link>
+                </li>
+                <li>
                     <Link to="/crud/sucursal">
                         <button>Crud de sucursal</button>
                     </Link>
