@@ -93,6 +93,7 @@ function ResenaCliente() {
             });
     }
 
+
     return (
         <div className="home-screen">
             <header className="header">
@@ -100,10 +101,10 @@ function ResenaCliente() {
             </header>
             <NavCliente/>
             <main className="main-content">
-                {product && puntuacion && (
+                {product && (
                     <>
                         <h2>Reseña de {product[0].NombreProducto} de la marca {product[0].NombreMarcaPro} puntuacion
-                            de {puntuacion[0].PuntuacionPromedio}</h2>
+                            de {puntuacion.length > 0 ? puntuacion[0].PuntuacionPromedio : 'N/A'}</h2>
                         <div className="product-grid">
                             {resenas.map(resena => (
                                 <div className="product-card" key={resena.IdResPro}>
@@ -114,49 +115,48 @@ function ResenaCliente() {
                                 </div>
                             ))}
                         </div>
-
-                        <h2>Deja tu propia resena sobre este producto</h2>
-                        <form onSubmit={handleSubmit} className="review-form">
-                            <label>
-                                Titulo de la resena:
-                                <input
-                                    name="titulo"
-                                    type="text"
-                                    value={titulo}
-                                    onChange={e => setTitulo(e.target.value)}
-                                    className="form-input"
-                                />
-                            </label><br/>
-                            <label>
-                                Contenido de la resena:
-                                <textarea
-                                    name="contenido"
-                                    value={contenido}
-                                    onChange={e => setContenido(e.target.value)}
-                                    className="form-textarea"
-                                />
-                            </label><br/>
-                            <label>
-                                Puntuacion:
-                                <select
-                                    name="puntuacion"
-                                    value={puntuacionNumero}
-                                    onChange={e => setPuntuacionNumero(e.target.value)}
-                                    className="form-select"
-                                >
-                                    {Array.from({length: 11}, (_, i) => (
-                                        <option key={i} value={i}>{i}</option>
-                                    ))}
-                                </select>
-                            </label><br/>
-
-                            <button type="submit" className="form-button">Guardar</button>
-                        </form>
-                        <br/>
-                        <button onClick={handleRegresar} className="form-button">Regresar</button>
                     </>
                 )}
 
+                <h2>Deja tu propia reseña sobre este producto</h2>
+                <form onSubmit={handleSubmit} className="review-form">
+                    <label>
+                        Titulo de la reseña:
+                        <input
+                            name="titulo"
+                            type="text"
+                            value={titulo}
+                            onChange={e => setTitulo(e.target.value)}
+                            className="form-input"
+                        />
+                    </label><br/>
+                    <label>
+                        Contenido de la reseña:
+                        <textarea
+                            name="contenido"
+                            value={contenido}
+                            onChange={e => setContenido(e.target.value)}
+                            className="form-textarea"
+                        />
+                    </label><br/>
+                    <label>
+                        Puntuacion:
+                        <select
+                            name="puntuacion"
+                            value={puntuacionNumero}
+                            onChange={e => setPuntuacionNumero(e.target.value)}
+                            className="form-select"
+                        >
+                            {Array.from({length: 11}, (_, i) => (
+                                <option key={i} value={i}>{i}</option>
+                            ))}
+                        </select>
+                    </label><br/>
+
+                    <button type="submit" className="form-button">Guardar</button>
+                </form>
+                <br/>
+                <button onClick={handleRegresar} className="form-button">Regresar</button>
             </main>
         </div>
     );
