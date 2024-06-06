@@ -12,7 +12,7 @@ import ExpedienteClienteAdmin from "../pantallas/pantallaAdmin/ExpedienteCliente
 import ProductoAdmin from "../pantallas/pantallaAdmin/ProductoAdmin";
 import GestionCitas from '../pantallas/pantallaAdmin/GestionCitas';
 import AsignacionPersonal from '../pantallas/pantallaAdmin/AsignacionPersonal';
-
+import CancelarCita from '../pantallas/pantallaAdmin/CancelarCita';
 
 const RouteAdmin = () => {
     return (
@@ -21,6 +21,7 @@ const RouteAdmin = () => {
             <Route path='/citasMedica' element={<CitasMedicasAdmin />} />
             <Route path='/citasMedica/gestion' element={<GestionCitas />} />
             <Route path='/citasMedica/asignacionPersonal' element={<AsignacionPersonal />} />
+            <Route path='/citasMedica/cancelarCita' element={<CancelarCita />} />
             <Route path='/cobro' element={<CobroAdmin />} />
             <Route path='/expedienteCliente' element={<ExpedienteClienteAdmin />} />
             <Route path='/producto' element={<ProductoAdmin />} />

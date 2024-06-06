@@ -25,7 +25,7 @@ function CitasCliente(){
                     </Link>
                 </li>
                 <li>
-                    <Link to="/crud">
+                    <Link to="/admin/citasMedica/cancelarCita">
                         <button>Cancelar Cita</button>
                     </Link>
                 </li>
