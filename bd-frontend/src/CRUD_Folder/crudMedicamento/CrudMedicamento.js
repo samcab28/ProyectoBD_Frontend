@@ -71,7 +71,7 @@ function MedicamentoList(){
                         <td>{medicamento.FechaCaducidad}</td>
                         <td>{medicamento.UnidadMedida}</td>
                         <td>{medicamento.TipoMedicamento}</td>
-                        <td>{medicamento.AptoPublico}</td>
+                        <td>{medicamento.AptoPublico ? 'Sí' : 'No'}</td>
                         <td>{medicamento.MarcaProducto}</td>
                         <td>{medicamento.Sucursal}</td>
                         <td>{medicamento.Cantidad}</td>
