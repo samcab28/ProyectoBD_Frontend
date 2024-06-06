@@ -2,6 +2,7 @@ import fondoVet from "../../Imagenes/FondoVet.jpg";
 import NavGerente from "./NavGerente";
 import React from "react";
 
+
 function InitialGerente(){
     return (
         <div className="home-screen">

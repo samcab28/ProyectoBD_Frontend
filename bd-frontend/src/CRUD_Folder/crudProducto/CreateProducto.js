@@ -30,7 +30,7 @@ function CreateProducto() {
             .then(response => response.json())
             .then(data => {
                 console.log("tipo producto fetched:", data); // Debug line
-                setTiposProducto(data);
+                setTipoProducto(data);
             })
             .catch(error => console.error('Error fetching tipo producto:', error));
 
@@ -48,7 +48,7 @@ function CreateProducto() {
             .then(response => response.json())
             .then(data => {
                 console.log("urls fetched:", data); // Debug line
-                setUrls(data);
+                setUrl(data);
             })
             .catch(error => console.error('Error fetching urls:', error));
 
