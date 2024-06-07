@@ -17,7 +17,7 @@ const RouteVeterinario = () => {
             <Route path='/citaMedica' element={<CitaMedicaVet />} />
             <Route path='/mascota' element={<MascotaVet />} />
             <Route path='/medicamento' element={<MedicamentoVet />} />
-            <Route path='/citaManejo/:id' element={<CitaEjecucionVet />} />
+            <Route path='/citaManejo/:idCita/:idMascota' element={<CitaEjecucionVet />} />
         </Routes>
     );
 };

@@ -20,9 +20,10 @@ function CitaMedicaVet(){
             .catch(error => console.error('Error fetching de citas:', error));
     }, []);
 
-    const goToCita = (cita) => {
-        navigate(`/veterinario/citaManejo/${cita}`)
+    const goToCita = (citaId, citaMasc) => {
+        navigate(`/veterinario/citaManejo/${citaId}/${citaMasc}`);
     }
+
     return (
         <div className="home-screen">
             <header className="header">
@@ -42,7 +43,7 @@ function CitaMedicaVet(){
                                     <p><strong>Nombrev Mascota:</strong> {cita.NombreMascota}</p>
                                     <button style={{marginBottom: '10px', marginRight: '10px'}}
                                             className="form-button"
-                                            onClick={() => goToCita(cita.IdCitaMed)}>Iniciar Cita
+                                            onClick={() => goToCita(cita.IdCitaMed, cita.IdMascota)}>Iniciar Cita
                                     </button>
                                 </div>
                             </div>
