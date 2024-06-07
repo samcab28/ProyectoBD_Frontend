@@ -108,6 +108,16 @@ function CitasMedicas() {
         .then(data => {
             console.log('Respuesta del servidor:', data);
             setCitas([...citas, data]);
+
+            // Obtener los correos electrónicos del dueño y veterinario
+            const citaCreada = data; // Asume que la respuesta contiene la cita creada
+            if (citaCreada) {
+                console.log(citaCreada); 
+                const correos = [citaCreada.DuegnoCorreo, citaCreada.VetCorreo];
+                const asunto = 'Notificación de Creación de Cita Médica';
+                const mensaje = `La cita médica para la mascota ${citaCreada.NombreMascota}, del dueño ${citaCreada.NombrePersona} ha sido creada para el día ${citaCreada.FechaCita}.`;
+                enviarCorreo(correos, asunto, mensaje);
+            }
         })
         .catch(error => console.error('Error creating cita:', error.message));
     };
