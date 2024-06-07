@@ -8,7 +8,6 @@ function ProductoList(){
     
     // fetch producto
     useEffect(() => {
-        // Fetch personas
         fetch('http://localhost:3001/producto')
             .then(response => response.json())
             .then(data => {
