@@ -26,7 +26,10 @@ function ResenaCliente() {
             .then(response => response.json())
             .then(data => {
                 console.log("Puntuacion fetched:", data);
-                setPuntuacion(data);
+                setPuntuacion(data.map(item => ({
+                    ...item,
+                    PuntuacionPromedio: parseFloat(item.PuntuacionPromedio).toFixed(2)
+                })));
             })
             .catch(error => console.error('Error fetching puntuacion:', error));
     }, [id]);

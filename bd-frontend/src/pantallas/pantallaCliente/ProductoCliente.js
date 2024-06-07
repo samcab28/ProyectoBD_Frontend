@@ -115,7 +115,6 @@ function ProductoCliente() {
                                 <p><strong>Marca:</strong> {product.NombreMarcaPro}</p>
                                 <p><strong>Disponibles:</strong> {product.Cantidad}</p>
                                 <p><strong>Descripción:</strong> {product.DescripcionProducto}</p>
-                                <p><strong>Id:</strong> {product.IdProducto}</p>
                                 <p><strong>Sucursal:</strong> {product.NombreSucursal}</p>
                                 <button style={{ marginBottom: '10px', marginRight: '10px' }} onClick={() => handleResenaGo(product.IdProducto)} className="form-button">Reseña</button>
                                 <button onClick={() => handleAddToCart(product.IdProducto)} className="form-button">Agregar al Carrito</button>
