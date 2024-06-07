@@ -51,7 +51,7 @@ function ProductoCliente() {
                 },
                 body: JSON.stringify({
                     IdPersona: user.IdPersona,
-                    IdProducto: IdProducto,
+                    IdProducto: parseInt(IdProducto), // Asegurarse de que IdProducto sea un número
                     IdSucursal: selectedSucursal.IdSucursal,
                     Cantidad: 1
                 })
@@ -68,7 +68,8 @@ function ProductoCliente() {
     };
 
     const handleResenaGo = (IdProducto) => {
-        navigate(`/cliente/resena/${IdProducto}`);
+        console.log(IdProducto); 
+        navigate(`/cliente/resena/${parseInt(IdProducto)}`); // Asegurarse de que IdProducto sea un número
     };
 
     const handleSucursalChange = (e) => {
@@ -114,6 +115,7 @@ function ProductoCliente() {
                                 <p><strong>Marca:</strong> {product.NombreMarcaPro}</p>
                                 <p><strong>Disponibles:</strong> {product.Cantidad}</p>
                                 <p><strong>Descripción:</strong> {product.DescripcionProducto}</p>
+                                <p><strong>Id:</strong> {product.IdProducto}</p>
                                 <p><strong>Sucursal:</strong> {product.NombreSucursal}</p>
                                 <button style={{ marginBottom: '10px', marginRight: '10px' }} onClick={() => handleResenaGo(product.IdProducto)} className="form-button">Reseña</button>
                                 <button onClick={() => handleAddToCart(product.IdProducto)} className="form-button">Agregar al Carrito</button>
