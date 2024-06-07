@@ -8,6 +8,7 @@ import InitialVeterinario from '../pantallas/pantallaVeterinario/InitialVeterina
 import CitaMedicaVet from "../pantallas/pantallaVeterinario/CitaMedicaVet";
 import MascotaVet from "../pantallas/pantallaVeterinario/MascotaVet";
 import MedicamentoVet from "../pantallas/pantallaVeterinario/MedicamentoVet";
+import CitaEjecucionVet from "../pantallas/pantallaVeterinario/CitaEjecucionVet";
 
 const RouteVeterinario = () => {
     return (
@@ -16,6 +17,7 @@ const RouteVeterinario = () => {
             <Route path='/citaMedica' element={<CitaMedicaVet />} />
             <Route path='/mascota' element={<MascotaVet />} />
             <Route path='/medicamento' element={<MedicamentoVet />} />
+            <Route path='/citaManejo/:id' element={<CitaEjecucionVet />} />
         </Routes>
     );
 };
