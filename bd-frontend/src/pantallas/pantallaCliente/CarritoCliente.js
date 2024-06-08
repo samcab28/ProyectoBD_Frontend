@@ -105,15 +105,15 @@ function CarritoCliente() {
         }
     };
 
-    const handleQuantityChange = (idCarrito, newQuantity) => {
+    const handleQuantityChange = (idProducto, newQuantity) => {
         if (user && user.IdPersona !== 37) {
-            fetch(`http://localhost:3001/carrito/${idCarrito}/${newQuantity}`, {
+            fetch(`http://localhost:3001/carrito/${idProducto}/${newQuantity}`, {
                 method: 'PUT',
             })
                 .then(response => response.json())
                 .then(() => {
                     const updatedCarrito = carrito.map(item =>
-                        item.IdCarrito === idCarrito ? { ...item, Cantidad: newQuantity } : item
+                        item.IdProducto === idProducto ? { ...item, Cantidad: newQuantity } : item
                     );
                     setCarrito(updatedCarrito);
                     handlePrecioFinal(updatedCarrito); 
@@ -121,7 +121,7 @@ function CarritoCliente() {
                 .catch(error => console.error('Error updating quantity:', error));
         } else {
             const updatedCarrito = carrito.map(item =>
-                item.IdCarrito === idCarrito ? { ...item, Cantidad: newQuantity } : item
+                item.IdProducto === idProducto ? { ...item, Cantidad: newQuantity } : item
             );
             setTemporaryCart(updatedCarrito);
             setCarrito(updatedCarrito);
@@ -198,11 +198,14 @@ function CarritoCliente() {
                     Cantidad: item.Cantidad,
                     MontoTotal: item.PrecioProducto * item.Cantidad,
                     IdProducto: parseInt(item.IdProducto),
-                    IdSucursal: item.IdSucursal, 
-                    NuevaCantidad: item.CantidadDisponible - item.Cantidad 
+                    IdSucursal: item.IdSucursal, // Asegúrate de que este valor esté presente y correcto
+                    NuevaCantidad: item.CantidadDisponible - item.Cantidad // Asegúrate de que este valor se esté calculando correctamente
                 })),
                 IdDireccion: user.IdPersona !== 37 ? direccionSeleccionada : idDireccionTemporal,
+                DireccionTemporal: direccionTemporal // Agregar la dirección temporal al objeto pedidoData
             };
+    
+            console.log("Pedido Data:", pedidoData); // Agrega esta línea para depurar el objeto pedidoData
     
             const responsePedido = await fetch(`http://localhost:3001/pedido`, {
                 method: 'POST',
@@ -228,7 +231,7 @@ function CarritoCliente() {
         } catch (error) {
             console.error('Error creando pedido:', error);
         }
-    };    
+    };            
 
     const handleAgregarTarjeta = (tarjetaData) => {
         if (user.IdPersona !== 37) {
@@ -297,12 +300,12 @@ function CarritoCliente() {
                                 <p><strong>Sucursal:</strong> {item.NombreSucursal}</p>
                                 <div className="quantity-control">
                                     <button style={{ marginBottom: '3px' }} className="form-button"
-                                        onClick={() => handleQuantityChange(item.IdCarrito, item.Cantidad - 1)}
+                                        onClick={() => handleQuantityChange(item.IdProducto, item.Cantidad - 1)}
                                         disabled={item.Cantidad <= 1}>-
                                     </button>
                                     <span>{item.Cantidad}</span>
                                     <button style={{ marginBottom: '3px', marginRight: '10px' }} className="form-button"
-                                        onClick={() => handleQuantityChange(item.IdCarrito, item.Cantidad + 1)}
+                                        onClick={() => handleQuantityChange(item.IdProducto, item.Cantidad + 1)}
                                         disabled={item.Cantidad >= item.CantidadDisponible}>+
                                     </button>
                                 </div>
