@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { UserContext } from '../../context/UserContext';
+import { TemporaryCartContext } from '../../context/TemporaryCartContext';
 import '../../Styles/PageContainer.css';
 import fondoVet from '../../Imagenes/FondoVet.jpg';
 import NavCliente from "./NavCliente";
@@ -12,6 +13,7 @@ function ProductoCliente() {
     const [sucursales, setSucursales] = useState([]);
     const [selectedSucursal, setSelectedSucursal] = useState(null);
     const { user } = useContext(UserContext);
+    const { temporaryCart, setTemporaryCart } = useContext(TemporaryCartContext);
 
     useEffect(() => {
         fetch('http://localhost:3001/sucursal')
@@ -43,7 +45,13 @@ function ProductoCliente() {
     }, [selectedSucursal]);
 
     const handleAddToCart = (IdProducto) => {
-        if (user && user.IdPersona) {
+        if (user && user.IdPersona === 37) { // Usuario invitado
+            const productToAdd = products.find(product => product.IdProducto === IdProducto);
+            if (productToAdd) {
+                setTemporaryCart([...temporaryCart, { ...productToAdd, Cantidad: 1 }]);
+                alert("Producto agregado al carrito temporal");
+            }
+        } else if (user && user.IdPersona) { // Usuario autenticado
             fetch('http://localhost:3001/carrito', {
                 method: 'POST',
                 headers: {
@@ -51,7 +59,7 @@ function ProductoCliente() {
                 },
                 body: JSON.stringify({
                     IdPersona: user.IdPersona,
-                    IdProducto: parseInt(IdProducto), // Asegurarse de que IdProducto sea un número
+                    IdProducto: parseInt(IdProducto),
                     IdSucursal: selectedSucursal.IdSucursal,
                     Cantidad: 1
                 })
@@ -69,7 +77,7 @@ function ProductoCliente() {
 
     const handleResenaGo = (IdProducto) => {
         console.log(IdProducto); 
-        navigate(`/cliente/resena/${parseInt(IdProducto)}`); // Asegurarse de que IdProducto sea un número
+        navigate(`/cliente/resena/${parseInt(IdProducto)}`);
     };
 
     const handleSucursalChange = (e) => {
