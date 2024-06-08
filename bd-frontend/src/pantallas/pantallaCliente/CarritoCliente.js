@@ -1,3 +1,4 @@
+// Importa el estado de React, hooks y componentes necesarios.
 import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { UserContext } from '../../context/UserContext';
@@ -9,6 +10,7 @@ import { TarjetaForm, DireccionForm } from '../../seguridad/Forms';
 import '../../Styles/FormsTarjeta.css';
 
 function CarritoCliente() {
+    // Define los estados y contextos que se utilizarán en el componente.
     const [carrito, setCarrito] = useState([]);
     const { user } = useContext(UserContext);
     const { temporaryCart, setTemporaryCart } = useContext(TemporaryCartContext);
@@ -27,8 +29,10 @@ function CarritoCliente() {
     const [showDireccionForm, setShowDireccionForm] = useState(false);
     const [numComprobante, setNumComprobante] = useState('');
     const [showComprobanteForm, setShowComprobanteForm] = useState(false);
+    const [envio, setEnvio] = useState(false); // Nuevo estado para manejar el envío
     const navigate = useNavigate();
 
+    // Usa `useEffect` para cargar el carrito y las direcciones cuando el componente se monta o cuando cambia el usuario o el carrito temporal.
     useEffect(() => {
         if (user && user.IdPersona !== 37) {
             fetch(`http://localhost:3001/carrito/${user.IdPersona}`)
@@ -36,7 +40,7 @@ function CarritoCliente() {
                 .then(data => {
                     console.log("CarritoCliente fetched:", data);
                     setCarrito(data);
-                    handlePrecioFinal(data); 
+                    handlePrecioFinal(data, envio); 
                 })
                 .catch(error => console.error('Error fetching carrito:', error));
 
@@ -49,10 +53,11 @@ function CarritoCliente() {
                 .catch(error => console.error('Error fetching direcciones:', error));
         } else {
             setCarrito(temporaryCart);
-            handlePrecioFinal(temporaryCart);
+            handlePrecioFinal(temporaryCart, envio);
         }
-    }, [user, temporaryCart]);
+    }, [user, temporaryCart, envio]);
 
+    // Carga los métodos de pago y las divisas disponibles.
     useEffect(() => {
         fetch(`http://localhost:3001/metodoPago`)
             .then(response => response.json())
@@ -85,6 +90,7 @@ function CarritoCliente() {
         }
     }, [user, metodoPagoSeleccionado]);
 
+    // Función para manejar la eliminación de productos del carrito.
     const handleDelete = (idProducto) => {
         if (user && user.IdPersona !== 37) {
             fetch(`http://localhost:3001/carrito/${idProducto}`, {
@@ -94,17 +100,18 @@ function CarritoCliente() {
                 .then(() => {
                     const updatedCarrito = carrito.filter(item => item.IdProducto !== idProducto);
                     setCarrito(updatedCarrito);
-                    handlePrecioFinal(updatedCarrito); 
+                    handlePrecioFinal(updatedCarrito, envio); 
                 })
                 .catch(error => console.error('Error deleting item:', error));
         } else {
             const updatedCarrito = carrito.filter(item => item.IdProducto !== idProducto);
             setTemporaryCart(updatedCarrito);
             setCarrito(updatedCarrito);
-            handlePrecioFinal(updatedCarrito);
+            handlePrecioFinal(updatedCarrito, envio);
         }
     };
 
+    // Función para manejar el cambio de cantidad de productos en el carrito.
     const handleQuantityChange = (idProducto, newQuantity) => {
         if (user && user.IdPersona !== 37) {
             fetch(`http://localhost:3001/carrito/${idProducto}/${newQuantity}`, {
@@ -116,7 +123,7 @@ function CarritoCliente() {
                         item.IdProducto === idProducto ? { ...item, Cantidad: newQuantity } : item
                     );
                     setCarrito(updatedCarrito);
-                    handlePrecioFinal(updatedCarrito); 
+                    handlePrecioFinal(updatedCarrito, envio); 
                 })
                 .catch(error => console.error('Error updating quantity:', error));
         } else {
@@ -125,15 +132,20 @@ function CarritoCliente() {
             );
             setTemporaryCart(updatedCarrito);
             setCarrito(updatedCarrito);
-            handlePrecioFinal(updatedCarrito);
+            handlePrecioFinal(updatedCarrito, envio);
         }
     };
 
-    const handlePrecioFinal = (carrito) => {
-        const total = carrito.reduce((accumulator, item) => accumulator + (item.PrecioProducto * item.Cantidad), 0);
+    // Función para calcular el precio total del carrito.
+    const handlePrecioFinal = (carrito, envio) => {
+        let total = carrito.reduce((accumulator, item) => accumulator + (item.PrecioProducto * item.Cantidad), 0);
+        if (envio) {
+            total += 4500; // Agregar costo de envío
+        }
         setMonto(total.toFixed(2));
     };
 
+    // Función para manejar la creación de pedidos.
     const handleCrearPedido = async () => {
         if (!metodoPagoSeleccionado) {
             alert("Seleccione un método de pago.");
@@ -145,7 +157,7 @@ function CarritoCliente() {
             return;
         }
     
-        if (!direccionSeleccionada && !direccionTemporal) {
+        if (envio && !direccionSeleccionada && !direccionTemporal) {
             alert("Seleccione o ingrese una dirección.");
             return;
         }
@@ -190,20 +202,22 @@ function CarritoCliente() {
                 MontoTotal: monto,
                 IdMetPago: metodoPagoSeleccionado,
                 IdDivisa: divisaSeleccionada,
-                IdInformacionTarjeta: metodoPagoSeleccionado === 3 || metodoPagoSeleccionado === 4 ? idTarjetaTemporal : null,
+                IdInformacionTarjeta: metodoPagoSeleccionado === 3 || metodoPagoSeleccionado === 4 ? tarjetaSeleccionada : idTarjetaTemporal,
                 NumComprobante: metodoPagoSeleccionado === 2 || metodoPagoSeleccionado === 5 ? numComprobante : null,
                 FechaPedido: new Date().toISOString().split('T')[0],
                 EstadoPedido: 1,
+                Envio: envio,
                 DetallesPedido: carrito.map(item => ({
                     Cantidad: item.Cantidad,
                     MontoTotal: item.PrecioProducto * item.Cantidad,
                     IdProducto: parseInt(item.IdProducto),
-                    IdSucursal: item.IdSucursal, // Asegúrate de que este valor esté presente y correcto
-                    NuevaCantidad: item.CantidadDisponible - item.Cantidad // Asegúrate de que este valor se esté calculando correctamente
+                    IdSucursal: item.IdSucursal,
+                    NuevaCantidad: item.CantidadDisponible - item.Cantidad
                 })),
-                IdDireccion: user.IdPersona !== 37 ? direccionSeleccionada : idDireccionTemporal,
-                DireccionTemporal: direccionTemporal // Agregar la dirección temporal al objeto pedidoData
+                IdDireccion: envio ? (user.IdPersona !== 37 ? direccionSeleccionada : idDireccionTemporal) : null,
+                DireccionTemporal: envio ? direccionTemporal : null
             };
+            
     
             console.log("Pedido Data:", pedidoData); // Agrega esta línea para depurar el objeto pedidoData
     
@@ -228,6 +242,15 @@ function CarritoCliente() {
             setDireccionSeleccionada(null);
             setTarjetaTemporal(null); 
             setDireccionTemporal(null); 
+
+            // Eliminar carrito en el servidor si el usuario está autenticado
+            if (user && user.IdPersona !== 37) {
+                await fetch(`http://localhost:3001/carrito/${user.IdPersona}`, {
+                    method: 'DELETE',
+                });
+            } else {
+                setTemporaryCart([]); // Limpiar carrito temporal
+            }
         } catch (error) {
             console.error('Error creando pedido:', error);
         }
@@ -291,7 +314,7 @@ function CarritoCliente() {
 
                 <div className="product-grid">
                     {carrito.map(item => (
-                        <div className="product-card" key={item.IdCarrito}>
+                        <div className="product-card" key={item.IdProducto}>
                             <div className="product-info">
                                 <p><strong>Nombre:</strong> {item.NombreProducto}</p>
                                 <p><strong>Precio:</strong> {item.PrecioProducto}</p>
@@ -316,6 +339,55 @@ function CarritoCliente() {
                     ))}
                 </div>
                 <h2>El monto total del pedido es de: {monto}</h2>
+
+                <div className="shipping-selection">
+                    <label>
+                        <input 
+                            type="radio" 
+                            value="retirar" 
+                            checked={!envio} 
+                            onChange={() => setEnvio(false)}
+                        />
+                        Retirar en sucursal
+                    </label>
+                    <label>
+                        <input 
+                            type="radio" 
+                            value="enviar" 
+                            checked={envio} 
+                            onChange={() => setEnvio(true)}
+                        />
+                        Enviar por Correos
+                    </label>
+                </div>
+
+                {envio && (
+                    <div className="direccion-selection">
+                        {user.IdPersona !== 37 && (
+                            <>
+                                <label htmlFor="direccion">Seleccione una dirección:</label>
+                                <select 
+                                    id="direccion" 
+                                    value={direccionSeleccionada || ''}
+                                    onChange={(e) => setDireccionSeleccionada(parseInt(e.target.value))}
+                                >
+                                    <option value="" disabled>Seleccione una dirección</option>
+                                    {direcciones.map(direccion => (
+                                        <option key={direccion.IdDireccionPer} value={direccion.IdDireccionPer}>
+                                            {direccion.DireccionCompleta}
+                                        </option>
+                                    ))}
+                                </select>
+                            </>
+                        )}
+                        {direccionTemporal && <p>Dirección temporal: {direccionTemporal.DireccionCompleta}</p>}
+                        <button onClick={() => setShowDireccionForm(!showDireccionForm)}>
+                            {showDireccionForm ? 'Cancelar' : 'Agregar nueva dirección'}
+                        </button>
+                    </div>
+                )}
+
+                {showDireccionForm && <DireccionForm onSubmit={handleAgregarDireccion} />}
 
                 <div className="payment-method-selection">
                     <label htmlFor="metodoPago">Seleccione método de pago:</label>
@@ -352,34 +424,7 @@ function CarritoCliente() {
                         ))}
                     </select>
                 </div>
-
-                <div className="direccion-selection">
-                    {user.IdPersona !== 37 && (
-                        <>
-                            <label htmlFor="direccion">Seleccione una dirección:</label>
-                            <select 
-                                id="direccion" 
-                                value={direccionSeleccionada || ''}
-                                onChange={(e) => setDireccionSeleccionada(parseInt(e.target.value))}
-                            >
-                                <option value="" disabled>Seleccione una dirección</option>
-                                {direcciones.map(direccion => (
-                                    <option key={direccion.IdDireccionPer} value={direccion.IdDireccionPer}>
-                                        {direccion.DireccionCompleta}
-                                    </option>
-                                ))}
-                            </select>
-                        </>
-                    )}
-                    {direccionTemporal && <p>Dirección temporal: {direccionTemporal.DireccionCompleta}</p>}
-                    <button onClick={() => setShowDireccionForm(!showDireccionForm)}>
-                        {showDireccionForm ? 'Cancelar' : 'Agregar nueva dirección'}
-                    </button>
-                </div>
-
-
-                {showDireccionForm && <DireccionForm onSubmit={handleAgregarDireccion} />}
-
+                
                 {(metodoPagoSeleccionado === 3 || metodoPagoSeleccionado === 4) && (
                     <div className="tarjeta-selection">
                         {user.IdPersona !== 37 && (
