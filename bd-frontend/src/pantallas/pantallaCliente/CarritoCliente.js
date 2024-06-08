@@ -85,20 +85,20 @@ function CarritoCliente() {
         }
     }, [user, metodoPagoSeleccionado]);
 
-    const handleDelete = (idCarrito) => {
+    const handleDelete = (idProducto) => {
         if (user && user.IdPersona !== 37) {
-            fetch(`http://localhost:3001/carrito/${idCarrito}`, {
+            fetch(`http://localhost:3001/carrito/${idProducto}`, {
                 method: 'DELETE',
             })
                 .then(response => response.json())
                 .then(() => {
-                    const updatedCarrito = carrito.filter(item => item.IdCarrito !== idCarrito);
+                    const updatedCarrito = carrito.filter(item => item.IdProducto !== idProducto);
                     setCarrito(updatedCarrito);
                     handlePrecioFinal(updatedCarrito); 
                 })
                 .catch(error => console.error('Error deleting item:', error));
         } else {
-            const updatedCarrito = carrito.filter(item => item.IdCarrito !== idCarrito);
+            const updatedCarrito = carrito.filter(item => item.IdProducto !== idProducto);
             setTemporaryCart(updatedCarrito);
             setCarrito(updatedCarrito);
             handlePrecioFinal(updatedCarrito);
@@ -218,7 +218,7 @@ function CarritoCliente() {
             
             console.log("Pedido creado:", dataPedido);
             alert("Pedido creado exitosamente.");
-            carrito.forEach(item => handleDelete(item.IdCarrito)); 
+            carrito.forEach(item => handleDelete(item.IdProducto)); 
             setCarrito([]);
             setMonto(0);
             setMetodoPagoSeleccionado(null);
@@ -309,7 +309,7 @@ function CarritoCliente() {
                                         disabled={item.Cantidad >= item.CantidadDisponible}>+
                                     </button>
                                 </div>
-                                <button onClick={() => handleDelete(item.IdCarrito)} className="form-button">Eliminar
+                                <button onClick={() => handleDelete(item.IdProducto)} className="form-button">Eliminar
                                 </button>
                             </div>
                         </div>
