@@ -91,23 +91,23 @@ function CarritoCliente() {
     }, [user, metodoPagoSeleccionado]);
 
     // Función para manejar la eliminación de productos del carrito.
-    const handleDelete = (idProducto) => {
+    const handleDelete = (idCarrito) => {
         if (user && user.IdPersona !== 37) {
-            fetch(`http://localhost:3001/carrito/${idProducto}`, {
+            fetch(`http://localhost:3001/carrito/${idCarrito}`, {
                 method: 'DELETE',
             })
                 .then(response => response.json())
                 .then(() => {
-                    const updatedCarrito = carrito.filter(item => item.IdProducto !== idProducto);
+                    const updatedCarrito = carrito.filter(item => item.IdCarrito !== idCarrito);
                     setCarrito(updatedCarrito);
-                    handlePrecioFinal(updatedCarrito, envio); 
+                    handlePrecioFinal(updatedCarrito); 
                 })
                 .catch(error => console.error('Error deleting item:', error));
         } else {
-            const updatedCarrito = carrito.filter(item => item.IdProducto !== idProducto);
+            const updatedCarrito = carrito.filter(item => item.IdCarrito !== idCarrito);
             setTemporaryCart(updatedCarrito);
             setCarrito(updatedCarrito);
-            handlePrecioFinal(updatedCarrito, envio);
+            handlePrecioFinal(updatedCarrito);
         }
     };
 
@@ -232,7 +232,7 @@ function CarritoCliente() {
             
             console.log("Pedido creado:", dataPedido);
             alert("Pedido creado exitosamente.");
-            carrito.forEach(item => handleDelete(item.IdProducto)); 
+            carrito.forEach(item => handleDelete(item.IdCarrito)); 
             setCarrito([]);
             setMonto(0);
             setMetodoPagoSeleccionado(null);
@@ -332,7 +332,7 @@ function CarritoCliente() {
                                         disabled={item.Cantidad >= item.CantidadDisponible}>+
                                     </button>
                                 </div>
-                                <button onClick={() => handleDelete(item.IdProducto)} className="form-button">Eliminar
+                                <button onClick={() => handleDelete(item.IdCarrito)} className="form-button">Eliminar
                                 </button>
                             </div>
                         </div>
