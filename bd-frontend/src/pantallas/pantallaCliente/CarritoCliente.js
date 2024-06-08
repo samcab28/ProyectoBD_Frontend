@@ -107,7 +107,7 @@ function CarritoCliente() {
             const updatedCarrito = carrito.filter(item => item.IdCarrito !== idCarrito);
             setTemporaryCart(updatedCarrito);
             setCarrito(updatedCarrito);
-            handlePrecioFinal(updatedCarrito);
+            handlePrecioFinal(updatedCarrito, envio);
         }
     };
 
@@ -332,8 +332,7 @@ function CarritoCliente() {
                                         disabled={item.Cantidad >= item.CantidadDisponible}>+
                                     </button>
                                 </div>
-                                <button onClick={() => handleDelete(item.IdCarrito)} className="form-button">Eliminar
-                                </button>
+                                <button onClick={() => handleDelete(item.IdCarrito)} className="form-button">Eliminar</button>
                             </div>
                         </div>
                     ))}
