@@ -25,7 +25,7 @@ function CitasMedicas() {
             fetch(`http://localhost:3001/citaMedica/${user.IdPersona}/${estadoCita}`)
                 .then(response => response.json())
                 .then(data => {
-                    console.log("Citas fetched:", data); // Debug line
+                    console.log("Citas fetched:", data);
                     setCitas(data);
                 })
                 .catch(error => console.error('Error fetching citas:', error));
@@ -33,7 +33,7 @@ function CitasMedicas() {
             fetch(`http://localhost:3001/mascotaDuenio/${user.IdPersona}`)
                 .then(response => response.json())
                 .then(data => {
-                    console.log("Mascotas fetched:", data); // Debug line
+                    console.log("Mascotas fetched:", data);
                     setMascotas(data);
                 })
                 .catch(error => console.error('Error fetching mascotas:', error));
@@ -41,7 +41,7 @@ function CitasMedicas() {
             fetch('http://localhost:3001/persona/tipo/2')
                 .then(response => response.json())
                 .then(data => {
-                    console.log("Veterinarios fetched:", data); // Debug line
+                    console.log("Veterinarios fetched:", data);
                     setVeterinarios(data);
                 })
                 .catch(error => console.error('Error fetching veterinarios:', error));
@@ -108,9 +108,44 @@ function CitasMedicas() {
         .then(data => {
             console.log('Respuesta del servidor:', data);
             setCitas([...citas, data]);
+
+            // Obtener los correos electrónicos del dueño y veterinario
+            const citaCreada = data; // Asume que la respuesta contiene la cita creada
+            if (citaCreada) {
+                console.log(citaCreada); 
+                const correos = [citaCreada.DuegnoCorreo, citaCreada.VetCorreo];
+                const asunto = 'Notificación de Creación de Cita Médica';
+                const mensaje = `La cita médica para la mascota ${citaCreada.NombreMascota}, del dueño ${citaCreada.NombrePersona} ha sido creada para el día ${citaCreada.FechaCita}.`;
+                enviarCorreo(correos, asunto, mensaje);
+            }
         })
         .catch(error => console.error('Error creating cita:', error.message));
     };
+
+    async function enviarCorreo(correos, asunto, mensaje) {
+        try {
+            const response = await fetch('http://localhost:3001/enviarCorreo', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    correos: correos,
+                    asunto: asunto,
+                    mensaje: mensaje
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error('Error al enviar el correo');
+            }
+
+            const data = await response.json();
+            console.log('Correo enviado exitosamente:', data);
+        } catch (error) {
+            console.error('Error al enviar el correo:', error);
+        }
+    }
 
     const handleDelete = (id) => {
         fetch(`http://localhost:3001/citaMedica/${id}`, {
@@ -119,6 +154,14 @@ function CitasMedicas() {
         .then(response => response.json())
         .then(data => {
             setCitas(citas.filter(cita => cita.IdCitaMed !== id));
+            // Obtener los correos electrónicos del dueño y veterinario
+            const citaEliminada = citas.find(cita => cita.IdCitaMed === id);
+            if (citaEliminada) {
+                const correos = [citaEliminada.DuegnoCorreo, citaEliminada.VetCorreo];
+                const asunto = 'Notificación de Eliminación de Cita Médica';
+                const mensaje = `La cita médica para la mascota ${citaEliminada.NombreMascota}, del dueño ${citaEliminada.NombrePersona} ha sido Cancelada.`;
+                enviarCorreo(correos, asunto, mensaje);
+            }
         })
         .catch(error => console.error('Error deleting cita:', error));
     };
@@ -172,6 +215,8 @@ function CitasMedicas() {
                                 <p><strong>Duración:</strong> {cita.DuracionCita}</p>
                                 <p><strong>Estado:</strong> {cita.EstadoCita}</p>
                                 <p><strong>Veterinario:</strong> {cita.NombreVeterinario || 'N/A'} {cita.ApellidoVeterinario || 'N/A'}</p>
+                                <p><strong>Dueño Correo:</strong> {cita.DuegnoCorreo}</p>
+                                <p><strong>Veterinario Correo:</strong> {cita.VetCorreo}</p>
                                 <p><strong>Mascota:</strong> {cita.NombreMascota}</p>
                                 <p><strong>Animal:</strong> {cita.NombreAnimal}</p>
                                 <button className="form-button" onClick={() => handleDelete(cita.IdCitaMed)}>Eliminar</button>
