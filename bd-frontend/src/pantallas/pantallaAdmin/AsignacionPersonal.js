@@ -7,6 +7,7 @@ function AsignacionPersonal(){
     const [Cita, setCita] = useState('');
 
     const navigate = useNavigate(); 
+    const [EncargadosCitas, setEncargadosCitas] = useState([]);
     const [citas, setCitas] = useState([]);
     const handleRegresar = () => {
         navigate('/admin/citasMedica'); 
@@ -23,15 +24,47 @@ function AsignacionPersonal(){
                 setVeterinarios(data);
             })
             .catch(error => console.error('Error fetching personas:', error));
-
-        fetch('http://localhost:3001/citaMedica')
+        
+        fetch('http://localhost:3001/citaMedica') 
             .then(response => response.json())
-            .then(data => setCitas(data))
+            .then(data => {
+                console.log("personas fetched:", data); // Debug line
+                setCitas(data);
+            })
+            .catch(error => console.error('Error fetching personas:', error));
+
+        fetch('http://localhost:3001/personalEncargado')
+            .then(response => response.json())
+            .then(data => setEncargadosCitas(data))
             .catch(error => console.error('Error fetching citas:', error));
     }, []);
 
     function handleSubmit(e) {
         e.preventDefault();
+
+        const newPersonalEncargado = {
+            IdPersona: parseInt(Encargado),
+            IdCita: parseInt(Cita),
+        };
+
+        fetch('http://localhost:3001/personalEncargado', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(newPersonalEncargado)
+        })
+            .then(response => {
+                if (response.ok) {
+                    alert('Personal agregado exitosamente');
+                    window.location.reload(); // Recargar la página
+                } else {
+                    alert('Error al agregar personal a la cita');
+                }
+            })
+            .catch(error => {
+                console.error('Error en la solicitud:', error);
+            });
     }
 
     return (
@@ -66,30 +99,23 @@ function AsignacionPersonal(){
                     </select>
                 </label>
                 <br/>
-                <button type="submit">Guardar</button>
+                <button type="submit">Asignar</button>
             </form>
             <h2>Listado de Citas Médicas</h2>
             <table>
                 <thead>
                     <tr>
-                    <th>Id</th>
+                    <th>IdCita</th>
                     <th>FechaCita</th>
-                    <th>Duracion</th>
-                    <th>Mascota</th>
-                    <th>Encargado</th>
-                    <th>Estado</th>
+                    <th>Encargados</th>
                     </tr> 
                     </thead>
                     <tbody>
-                {citas.map(cita => (
+                {EncargadosCitas.map(cita => (
                     <tr key={cita.IdCitaMed}>
                         <td>{cita.IdCitaMed}</td>
                         <td>{cita.FechaCita}</td>
-                        <td>{cita.Duracion}</td>
-                        <td>{cita.NombreMascota}</td>
-                        <td>{cita.Encargado}</td>
-                        <td>{cita.TipoEstCita}</td>
-
+                        <td>{cita.Encargados}</td>
                     </tr>
                 ))}
                 </tbody>       
