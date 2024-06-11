@@ -28,11 +28,42 @@ function Login() {
         setPassword(event.target.value);
     };
 
+    const registroHistorialLogin = (estado, username, password) => {
+        const moment = require('moment');
+        const horaActual = moment().format('YYYY-MM-DD HH:mm:ss');
+
+        const newHistorial = {
+            "username" : username,
+            "passwordUser" : password,
+            "hora" : horaActual,
+            "acceso": estado
+        }
+
+        fetch('http://localhost:3001/HistorialLogin', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(newHistorial)
+        })
+            .then(response => {
+                if (response.ok) {
+                    console.log("registro de login exitoso")
+                } else {
+                    console.log("error en el registro de login")
+                }
+            })
+            .catch(error => {
+                console.error('Error en la solicitud:', error);
+            });
+    };
+
     const handleSubmit = (event) => {
         event.preventDefault();
         const foundPersona = personas.find(persona => persona.UsuarioPersona === username && persona.PasswordPersona === password);
 
         if (foundPersona) {
+            registroHistorialLogin(true, username, password);
             setUser(foundPersona); // Almacena el usuario en el contexto y en localStorage
             switch (foundPersona.TipoPersona) {
                 case 1:
@@ -51,11 +82,13 @@ function Login() {
                     break;
             }
         } else {
+            registroHistorialLogin(false, username, password);
             console.log('Invalid username or password');
         }
         setUsername('');
         setPassword('');
     };
+
 
     const handleContinueWithoutLogin = () => {
         const foundPersona = personas.find(persona => persona.UsuarioPersona === "UsuarioInvitado" && persona.PasswordPersona === "123");
