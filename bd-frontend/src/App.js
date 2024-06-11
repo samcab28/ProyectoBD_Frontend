@@ -4,6 +4,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 // Importación de UserContext
 import { UserProvider } from './context/UserContext';
+import { TemporaryCartProvider } from './context/TemporaryCartContext';
 
 // Importación de rutas
 import RouteHomeScreen from "./router/RouteHomeScreen";
@@ -20,6 +21,7 @@ Innactividad.startAutoLogout();
 function App() {
     return (
         <UserProvider>
+            <TemporaryCartProvider>
                 <BrowserRouter>
                     <Routes>
                         <Route path='/*' element={<RouteHomeScreen />} />
@@ -30,6 +32,7 @@ function App() {
                         <Route path='/crud/*' element={<RouteCRUD />} />
                     </Routes>
                 </BrowserRouter>
+            </TemporaryCartProvider>
         </UserProvider>
     );
 }
