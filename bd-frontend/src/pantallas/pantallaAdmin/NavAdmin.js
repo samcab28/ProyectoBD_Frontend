@@ -11,6 +11,7 @@ function NavAdmin() {
                 <li><Link to="/crud/"><button className="nav-button">Gestión General</button></Link></li>
                 <li><Link to="/admin/citasMedica"><button className="nav-button">Citas Médicas</button></Link></li>
                 <li><Link to="/admin/usuarios"><button className="nav-button">Usuarios</button></Link></li>
+                <li><Link to="/admin/carritos"><button className="nav-button">Carritos de Compra</button></Link></li>
                 <li><Link to="/admin/cobro"><button className="nav-button">Cobro</button></Link></li>
                 <li><Link to="/admin/expedienteCliente"><button className="nav-button">Expediente Cliente</button></Link></li>
                 <li><Link to="/admin/producto"><button className="nav-button">Productos</button></Link></li>
