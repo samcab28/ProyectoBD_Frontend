@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import NavAdmin from "./NavAdmin";
 import fondoVet from "../../Imagenes/FondoVet.jpg";
 
-function CitasCliente(){
+function Usuarios(){
 
     return (
         <div className="home-screen">
@@ -12,21 +12,16 @@ function CitasCliente(){
             </header>
             <NavAdmin/>
             <main className="main-content">
-                <h2>Citas Médicas</h2>
+                <h2>Gestión de Usuarios</h2>
                 <ul>
                 <li>
                     <Link to="/admin/citasMedica/gestion">
-                        <button>Gestionar Citas</button>
+                        <button>Gestionar Usuarios</button>
                     </Link>
                 </li>
                 <li>
-                    <Link to="/admin/citasMedica/asignacionPersonal">
-                        <button>Asignar Personal</button>
-                    </Link>
-                </li>
-                <li>
-                    <Link to="/admin/citasMedica/cancelarCita">
-                        <button>Cancelar Cita</button>
+                    <Link to="/admin/usuarios/modificar">
+                        <button>Modificar Información</button>
                     </Link>
                 </li>
                 </ul>
@@ -35,4 +30,4 @@ function CitasCliente(){
     );
 }
 
-export default CitasCliente;
+export default Usuarios;

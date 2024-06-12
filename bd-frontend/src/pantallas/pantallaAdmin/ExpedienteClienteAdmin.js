@@ -7,7 +7,11 @@ function ExpedienteClienteAdmin(){
 
     const [busqueda, setBusqueda] = useState('');
     const [expedientes, setExpedientes] = useState([]);
-    const [expedientesFiltrados, setExpedientesFiltrados] = useState([]);
+    const [expedienteFiltrado, setExpedienteFiltrado] = useState([]);
+
+    const expedientesFiltrados = [];
+    expedientesFiltrados.push(<option key={'Duegno'} value={'Duegno'}>{'Duegno'}</option>);
+    expedientesFiltrados.push(<option key={'Mascota'} value={'Mascota'}>{'Mascota'}</option>);
 
     const handleInputChange = (event) => {
         setBusqueda(event.target.value);
@@ -20,6 +24,9 @@ function ExpedienteClienteAdmin(){
             .catch(error => console.error('Error fetching expediente:', error));
     }, []);
 
+    function handleSubmit(e) {
+        e.preventDefault();
+    }
     //filtro
     /*
     const expedientesFiltrados = expedientes.filter(expediente =>
@@ -41,6 +48,21 @@ function ExpedienteClienteAdmin(){
                     value={busqueda}
                     onChange={handleInputChange}
                 />
+                <form onSubmit={handleSubmit}>
+            <label>
+                    Filtrar por:
+                    <select
+                        name="filtrar"
+                        value={expedienteFiltrado}
+                        onChange={e => setExpedienteFiltrado(e.target.value)}
+                    >
+                       <option value="">Selecciona un filtro</option>
+                       {expedientesFiltrados}
+                    </select>
+                </label>
+                <br/>
+                <button type="submit">Buscar</button>
+            </form>
                 <table>
                 <thead>
                     <tr>

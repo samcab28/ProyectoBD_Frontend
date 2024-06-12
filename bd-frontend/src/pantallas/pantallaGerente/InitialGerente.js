@@ -1,9 +1,23 @@
 import fondoVet from "../../Imagenes/FondoVet.jpg";
 import NavGerente from "./NavGerente";
-import React from "react";
+import React, { useEffect } from "react";
+import NotificacionHistorial from "../../seguridad/NotificacionHistorial";
+
+function InitialGerente() {
+    const confirmacionLoginFallido = () => {
+        NotificacionHistorial.checkHistorialLoginMinuto()
+            .then(cantidad => console.log(cantidad))
+            .catch(error => console.error('Error:', error));
+    };
+
+    useEffect(() => {
+        confirmacionLoginFallido();
+    }, []);
+
 
 
 function InitialGerente(){
+
     return (
         <div className="home-screen">
             <header className="header">
