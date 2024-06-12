@@ -27,7 +27,7 @@ const RouteGerente = () => {
             <Route path='/producto' element={<ProductoGerente />} />
 
             <Route path='/gestion' element={<CRUDMasterGerente />} />
-            <Route path='/gestion/persona' element={<PersonaList />} />
+            <Route path='/gestion/cliente' element={<PersonaList />} />
             <Route path='/gestion/producto' element={<ProductoList />} />
             
             
