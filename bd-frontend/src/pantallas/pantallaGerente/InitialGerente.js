@@ -15,6 +15,10 @@ function InitialGerente() {
         confirmacionLoginFallido();
     }, []);
 
+
+
+function InitialGerente(){
+
     return (
         <div className="home-screen">
             <header className="header">
@@ -27,6 +31,6 @@ function InitialGerente() {
         </div>
     );
 }
-
+}
 
 export default InitialGerente;
