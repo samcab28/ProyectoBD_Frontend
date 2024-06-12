@@ -3,7 +3,6 @@ import NavGerente from "./NavGerente";
 import React, { useEffect } from "react";
 import NotificacionHistorial from "../../seguridad/NotificacionHistorial";
 
-
 function InitialGerente() {
     const confirmacionLoginFallido = () => {
         NotificacionHistorial.checkHistorialLoginMinuto()
@@ -14,10 +13,6 @@ function InitialGerente() {
     useEffect(() => {
         confirmacionLoginFallido();
     }, []);
-
-
-
-function InitialGerente(){
 
     return (
         <div className="home-screen">
@@ -30,7 +25,6 @@ function InitialGerente(){
             </main>
         </div>
     );
-}
 }
 
 export default InitialGerente;
