@@ -27,10 +27,6 @@ function GestionCitas(){
 
     }
 
-    function handleMod(id){
-        console.log("implementar logica");
-    }
-
     useEffect(() => {
         fetch('http://localhost:3001/citaMedica')
             .then(response => response.json())
@@ -50,7 +46,8 @@ function GestionCitas(){
                     <th>FechaCita</th>
                     <th>Duracion</th>
                     <th>Mascota</th>
-                    <th>Encargado</th>
+                    <th>Veterinario Principal</th>
+                    <th>Personal Encargado</th>
                     <th>Estado</th>
                     </tr> 
                     </thead>
@@ -62,11 +59,11 @@ function GestionCitas(){
                         <td>{cita.Duracion}</td>
                         <td>{cita.NombreMascota}</td>
                         <td>{cita.Encargado}</td>
+                        <td>{cita.PersonalEncargado}</td>
                         <td>{cita.TipoEstCita}</td>
 
                         <td>
                             <button onClick={() => handleDelete(cita.IdCitaMed)}>Eliminar</button>
-                            <button onClick={() => handleMod(cita.IdCitaMed)}>Modificar</button>
                         </td>
                     </tr>
                 ))}
