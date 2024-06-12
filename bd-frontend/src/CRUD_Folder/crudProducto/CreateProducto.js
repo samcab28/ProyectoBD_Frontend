@@ -26,13 +26,13 @@ function CreateProducto() {
             .catch(error => console.error('Error fetching sucursales:', error));
         
         // fetch tipos de producto
-        fetch('http://localhost:3001/tipoProducto')
+        /*fetch('http://localhost:3001/tipoProducto')
             .then(response => response.json())
             .then(data => {
                 console.log("tipo producto fetched:", data); // Debug line
                 setTiposProducto(data);
             })
-            .catch(error => console.error('Error fetching tipo producto:', error));
+            .catch(error => console.error('Error fetching tipo producto:', error));*/
 
         // fetch marcas de producto
         fetch('http://localhost:3001/marcaProducto')
@@ -65,7 +65,7 @@ function CreateProducto() {
             NombreSucursal: nombreSucursal,
             TipoProducto: tipoProducto,
             NombreMarcaPro: nombreMarcaPro,
-            Direccion: url
+            Direccion: parseInt(url)
         };
 
         fetch('http://localhost:3001/producto', {
