@@ -1,6 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react'; // Importar useContext desde React
+import logHistorialClick from '../../seguridad/historialClick';
+import { UserContext } from '../../context/UserContext'; // Asegúrate de tener acceso al contexto del usuario
 
-function CreateCita(){
+function CreateCita() {
+    const { user } = useContext(UserContext); // Obtener el contexto del usuario
     const [FechaCita, setFechaCita] = useState('');
     const [Duracion, setDuracion] = useState('');
     const [Encargado, setEncargado] = useState('');
@@ -13,16 +16,16 @@ function CreateCita(){
 
     useEffect(() => {
         // Fetch personas (veterinarios)
-        fetch('http://localhost:3001/persona/tipo/2') 
+        fetch('http://localhost:3001/persona/tipo/2')
             .then(response => response.json())
             .then(data => {
                 console.log("personas fetched:", data); // Debug line
                 setPersonas(data);
             })
             .catch(error => console.error('Error fetching personas:', error));
-        
+
         // Fetch estados (de cita)
-        fetch('http://localhost:3001/estadoCita') 
+        fetch('http://localhost:3001/estadoCita')
             .then(response => response.json())
             .then(data => {
                 console.log("personas fetched:", data); // Debug line
@@ -48,7 +51,7 @@ function CreateCita(){
             DuracionCita: Duracion,
             IdMascota: parseInt(Mascota),
             IdEncargado: parseInt(Encargado),
-            EstadoCita : parseInt(Estado)
+            EstadoCita: parseInt(Estado)
         };
 
         fetch('http://localhost:3001/citaMedica', {
@@ -61,6 +64,7 @@ function CreateCita(){
             .then(response => {
                 if (response.ok) {
                     alert('Cita creada exitosamente');
+                    logHistorialClick(user, "Crear cita", `Cita para mascota ID: ${Mascota} con encargado ID: ${Encargado}`);
                     window.location.reload(); // Recargar la página
                 } else {
                     alert('Error al crear cita');
@@ -71,11 +75,20 @@ function CreateCita(){
             });
     }
 
-    return(
+    function handleReset(e) {
+        logHistorialClick(user, "Resetear formulario", "Formulario de creación de cita reseteado");
+        setFechaCita('');
+        setDuracion('');
+        setEncargado('');
+        setMacota('');
+        setEstado('');
+    }
+
+    return (
         <div>
             <h2>Crear Cita</h2>
             <form onSubmit={handleSubmit}>
-            <label>
+                <label>
                     Fecha:
                     <input
                         name="fechaCita"
@@ -84,7 +97,7 @@ function CreateCita(){
                         onChange={e => setFechaCita(e.target.value)}
                     />
                 </label>
-                <br/>
+                <br />
                 <label>
                     Duración:
                     <input
@@ -94,7 +107,7 @@ function CreateCita(){
                         onChange={e => setDuracion(e.target.value)}
                     />
                 </label>
-                <br/>
+                <br />
                 <label>
                     Encargado:
                     <select
@@ -108,7 +121,7 @@ function CreateCita(){
                         ))}
                     </select>
                 </label>
-                <br/>
+                <br />
                 <label>
                     Mascota:
                     <select
@@ -122,7 +135,7 @@ function CreateCita(){
                         ))}
                     </select>
                 </label>
-                <br/>
+                <br />
                 <label>
                     Estado:
                     <select
@@ -136,8 +149,8 @@ function CreateCita(){
                         ))}
                     </select>
                 </label>
-                <br/>
-                <button type="reset">Reset data</button>
+                <br />
+                <button type="reset" onClick={handleReset}>Reset data</button>
                 <button type="submit">Guardar</button>
             </form>
         </div>

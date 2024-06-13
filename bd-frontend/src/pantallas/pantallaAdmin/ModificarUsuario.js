@@ -1,8 +1,10 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import logHistorialClick from '../../seguridad/historialClick';
+import { UserContext } from '../../context/UserContext';
 
-function ModificarUsuario(){
+function ModificarUsuario() {
+    const { user } = useContext(UserContext); // Assuming you have a user context to get the current user
     const [usuario, setUsuario] = useState('');
     const [campoModificar, setCampoModificar] = useState('');
     const [valorNuevo, setvalorNuevo] = useState('');
@@ -14,12 +16,14 @@ function ModificarUsuario(){
     camposModificables.push(<option key={'UsuarioPersona'} value={'UsuarioPersona'}>{'Nombre de Usuario'}</option>);
     camposModificables.push(<option key={'PasswordPersona'} value={'PasswordPersona'}>{'Password'}</option>);
 
-    const navigate = useNavigate(); 
+    const navigate = useNavigate();
     const [usuarios, setUsuarios] = useState([]);
     const [tiposPersona, setTiposPersona] = useState({});
     const [sexos, setSexos] = useState({});
+
     const handleRegresar = () => {
-        navigate('/admin/usuarios'); 
+        logHistorialClick(user, "Regresar", "Volver a la gestión de usuarios");
+        navigate('/admin/usuarios');
     };
 
     useEffect(() => {
@@ -75,6 +79,7 @@ function ModificarUsuario(){
         .then(response => {
             if (response.ok) {
                 alert('Informacion modificada exitosamente');
+                logHistorialClick(user, "Modificar Usuario", `Usuario ID: ${usuario}, Campo: ${campoModificar}, Nuevo Valor: ${valorNuevo}`);
                 window.location.reload(); // Recargar la página
             } else {
                 alert('Error al modificar la informacion del usuario');
@@ -89,7 +94,7 @@ function ModificarUsuario(){
         <div>
             <h1>Modificar Información de Usuario</h1>
             <form onSubmit={handleSubmit}>
-            <label>
+                <label>
                     Usuario:
                     <select
                         name="usuario"
@@ -98,7 +103,7 @@ function ModificarUsuario(){
                     >
                         <option value="">Seleccione un usuario</option>
                         {usuarios.map(user => (
-                            <option key={user.IdPersona} value={user.IdPersona}>{user.IdPersona}, {user.NombrePersona} {user.ApellidoPersona} </option>
+                            <option key={user.IdPersona} value={user.IdPersona}>{user.IdPersona}, {user.NombrePersona} {user.ApellidoPersona}</option>
                         ))}
                     </select>
                 </label>
@@ -148,15 +153,12 @@ function ModificarUsuario(){
                         <td>{persona.PasswordPersona}</td>
                         <td>{tiposPersona[persona.TipoPersona]}</td>
                         <td>{sexos[persona.Sexo]}</td>
-                        
                     </tr>
                 ))}
                 </tbody>
             </table>
-            
             <button onClick={handleRegresar}>Regresar</button>
         </div>
-    
     );
 }
 

@@ -1,16 +1,20 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+import logHistorialClick from '../../seguridad/historialClick'; // Asegúrate de importar la función logHistorialClick
+import { UserContext } from '../../context/UserContext'; // Importar el contexto de usuario
 
-function CancelarCita(){
+function CancelarCita() {
     const [Cita, setCita] = useState('');
     const campoModificar = 'EstadoCita';
     const valorNuevo = '3';
 
-    const navigate = useNavigate(); 
+    const navigate = useNavigate();
+    const { user } = useContext(UserContext); // Obtener el contexto del usuario
     const [citas, setCitas] = useState([]);
+
     const handleRegresar = () => {
-        navigate('/admin/citasMedica'); 
+        logHistorialClick(user, "Navegacion", "/admin/citasMedica");
+        navigate('/admin/citasMedica');
     };
 
     useEffect(() => {
@@ -22,12 +26,12 @@ function CancelarCita(){
 
     function handleSubmit(e) {
         e.preventDefault();
-    
+
         const updateData = {
             campoModificar: campoModificar,
             valorNuevo: valorNuevo
         };
-    
+
         fetch(`http://localhost:3001/citaMedica/${Cita}`, {
             method: 'PUT',
             headers: {
@@ -37,6 +41,7 @@ function CancelarCita(){
         })
         .then(response => {
             if (response.ok) {
+                logHistorialClick(user, "Cancelar Cita", `Cita ID: ${Cita}`);
                 alert('Cita modificada exitosamente');
                 window.location.reload(); // Recargar la página
             } else {
@@ -52,7 +57,7 @@ function CancelarCita(){
         <div>
             <h1>Cancelación de Cita Médica</h1>
             <form onSubmit={handleSubmit}>
-            <label>
+                <label>
                     Cita:
                     <select
                         name="cita"
@@ -61,7 +66,9 @@ function CancelarCita(){
                     >
                         <option value="">Seleccione una cita</option>
                         {citas.map(cita => (
-                            <option key={cita.IdCitaMed} value={cita.IdCitaMed}>{cita.IdCitaMed}, {cita.FechaCita}, {cita.NombreMascota} </option>
+                            <option key={cita.IdCitaMed} value={cita.IdCitaMed}>
+                                {cita.IdCitaMed}, {cita.FechaCita}, {cita.NombreMascota}
+                            </option>
                         ))}
                     </select>
                 </label>
@@ -72,29 +79,27 @@ function CancelarCita(){
             <table>
                 <thead>
                     <tr>
-                    <th>Id</th>
-                    <th>FechaCita</th>
-                    <th>Duracion</th>
-                    <th>Mascota</th>
-                    <th>Encargado</th>
-                    <th>Estado</th>
-                    </tr> 
-                    </thead>
-                    <tbody>
-                {citas.map(cita => (
-                    <tr key={cita.IdCitaMed}>
-                        <td>{cita.IdCitaMed}</td>
-                        <td>{cita.FechaCita}</td>
-                        <td>{cita.Duracion}</td>
-                        <td>{cita.NombreMascota}</td>
-                        <td>{cita.Encargado}</td>
-                        <td>{cita.TipoEstCita}</td>
-
+                        <th>Id</th>
+                        <th>FechaCita</th>
+                        <th>Duracion</th>
+                        <th>Mascota</th>
+                        <th>Encargado</th>
+                        <th>Estado</th>
                     </tr>
-                ))}
-                </tbody>       
+                </thead>
+                <tbody>
+                    {citas.map(cita => (
+                        <tr key={cita.IdCitaMed}>
+                            <td>{cita.IdCitaMed}</td>
+                            <td>{cita.FechaCita}</td>
+                            <td>{cita.Duracion}</td>
+                            <td>{cita.NombreMascota}</td>
+                            <td>{cita.Encargado}</td>
+                            <td>{cita.TipoEstCita}</td>
+                        </tr>
+                    ))}
+                </tbody>
             </table>
-            
             <button onClick={handleRegresar}>Regresar</button>
         </div>
     );

@@ -2,9 +2,11 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import fondoVet from "../../Imagenes/FondoVet.jpg";
 import NavAdmin from "./NavAdmin";
+import logHistorialClick from '../../seguridad/historialClick';
+import { UserContext } from '../../context/UserContext'; // Asegúrate de que tengas acceso al contexto del usuario
 
-function ExpedienteClienteAdmin(){
-
+function ExpedienteClienteAdmin() {
+    const { user } = useContext(UserContext); // Obtener el contexto del usuario
     const [busqueda, setBusqueda] = useState('');
     const [expedientes, setExpedientes] = useState([]);
     const [expedienteFiltrado, setExpedienteFiltrado] = useState([]);
@@ -37,9 +39,9 @@ function ExpedienteClienteAdmin(){
     return (
         <div className="home-screen">
             <header className="header">
-                <img src={fondoVet} alt="Veterinary Clinic" className="header-image"/>
+                <img src={fondoVet} alt="Veterinary Clinic" className="header-image" />
             </header>
-            <NavAdmin/>
+            <NavAdmin />
             <main className="main-content">
                 <h2>Expedientes de los clientes</h2>
                 <input
@@ -64,31 +66,31 @@ function ExpedienteClienteAdmin(){
                 <button type="submit">Buscar</button>
             </form>
                 <table>
-                <thead>
-                    <tr>
-                    <th>Id</th>
-                    <th>Comentarios</th>
-                    <th>Fecha_Cita</th> 
-                    <th>Encargado</th>
-                    <th>Duegno</th>
-                    <th>Mascota</th>
-                    <th>ProductosRecetados</th>
-                    </tr> 
-                    </thead>      
+                    <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Comentarios</th>
+                            <th>Fecha_Cita</th>
+                            <th>Encargado</th>
+                            <th>Duegno</th>
+                            <th>Mascota</th>
+                            <th>ProductosRecetados</th>
+                        </tr>
+                    </thead>
                     <tbody>
-                {expedientes.map(expediente => (
-                    <tr key={expediente.IdExpediente}>
-                        <td>{expediente.IdExpediente}</td>
-                        <td>{expediente.Comentarios}</td>
-                        <td>{expediente.FechaCita}</td>
-                        <td>{expediente.Veterinario}</td>
-                        <td>{expediente.Duegno}</td>
-                        <td>{expediente.NombreMascota}</td>
-                        <td>{expediente.ProductosRecetados}</td>
-                    </tr>
-                ))}
-                </tbody>        
-            </table>
+                        {expedientes.map(expediente => (
+                            <tr key={expediente.IdExpediente}>
+                                <td>{expediente.IdExpediente}</td>
+                                <td>{expediente.Comentarios}</td>
+                                <td>{expediente.FechaCita}</td>
+                                <td>{expediente.Veterinario}</td>
+                                <td>{expediente.Duegno}</td>
+                                <td>{expediente.NombreMascota}</td>
+                                <td>{expediente.ProductosRecetados}</td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
             </main>
         </div>
     );

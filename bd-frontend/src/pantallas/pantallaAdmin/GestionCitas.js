@@ -1,16 +1,21 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import logHistorialClick from '../../seguridad/historialClick';
+import { UserContext } from '../../context/UserContext'; // Asegúrate de que tengas acceso al contexto del usuario
 import CreateCita from './CrearCita';
 
-function GestionCitas(){
+function GestionCitas() {
+    const { user } = useContext(UserContext); // Obtener el contexto del usuario
     const navigate = useNavigate(); 
     const [citas, setCitas] = useState([]);
+
     const handleRegresar = () => {
+        logHistorialClick(user, "Regresar", "Volver a la gestión de citas médicas");
         navigate('/admin/citasMedica'); 
     };
 
-    function handleDelete(id){
+    function handleDelete(id) {
+        logHistorialClick(user, "Eliminar cita", `ID de la cita: ${id}`);
         fetch(`http://localhost:3001/citaMedica/${id}`, {
             method: 'DELETE',
         })
@@ -24,11 +29,11 @@ function GestionCitas(){
             }
         })
         .catch(error => console.error('Error deleting cita:', error));
-
     }
 
-    function handleMod(id){
-        console.log("implementar logica");
+    function handleMod(id) {
+        logHistorialClick(user, "Modificar cita", `ID de la cita: ${id}`);
+        console.log("Implementar lógica");
     }
 
     useEffect(() => {
@@ -41,38 +46,36 @@ function GestionCitas(){
     return (
         <div>
             <h1>Gestión de Citas Médicas</h1>
-            <CreateCita/>
+            <CreateCita />
             <h2>Listado de Citas Médicas</h2>
             <table>
                 <thead>
                     <tr>
-                    <th>Id</th>
-                    <th>FechaCita</th>
-                    <th>Duracion</th>
-                    <th>Mascota</th>
-                    <th>Encargado</th>
-                    <th>Estado</th>
+                        <th>Id</th>
+                        <th>FechaCita</th>
+                        <th>Duracion</th>
+                        <th>Mascota</th>
+                        <th>Encargado</th>
+                        <th>Estado</th>
                     </tr> 
-                    </thead>
-                    <tbody>
-                {citas.map(cita => (
-                    <tr key={cita.IdCitaMed}>
-                        <td>{cita.IdCitaMed}</td>
-                        <td>{cita.FechaCita}</td>
-                        <td>{cita.Duracion}</td>
-                        <td>{cita.NombreMascota}</td>
-                        <td>{cita.Encargado}</td>
-                        <td>{cita.TipoEstCita}</td>
-
-                        <td>
-                            <button onClick={() => handleDelete(cita.IdCitaMed)}>Eliminar</button>
-                            <button onClick={() => handleMod(cita.IdCitaMed)}>Modificar</button>
-                        </td>
-                    </tr>
-                ))}
+                </thead>
+                <tbody>
+                    {citas.map(cita => (
+                        <tr key={cita.IdCitaMed}>
+                            <td>{cita.IdCitaMed}</td>
+                            <td>{cita.FechaCita}</td>
+                            <td>{cita.Duracion}</td>
+                            <td>{cita.NombreMascota}</td>
+                            <td>{cita.Encargado}</td>
+                            <td>{cita.TipoEstCita}</td>
+                            <td>
+                                <button onClick={() => handleDelete(cita.IdCitaMed)}>Eliminar</button>
+                                <button onClick={() => handleMod(cita.IdCitaMed)}>Modificar</button>
+                            </td>
+                        </tr>
+                    ))}
                 </tbody>       
             </table>
-            
             <button onClick={handleRegresar}>Regresar</button>
         </div>
     );
