@@ -60,6 +60,15 @@ function ExpedienteClienteAdmin(){
         }
     }
 
+    function reset() {
+        setBusqueda('');
+        setExpedienteFiltrado('');
+        fetch('http://localhost:3001/expediente')
+            .then(response => response.json())
+            .then(data => setExpedientes(data))
+            .catch(error => console.error('Error fetching expediente:', error));
+    }
+
     return (
         <div className="home-screen">
             <header className="header">
@@ -117,6 +126,7 @@ function ExpedienteClienteAdmin(){
                         </label>
                     )}              
                     <button type="submit">Buscar</button>
+                    <button type="button" onClick={reset}>Reset </button>
                 </form>
                 <table>
                     <thead>
