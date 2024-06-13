@@ -17,7 +17,8 @@ function CitasMedicas() {
         DuracionCita: '',
         IdMascota: '',
         IdEncargado: '',
-        EstadoCita: 1
+        EstadoCita: 1,
+        Precio: 15000 // Precio predefinido
     });
     const [error, setError] = useState('');
 
