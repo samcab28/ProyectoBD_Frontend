@@ -41,6 +41,16 @@ function ExpedienteClienteAdmin(){
     function handleSubmit(e) {
         e.preventDefault();
         
+        if(expedienteFiltrado === 'Mascota'){
+            fetch(`http://localhost:3001/expedienteMascota/${busqueda}`)
+            .then(response => response.json())
+            .then(data => {
+                console.log("expediente fetched:", data); 
+                setExpedientes(data);
+            })
+            .catch(error => console.error('Error fetching expediente:', error));
+        }
+        
     }
 
     return (
@@ -107,7 +117,7 @@ function ExpedienteClienteAdmin(){
                             <th>Id</th>
                             <th>Comentarios</th>
                             <th>Fecha_Cita</th>
-                            <th>Encargado</th>
+                            <th>Veterinario</th>
                             <th>Duegno</th>
                             <th>Mascota</th>
                             <th>ProductosRecetados</th>
@@ -119,7 +129,7 @@ function ExpedienteClienteAdmin(){
                                 <td>{expediente.IdExpediente}</td>
                                 <td>{expediente.Comentarios}</td>
                                 <td>{expediente.FechaCita}</td>
-                                <td>{expediente.Veterinario}</td>
+                                <td>{expediente.NombreVeterinario}</td>
                                 <td>{expediente.Duegno}</td>
                                 <td>{expediente.NombreMascota}</td>
                                 <td>{expediente.ProductosRecetados}</td>
