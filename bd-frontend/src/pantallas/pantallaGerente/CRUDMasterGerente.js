@@ -16,6 +16,8 @@ function CRUDMasterGerente(){
                 <ul>
                     <li><Link to="/gerente/gestion/cliente">
                     <button className="nav-button">Gestión de clientes</button></Link></li>
+                    <li><Link to="/gerente/gestion/administrador">
+                    <button className="nav-button">Gestión de administradores</button></Link></li>
                     <li><Link to="/gerente/gestion/producto">
                     <button className="nav-button">Gestión de productos</button></Link></li>
                 </ul>
