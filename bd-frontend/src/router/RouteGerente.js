@@ -10,8 +10,8 @@ import ExpedienteGerente from "../pantallas/pantallaGerente/ExpedienteGerente";
 import ProductoGerente from "../pantallas/pantallaGerente/ProductoGerente";
 
 import CRUDMasterGerente from '../pantallas/pantallaGerente/CRUDMasterGerente';
-import PersonaList from '../CRUD_Folder/crudPersona/CrudPersona';
 import ProductoList from '../CRUD_Folder/crudProducto/CrudProducto';
+import ClienteListGerente from '../pantallas/pantallaGerente/CRUDGenrente/ClienteListGerente';
 
 import HistorialLogin from "../pantallas/pantallaGerente/HistorialLoginGerente";
 
@@ -27,7 +27,7 @@ const RouteGerente = () => {
             <Route path='/producto' element={<ProductoGerente />} />
 
             <Route path='/gestion' element={<CRUDMasterGerente />} />
-            <Route path='/gestion/cliente' element={<PersonaList />} />
+            <Route path='/gestion/cliente' element={<ClienteListGerente />} />
             <Route path='/gestion/producto' element={<ProductoList />} />
             
             

@@ -1,19 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-
+import CreateClienteGerente from './CreateClienteGerente';
 function ClienteListGerente() {
     const navigate = useNavigate();
     const [personas, setPersonas] = useState([]);
     const [tiposPersona, setTiposPersona] = useState({});
     const [sexos, setSexos] = useState({});
 
-    const handleRegresar = () => {
-        navigate('/crud'); // Cambia '/another' por la ruta deseada
-    };
-
     useEffect(() => {
         // Fetch personas
-        fetch('http://localhost:3001/persona')
+        fetch('http://localhost:3001/persona/tipo/3')
             .then(response => response.json())
             .then(data => {
                 console.log("Personas fetched:", data); // Debug line
@@ -69,9 +65,13 @@ function ClienteListGerente() {
             .catch(error => console.error('Error deleting persona:', error));
     }
 
+    const handleRegresar = () => {
+        navigate('/gerente/gestion'); // Cambia '/another' por la ruta deseada
+    };
+
     return (
         <div>
-            <CreatePersona/>
+            <CreateClienteGerente/>
             <h2>Listado de Personas</h2>
             <table>
                 <thead>
@@ -100,13 +100,18 @@ function ClienteListGerente() {
                         <td>{persona.PasswordPersona}</td>
                         <td>{tiposPersona[persona.TipoPersona]}</td>
                         <td>{sexos[persona.Sexo]}</td>
-                        
+                        <td>
+                            <button onClick={() => handleDelete(persona.IdPersona)}>Eliminar</button>
+                            <button onClick={() => handleMod(persona.IdPersona)}>Modificar</button>
+                        </td>
                     </tr>
                 ))}
                 </tbody>
             </table>
-
-     
+            <button onClick={handleRegresar}>regresar</button>
+    
        </div>
     );
 }
+
+export default ClienteListGerente
