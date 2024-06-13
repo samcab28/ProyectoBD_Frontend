@@ -3,12 +3,13 @@ import React from 'react';
 import '../../Styles/PageContainer.css';
 import {Link} from "react-router-dom"; // Importa el archivo de estilos
 import NavAdmin from "./NavAdmin";
+import fondoVet from "../../Imagenes/FondoVet.jpg";
 
 function InitialAdmin() {
     return (
         <div className="home-screen">
             <header className="header">
-                <img src="https://via.placeholder.com/1500x150" alt="Banner" className="header-image"/>
+                <img src={fondoVet} alt="Veterinary Clinic" className="header-image"/>
             </header>
             <NavAdmin/>
             <main className="main-content">
