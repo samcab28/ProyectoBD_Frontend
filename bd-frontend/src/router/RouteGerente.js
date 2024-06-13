@@ -11,8 +11,9 @@ import ProductoGerente from "../pantallas/pantallaGerente/ProductoGerente";
 
 import CRUDMasterGerente from '../pantallas/pantallaGerente/CRUDMasterGerente';
 import ProductoList from '../CRUD_Folder/crudProducto/CrudProducto';
-import ClienteListGerente from '../pantallas/CRUDSPantallas/ClienteList';
-import AdminListGerente from '../pantallas/CRUDSPantallas/AdminList';
+import ClienteList from '../pantallas/CRUDSPantallas/ClienteList';
+import AdminList from '../pantallas/CRUDSPantallas/AdminList';
+import VetList from '../pantallas/CRUDSPantallas/VetList';
 import HistorialLogin from "../pantallas/pantallaGerente/HistorialLoginGerente";
 
 
@@ -27,8 +28,9 @@ const RouteGerente = () => {
             <Route path='/producto' element={<ProductoGerente />} />
 
             <Route path='/gestion' element={<CRUDMasterGerente />} />
-            <Route path='/gestion/cliente' element={<ClienteListGerente />} />
-            <Route path='/gestion/administrador' element={<AdminListGerente />} />
+            <Route path='/gestion/cliente' element={<ClienteList />} />
+            <Route path='/gestion/veterinario' element={<VetList />} />
+            <Route path='/gestion/administrador' element={<AdminList />} />
             <Route path='/gestion/producto' element={<ProductoList />} />
             
             

@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import CreateAdmin from './CreateAdmin';
-import ModifyAdmin from './ModifyAdmin';
+import CreateVet from './CreateVet';
+import ModifyVet from './ModifiyVet';
 
-function AdminList() {
+function VetList() {
     const navigate = useNavigate();
     const [personas, setPersonas] = useState([]);
     const [tiposPersona, setTiposPersona] = useState({});
@@ -11,7 +11,7 @@ function AdminList() {
 
     useEffect(() => {
         // Fetch personas
-        fetch('http://localhost:3001/persona/tipo/1')
+        fetch('http://localhost:3001/persona/tipo/2')
             .then(response => response.json())
             .then(data => {
                 console.log("Personas fetched:", data); // Debug line
@@ -70,10 +70,10 @@ function AdminList() {
 
     return (
         <div>
-            <h1>Gestión de Administradores</h1>
-            <CreateAdmin/>
-            <ModifyAdmin/>
-            <h2>Listado de Personas</h2>
+            <h1>Gestión de Veterinarios</h1>
+            <CreateVet/>
+            <ModifyVet/>
+            <h3>Listado de Veterinarios</h3>
             <table>
                 <thead>
                 <tr>
@@ -109,9 +109,8 @@ function AdminList() {
                 </tbody>
             </table>
             <button onClick={handleRegresar}>Regresar</button>
-    
        </div>
     );
 }
 
-export default AdminList
+export default VetList

@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import CreateCliente from './CreateCliente';
 import ModifyCliente from './ModifyCliente';
 
-function ClienteListGerente() {
+function ClienteList() {
     const navigate = useNavigate();
     const [personas, setPersonas] = useState([]);
     const [tiposPersona, setTiposPersona] = useState({});
@@ -113,4 +113,4 @@ function ClienteListGerente() {
     );
 }
 
-export default ClienteListGerente
+export default ClienteList
