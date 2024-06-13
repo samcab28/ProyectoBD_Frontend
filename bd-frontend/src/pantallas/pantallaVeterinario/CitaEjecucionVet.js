@@ -5,6 +5,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { UserContext } from "../../context/UserContext";
 import ProductImage from "../../Imagenes/ProductImage";
+import logHistorialClick from "../../seguridad/historialClick";
 
 function CitaEjecucionVet() {
     const navigate = useNavigate();
@@ -17,6 +18,7 @@ function CitaEjecucionVet() {
     const [selectedSucursal, setSelectedSucursal] = useState(null);
 
     const handleRegresar = () => {
+        logHistorialClick(user, "Regresar", "Regresó a la lista de citas médicas");
         navigate('/veterinario/citaMedica');
     };
 
@@ -51,7 +53,6 @@ function CitaEjecucionVet() {
             .catch(error => console.error('Error fetching sucursales:', error));
     }, []);
 
-
     //carga de productos segun la sucursal
     useEffect(() => {
         if (selectedSucursal) {
@@ -64,7 +65,6 @@ function CitaEjecucionVet() {
                 .catch(error => console.error('Error fetching productos:', error));
         }
     }, [selectedSucursal]);
-
 
     function handleSubmit(e) {
         e.preventDefault();
@@ -88,6 +88,7 @@ function CitaEjecucionVet() {
             .then(response => {
                 if (response.ok) {
                     alert('Agregado al expediente exitosamente');
+                    logHistorialClick(user, "Agregar al expediente", `Cita ID: ${idCita}`);
                     window.location.reload(); // Recargar la página
                 } else {
                     alert('Error al agregar al expediente');
@@ -99,12 +100,12 @@ function CitaEjecucionVet() {
     }
 
     const handleResenaGo = (IdProducto) => {
-        console.log(IdProducto);
+        logHistorialClick(user, "Ver reseña", `Producto ID: ${IdProducto}`);
         navigate(`/cliente/resena/${parseInt(IdProducto)}`); // Asegurarse de que IdProducto sea un número
     };
 
-
     const handleAddToCart = (IdProducto) => {
+        logHistorialClick(user, "Agregar al carrito", `Producto ID: ${IdProducto}`);
         if (user && user.IdPersona) {
             fetch('http://localhost:3001/carrito', {
                 method: 'POST',
@@ -139,9 +140,9 @@ function CitaEjecucionVet() {
     return (
         <div className="home-screen">
             <header className="header">
-                <img src={fondoVet} alt="Veterinary Clinic" className="header-image"/>
+                <img src={fondoVet} alt="Veterinary Clinic" className="header-image" />
             </header>
-            <NavCliente/>
+            <NavCliente />
             <main className="main-content">
                 <h2>Id de la cita que está siendo atendida: {idCita}</h2>
                 <h2>Id de la mascota: {idMascota}</h2>
@@ -170,9 +171,9 @@ function CitaEjecucionVet() {
                             value={comentario}
                             onChange={e => setComentario(e.target.value)}
                         />
-                    </label><br/>
+                    </label><br />
                     <button
-                        style={{marginTop: '10px', marginBottom: '10px'}}
+                        style={{ marginTop: '10px', marginBottom: '10px' }}
                         className="form-button"
                         type="submit"
                     >
@@ -203,7 +204,7 @@ function CitaEjecucionVet() {
                 <div className="product-grid">
                     {products.map(product => (
                         <div className="product-card" key={product.IdProducto}>
-                            <ProductImage url={product.Dirrecion} alt={product.NombreProducto}/>
+                            <ProductImage url={product.Dirrecion} alt={product.NombreProducto} />
                             <div className="product-info">
                                 <p><strong>Nombre:</strong> {product.NombreProducto}</p>
                                 <p><strong>Precio:</strong> {product.PrecioProducto}</p>
@@ -211,35 +212,36 @@ function CitaEjecucionVet() {
                                 <p><strong>Disponibles:</strong> {product.Cantidad}</p>
                                 <p><strong>Descripción:</strong> {product.DescripcionProducto}</p>
                                 <p><strong>Sucursal:</strong> {product.NombreSucursal}</p>
-                                <button style={{marginBottom: '10px', marginRight: '10px'}}
-                                        onClick={() => handleResenaGo(product.IdProducto)}
-                                        className="form-button">Reseña
+                                <button style={{ marginBottom: '10px', marginRight: '10px' }}
+                                    onClick={() => handleResenaGo(product.IdProducto)}
+                                    className="form-button">Reseña
                                 </button>
                                 <button onClick={() => handleAddToCart(product.IdProducto)}
-                                        className="form-button">Agregar al Carrito
+                                    className="form-button">Agregar al Carrito
                                 </button>
                             </div>
                         </div>
                     ))}
                 </div>
 
-
                 <button
-                    style={{marginTop: '10px', marginBottom: '10px'}}
+                    style={{ marginTop: '10px', marginBottom: '10px' }}
                     className="form-button"
+                    onClick={() => logHistorialClick(user, "Generar receta", "Generar receta médica")}
                 >
                     Generar receta
                 </button>
-                <br/>
+                <br />
                 <button
-                    style={{marginTop: '10px', marginBottom: '10px'}}
+                    style={{ marginTop: '10px', marginBottom: '10px' }}
                     className="form-button"
+                    onClick={() => logHistorialClick(user, "Terminar cita", "Cita médica terminada")}
                 >
                     Terminar cita
                 </button>
-                <br/>
+                <br />
                 <button
-                    style={{marginTop: '10px', marginBottom: '10px'}}
+                    style={{ marginTop: '10px', marginBottom: '10px' }}
                     onClick={handleRegresar}
                     className="form-button"
                 >

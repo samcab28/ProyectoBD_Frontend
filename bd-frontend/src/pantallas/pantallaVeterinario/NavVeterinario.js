@@ -1,19 +1,40 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useContext } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import '../../Styles/PageContainer.css'; // Importa el archivo de estilos de NavCliente
-
+import logHistorialClick from '../../seguridad/historialClick';
+import { UserContext } from '../../context/UserContext';
 
 function NavAdmin() {
+    const { user } = useContext(UserContext); // Obtener el contexto del usuario
+    const navigate = useNavigate();
+
+    const handleNavigation = (path) => {
+        logHistorialClick(user, "Navegación", `Navegar a ${path}`);
+        navigate(path);
+    };
+
     return (
         <nav className="sidebar">
             <h2>Navegación</h2>
             <ul>
-                <li><Link to="/veterinario/"><button className="nav-button">Home</button></Link></li>
-                <li><Link to="/crud/"><button className="nav-button">Gestión</button></Link></li>
-                <li><Link to="/veterinario/medicamento"><button className="nav-button">Medicamentos Disponibles</button></Link></li>
-                <li><Link to="/veterinario/mascota"><button className="nav-button">Mascotas</button></Link></li>
-                <li><Link to="/veterinario/citaMedica"><button className="nav-button">Citas Medicas</button></Link></li>
-                <li><Link to="/"><button className="nav-button">Logout</button></Link></li>
+                <li>
+                    <button className="nav-button" onClick={() => handleNavigation('/veterinario/')}>Home</button>
+                </li>
+                <li>
+                    <button className="nav-button" onClick={() => handleNavigation('/crud/')}>Gestión</button>
+                </li>
+                <li>
+                    <button className="nav-button" onClick={() => handleNavigation('/veterinario/medicamento')}>Medicamentos Disponibles</button>
+                </li>
+                <li>
+                    <button className="nav-button" onClick={() => handleNavigation('/veterinario/mascota')}>Mascotas</button>
+                </li>
+                <li>
+                    <button className="nav-button" onClick={() => handleNavigation('/veterinario/citaMedica')}>Citas Medicas</button>
+                </li>
+                <li>
+                    <button className="nav-button" onClick={() => handleNavigation('/')}>Logout</button>
+                </li>
             </ul>
         </nav>
     );

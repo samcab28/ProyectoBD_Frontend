@@ -1,12 +1,13 @@
 // CitaMedicaVet.js
 import fondoVet from "../../Imagenes/FondoVet.jpg";
 import NavVeterinario from "./NavVeterinario";
-import React, {useContext, useEffect, useState} from "react";
-import {UserContext} from "../../context/UserContext";
+import React, { useContext, useEffect, useState } from "react";
+import { UserContext } from "../../context/UserContext";
 import ProductImage from "../../Imagenes/ProductImage";
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import logHistorialClick from "../../seguridad/historialClick";
 
-function CitaMedicaVet(){
+function CitaMedicaVet() {
     const { user } = useContext(UserContext);
     const [citas, setCitas] = useState([]);
     const navigate = useNavigate();
@@ -22,15 +23,16 @@ function CitaMedicaVet(){
     }, []);
 
     const goToCita = (citaId, citaMasc) => {
+        logHistorialClick(user, "Iniciar cita", `Cita ID: ${citaId}, Mascota ID: ${citaMasc}`);
         navigate(`/veterinario/citaManejo/${citaId}/${citaMasc}`);
-    }
+    };
 
     return (
         <div className="home-screen">
             <header className="header">
-                <img src={fondoVet} alt="Veterinary Clinic" className="header-image"/>
+                <img src={fondoVet} alt="Veterinary Clinic" className="header-image" />
             </header>
-            <NavVeterinario/>
+            <NavVeterinario />
             <main className="main-content">
                 <h2>citas medicas veterinario</h2>
                 <div className="product-grid">
@@ -41,10 +43,10 @@ function CitaMedicaVet(){
                                     <p><strong>Fecha de la cita:</strong> {cita.FechaCita}</p>
                                     <p><strong>Duracion cita, minutos:</strong> {cita.DuracionCita}</p>
                                     <p><strong>Nombre Encargado:</strong> {cita.NombrePersona}</p>
-                                    <p><strong>Nombrev Mascota:</strong> {cita.NombreMascota}</p>
-                                    <button style={{marginBottom: '10px', marginRight: '10px'}}
-                                            className="form-button"
-                                            onClick={() => goToCita(cita.IdCitaMed, cita.IdMascota)}>Iniciar Cita
+                                    <p><strong>Nombre Mascota:</strong> {cita.NombreMascota}</p>
+                                    <button style={{ marginBottom: '10px', marginRight: '10px' }}
+                                        className="form-button"
+                                        onClick={() => goToCita(cita.IdCitaMed, cita.IdMascota)}>Iniciar Cita
                                     </button>
                                 </div>
                             </div>
@@ -56,7 +58,6 @@ function CitaMedicaVet(){
             </main>
         </div>
     );
-
 }
 
 export default CitaMedicaVet;
