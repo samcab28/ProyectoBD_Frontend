@@ -49,8 +49,15 @@ function ExpedienteClienteAdmin(){
                 setExpedientes(data);
             })
             .catch(error => console.error('Error fetching expediente:', error));
+        } else{
+            fetch(`http://localhost:3001/expedienteDuegno/${busqueda}`)
+            .then(response => response.json())
+            .then(data => {
+                console.log("expediente fetched:", data); 
+                setExpedientes(data);
+            })
+            .catch(error => console.error('Error fetching expediente:', error)); 
         }
-        
     }
 
     return (
