@@ -1,9 +1,10 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import '../../Styles/PageContainer.css';
 import fondoVet from '../../Imagenes/FondoVet.jpg';
 import NavCliente from "./NavCliente";
-import {UserContext} from "../../context/UserContext";
+import { UserContext } from "../../context/UserContext";
+import logHistorialClick from '../../seguridad/historialClick';
 
 function ResenaCliente() {
     const navigate = useNavigate();
@@ -17,10 +18,11 @@ function ResenaCliente() {
     const [puntuacionNumero, setPuntuacionNumero] = useState(0);
 
     const handleRegresar = () => {
-        navigate('/cliente/producto'); // Cambia '/another' por la ruta deseada
+        logHistorialClick(user, "Navegacion", "Regresar Productos");
+        navigate('/cliente/producto');
     };
 
-    //carga de informacion del puntaje del producto
+    // Carga de información del puntaje del producto
     useEffect(() => {
         fetch(`http://localhost:3001/puntuacion/${id}`)
             .then(response => response.json())
@@ -34,7 +36,7 @@ function ResenaCliente() {
             .catch(error => console.error('Error fetching puntuacion:', error));
     }, [id]);
 
-    //carga de la informacion del producto
+    // Carga de la información del producto
     useEffect(() => {
         fetch(`http://localhost:3001/producto/${id}`)
             .then(response => response.json())
@@ -45,22 +47,21 @@ function ResenaCliente() {
             .catch(error => console.error('Error fetching producto:', error));
     }, [id]);
 
-    //carga de la informacion de las resenas segun el id producto
+    // Carga de la información de las reseñas según el id producto
     useEffect(() => {
         fetch(`http://localhost:3001/resenaByProducto/${id}`)
             .then(response => response.json())
             .then(data => {
-                console.log("resenas fetched:", data);
+                console.log("Resenas fetched:", data);
                 setResenas(data);
             })
             .catch(error => console.error('Error fetching resenas:', error));
     }, [id]);
 
-
-    function handleSubmit(e){
+    function handleSubmit(e) {
         e.preventDefault();
 
-        console.log("usuario de persona",user.IdPersona);
+        console.log("Usuario de persona", user.IdPersona);
         if (!user || !user.IdPersona) {
             alert('Por favor, inicie sesión para dejar una reseña.');
             return;
@@ -85,36 +86,37 @@ function ResenaCliente() {
         })
             .then(response => {
                 if (response.ok) {
-                    alert('resena creada exitosamente');
+                    alert('Reseña creada exitosamente');
                     window.location.reload(); // Recargar la página
                 } else {
-                    alert('Error al crear la resena');
+                    alert('Error al crear la reseña');
                 }
             })
             .catch(error => {
                 console.error('Error en la solicitud:', error);
             });
-    }
 
+        logHistorialClick(user, "Guardar reseña", `Producto id: ${parseInt(id)}`);
+    }
 
     return (
         <div className="home-screen">
             <header className="header">
-                <img src={fondoVet} alt="Veterinary Clinic" className="header-image"/>
+                <img src={fondoVet} alt="Veterinary Clinic" className="header-image" />
             </header>
-            <NavCliente/>
+            <NavCliente />
             <main className="main-content">
                 {product && (
                     <>
-                        <h2>Reseña de {product[0].NombreProducto} de la marca {product[0].NombreMarcaPro} puntuacion
+                        <h2>Reseña de {product[0].NombreProducto} de la marca {product[0].NombreMarcaPro} puntuación
                             de {puntuacion.length > 0 ? puntuacion[0].PuntuacionPromedio : 'N/A'}</h2>
                         <div className="product-grid">
                             {resenas.map(resena => (
                                 <div className="product-card" key={resena.IdResPro}>
                                     <p><strong>Autor:</strong> {resena.Nombre_Completo}</p>
                                     <p><strong>Titulo:</strong> {resena.TituloRes}</p>
-                                    <p><strong>Descripcion:</strong> {resena.ContenidoRes}</p>
-                                    <p><strong>Puntuacion:</strong> {resena.Puntuacion}</p>
+                                    <p><strong>Descripción:</strong> {resena.ContenidoRes}</p>
+                                    <p><strong>Puntuación:</strong> {resena.Puntuacion}</p>
                                 </div>
                             ))}
                         </div>
@@ -132,7 +134,7 @@ function ResenaCliente() {
                             onChange={e => setTitulo(e.target.value)}
                             className="form-input"
                         />
-                    </label><br/>
+                    </label><br />
                     <label>
                         Contenido de la reseña:
                         <textarea
@@ -141,24 +143,24 @@ function ResenaCliente() {
                             onChange={e => setContenido(e.target.value)}
                             className="form-textarea"
                         />
-                    </label><br/>
+                    </label><br />
                     <label>
-                        Puntuacion:
+                        Puntuación:
                         <select
                             name="puntuacion"
                             value={puntuacionNumero}
                             onChange={e => setPuntuacionNumero(e.target.value)}
                             className="form-select"
                         >
-                            {Array.from({length: 11}, (_, i) => (
+                            {Array.from({ length: 11 }, (_, i) => (
                                 <option key={i} value={i}>{i}</option>
                             ))}
                         </select>
-                    </label><br/>
+                    </label><br />
 
                     <button type="submit" className="form-button">Guardar</button>
                 </form>
-                <br/>
+                <br />
                 <button onClick={handleRegresar} className="form-button">Regresar</button>
             </main>
         </div>

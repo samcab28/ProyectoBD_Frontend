@@ -4,6 +4,7 @@ import '../../Styles/PageContainer.css';
 import '../../Styles/FormsTarjeta.css';
 import fondoVet from '../../Imagenes/FondoVet.jpg';
 import NavCliente from '../../pantallas/pantallaCliente/NavCliente';
+import logHistorialClick from '../../seguridad/historialClick';
 
 function CitasMedicas() {
     const [citas, setCitas] = useState([]);
@@ -49,6 +50,7 @@ function CitasMedicas() {
     }, [user, estadoCita]);
 
     const handleEstadoChange = (event) => {
+        logHistorialClick(user, "Ver citas", `Estado de citas: ${event.target.value}`);
         setEstadoCita(event.target.value);
     };
 
@@ -117,6 +119,7 @@ function CitasMedicas() {
                 const asunto = 'Notificación de Creación de Cita Médica';
                 const mensaje = `La cita médica para la mascota ${citaCreada.NombreMascota}, del dueño ${citaCreada.NombrePersona} ha sido creada para el día ${citaCreada.FechaCita}.`;
                 enviarCorreo(correos, asunto, mensaje);
+                logHistorialClick(user, "Generar cita", `Mascota id: ${nuevaCita.IdMascota}, Veterinario id: ${nuevaCita.IdEncargado}`);
             }
         })
         .catch(error => console.error('Error creating cita:', error.message));

@@ -4,6 +4,7 @@ import { UserContext } from '../../context/UserContext';
 import '../../Styles/PageContainer.css';
 import fondoVet from '../../Imagenes/FondoVet.jpg';
 import NavCliente from "./NavCliente";
+import logHistorialClick from '../../seguridad/historialClick';
 
 function MascotaCliente() {
     const [mascotas, setMascotas] = useState([]);
@@ -71,6 +72,7 @@ function MascotaCliente() {
             .then(response => {
                 if (response.ok) {
                     alert('mascota creada exitosamente');
+                    logHistorialClick( user,"Nueva Mascota", `${newMascota.NombreMascota}`);
                     window.location.reload(); // Recargar la página
                 } else {
                     alert('Error al crear mascota');
