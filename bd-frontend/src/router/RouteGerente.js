@@ -11,8 +11,8 @@ import ProductoGerente from "../pantallas/pantallaGerente/ProductoGerente";
 
 import CRUDMasterGerente from '../pantallas/pantallaGerente/CRUDMasterGerente';
 import ProductoList from '../CRUD_Folder/crudProducto/CrudProducto';
-import ClienteListGerente from '../pantallas/pantallaGerente/CRUDGenrente/ClienteListGerente';
-import AdminListGerente from '../pantallas/pantallaGerente/CRUDGenrente/AdminListGerente';
+import ClienteListGerente from '../pantallas/CRUDSPantallas/ClienteList';
+import AdminListGerente from '../pantallas/CRUDSPantallas/AdminList';
 import HistorialLogin from "../pantallas/pantallaGerente/HistorialLoginGerente";
 
 

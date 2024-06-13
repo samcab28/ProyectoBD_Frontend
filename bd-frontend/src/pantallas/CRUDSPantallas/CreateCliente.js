@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 
 
-function CreateAdminGerente() {
+function CreateCliente() {
     const [nombre, setNombre] = useState('');
     const [apellido, setApellido] = useState('');
     const [correo, setCorreo] = useState('');
     const [telefono, setTelefono] = useState('');
     const [usuario, setUsuario] = useState('');
     const [contrasena, setContrasena] = useState('');
-    const [tipo, setTipo] = useState('Administrador');
+    const [tipo, setTipo] = useState('Cliente');
     const [sexo, setSexo] = useState('masculino');
 
     function handleSubmit(e) {
@@ -16,11 +16,11 @@ function CreateAdminGerente() {
 
         let tipoPersonaValue;
         switch (tipo) {
-            case 'Administrador':
-                tipoPersonaValue = 1;
+            case 'Cliente':
+                tipoPersonaValue = 3;
                 break;
             default:
-                tipoPersonaValue = 1;
+                tipoPersonaValue = 3;
         }
 
         let sexoValue;
@@ -96,7 +96,7 @@ function CreateAdminGerente() {
 
     return (
         <div>
-            <div>Crear persona</div>
+            <h2>Crear Cliente</h2>
             <form onSubmit={handleSubmit}>
                 <label>
                     Nombre: <input name="nombre" type="text" value={nombre} 
@@ -125,7 +125,7 @@ function CreateAdminGerente() {
                 <label>
                     Tipo de persona:
                     <select name="tipo" value={tipo} onChange={e => setTipo(e.target.value)}>
-                        <option value="Administrador">Administrador</option>
+                        <option value="Cliente">Cliente</option>
                     </select>
                 </label><br/>
                 <label>
@@ -136,11 +136,10 @@ function CreateAdminGerente() {
                         <option value="otro">Otro</option>
                     </select>
                 </label><br/>
-                <button type="reset">Reset data</button>
                 <button type="submit">Guardar</button>
             </form>
         </div>
     );
 }
 
-export default CreateAdminGerente;
+export default CreateCliente;

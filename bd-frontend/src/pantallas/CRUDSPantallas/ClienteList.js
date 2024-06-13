@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import CreateClienteGerente from './CreateClienteGerente';
+import CreateCliente from './CreateCliente';
+import ModifyCliente from './ModifyCliente';
+
 function ClienteListGerente() {
     const navigate = useNavigate();
     const [personas, setPersonas] = useState([]);
@@ -46,10 +48,6 @@ function ClienteListGerente() {
             .catch(error => console.error('Error fetching sexos:', error));
     }, []);
 
-    function handleMod(id) {
-        console.log("implementar logica");
-    }
-
     function handleDelete(id) {
         fetch(`http://localhost:3001/persona/${id}`, {
             method: 'DELETE',
@@ -71,7 +69,9 @@ function ClienteListGerente() {
 
     return (
         <div>
-            <CreateClienteGerente/>
+            <h1>Gestión de clientes</h1>
+            <CreateCliente/>
+            <ModifyCliente/>
             <h2>Listado de Personas</h2>
             <table>
                 <thead>
@@ -102,13 +102,12 @@ function ClienteListGerente() {
                         <td>{sexos[persona.Sexo]}</td>
                         <td>
                             <button onClick={() => handleDelete(persona.IdPersona)}>Eliminar</button>
-                            <button onClick={() => handleMod(persona.IdPersona)}>Modificar</button>
                         </td>
                     </tr>
                 ))}
                 </tbody>
             </table>
-            <button onClick={handleRegresar}>regresar</button>
+            <button onClick={handleRegresar}>Regresar</button>
     
        </div>
     );

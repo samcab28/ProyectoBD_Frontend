@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 
 
-function CreateClienteGerente() {
+function CreateAdmin() {
     const [nombre, setNombre] = useState('');
     const [apellido, setApellido] = useState('');
     const [correo, setCorreo] = useState('');
     const [telefono, setTelefono] = useState('');
     const [usuario, setUsuario] = useState('');
     const [contrasena, setContrasena] = useState('');
-    const [tipo, setTipo] = useState('Cliente');
+    const [tipo, setTipo] = useState('Administrador');
     const [sexo, setSexo] = useState('masculino');
 
     function handleSubmit(e) {
@@ -16,11 +16,11 @@ function CreateClienteGerente() {
 
         let tipoPersonaValue;
         switch (tipo) {
-            case 'Cliente':
-                tipoPersonaValue = 3;
+            case 'Administrador':
+                tipoPersonaValue = 1;
                 break;
             default:
-                tipoPersonaValue = 3;
+                tipoPersonaValue = 1;
         }
 
         let sexoValue;
@@ -96,7 +96,7 @@ function CreateClienteGerente() {
 
     return (
         <div>
-            <div>Crear persona</div>
+            <h2>Crear administrador</h2>
             <form onSubmit={handleSubmit}>
                 <label>
                     Nombre: <input name="nombre" type="text" value={nombre} 
@@ -125,7 +125,7 @@ function CreateClienteGerente() {
                 <label>
                     Tipo de persona:
                     <select name="tipo" value={tipo} onChange={e => setTipo(e.target.value)}>
-                        <option value="Cliente">Cliente</option>
+                        <option value="Administrador">Administrador</option>
                     </select>
                 </label><br/>
                 <label>
@@ -136,11 +136,10 @@ function CreateClienteGerente() {
                         <option value="otro">Otro</option>
                     </select>
                 </label><br/>
-                <button type="reset">Reset data</button>
                 <button type="submit">Guardar</button>
             </form>
         </div>
     );
 }
 
-export default CreateClienteGerente;
+export default CreateAdmin;

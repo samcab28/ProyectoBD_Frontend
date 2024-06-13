@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import CreateAdminGerente from './CreateAdminGerente';
+import CreateAdmin from './CreateAdmin';
+import ModifyAdmin from './ModifyAdmin';
 
 function AdminListGerente() {
     const navigate = useNavigate();
@@ -47,9 +48,6 @@ function AdminListGerente() {
             .catch(error => console.error('Error fetching sexos:', error));
     }, []);
 
-    function handleMod(id) {
-        console.log("implementar logica");
-    }
 
     function handleDelete(id) {
         fetch(`http://localhost:3001/persona/${id}`, {
@@ -72,7 +70,9 @@ function AdminListGerente() {
 
     return (
         <div>
-            <CreateAdminGerente/>
+            <h1>Gestión de Administradores</h1>
+            <CreateAdmin/>
+            <ModifyAdmin/>
             <h2>Listado de Personas</h2>
             <table>
                 <thead>
@@ -103,13 +103,12 @@ function AdminListGerente() {
                         <td>{sexos[persona.Sexo]}</td>
                         <td>
                             <button onClick={() => handleDelete(persona.IdPersona)}>Eliminar</button>
-                            <button onClick={() => handleMod(persona.IdPersona)}>Modificar</button>
                         </td>
                     </tr>
                 ))}
                 </tbody>
             </table>
-            <button onClick={handleRegresar}>regresar</button>
+            <button onClick={handleRegresar}>Regresar</button>
     
        </div>
     );
