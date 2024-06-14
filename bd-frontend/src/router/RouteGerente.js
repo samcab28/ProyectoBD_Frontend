@@ -8,6 +8,7 @@ import CitaMedicaGerente from "../pantallas/pantallaGerente/CitaMedicaGerente";
 import CobroGerente from "../pantallas/pantallaGerente/CobroGerente";
 import ExpedienteGerente from "../pantallas/pantallaGerente/ExpedienteGerente";
 import ProductoGerente from "../pantallas/pantallaGerente/ProductoGerente";
+import HistorialLogin from "../pantallas/pantallaGerente/HistorialLoginGerente";
 
 
 const RouteGerente = () => {
@@ -18,6 +19,7 @@ const RouteGerente = () => {
             <Route path='/cobro' element={<CobroGerente />} />
             <Route path='/expediente' element={<ExpedienteGerente />} />
             <Route path='/producto' element={<ProductoGerente />} />
+            <Route path='/historial' element={<HistorialLogin />} />
         </Routes>
     );
 };
