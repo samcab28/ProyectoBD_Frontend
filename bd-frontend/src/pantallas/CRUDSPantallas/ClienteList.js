@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import fondoVet from "../../Imagenes/FondoVet.jpg";
-
+import NavGerente from '../pantallaGerente/NavGerente';
 
 import CreateCliente from './CreateCliente';
 import ModifyCliente from './ModifyCliente';
@@ -76,6 +76,7 @@ function ClienteList() {
                 <img src={fondoVet} alt="Veterinary Clinic" className="header-image"/>
             </header>
             <NavGerente/>
+            <main className="crud">
             <h1>Gestión de clientes</h1>
             <CreateCliente/>
             <ModifyCliente/>
@@ -114,8 +115,7 @@ function ClienteList() {
                 ))}
                 </tbody>
             </table>
-            <button onClick={handleRegresar}>Regresar</button>
-    
+            </main>
        </div>
     );
 }

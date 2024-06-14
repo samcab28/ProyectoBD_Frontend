@@ -120,7 +120,6 @@ function ModifyCliente(){
                 </label><br/>
                 <button type="submit">Guardar Cambios</button>
             </form>            
-            <button onClick={handleRegresar}>Regresar</button>
         </div>
     
     );

@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import fondoVet from "../../Imagenes/FondoVet.jpg";
+import NavGerente from '../pantallaGerente/NavGerente';
+
 import CreateAdmin from './CreateAdmin';
 import ModifyAdmin from './ModifyAdmin';
 
@@ -69,7 +72,12 @@ function AdminList() {
     };
 
     return (
-        <div>
+        <div className="home-screen">
+            <header className="header">
+                <img src={fondoVet} alt="Veterinary Clinic" className="header-image"/>
+            </header>
+            <NavGerente/>
+            <main className="crud">
             <h1>Gestión de Administradores</h1>
             <CreateAdmin/>
             <ModifyAdmin/>
@@ -108,8 +116,7 @@ function AdminList() {
                 ))}
                 </tbody>
             </table>
-            <button onClick={handleRegresar}>Regresar</button>
-    
+            </main>
        </div>
     );
 }

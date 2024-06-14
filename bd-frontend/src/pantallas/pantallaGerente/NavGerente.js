@@ -4,7 +4,7 @@ import '../../Styles/PageContainer.css'; // Importa el archivo de estilos de Nav
 
 
 //falta actualizar a componentes de gerente, actualmente tiene los de admin
-function NavAdmin() {
+function NavGerente() {
     return (
         <nav className="sidebar">
             <h2>Navegación</h2>
@@ -24,4 +24,4 @@ function NavAdmin() {
     );
 }
 
-export default NavAdmin;
+export default NavGerente;

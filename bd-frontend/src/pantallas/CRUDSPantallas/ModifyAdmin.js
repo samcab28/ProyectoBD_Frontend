@@ -119,8 +119,7 @@ function ModifyAdmin(){
                     Nuevo Dato: <input name="valorNuevo" type="text" value={valorNuevo} onChange={e => setvalorNuevo(e.target.value)} />
                 </label><br/>
                 <button type="submit">Guardar Cambios</button>
-            </form> 
-            <button onClick={handleRegresar}>Regresar</button>           
+            </form>       
         </div>
     
     );
