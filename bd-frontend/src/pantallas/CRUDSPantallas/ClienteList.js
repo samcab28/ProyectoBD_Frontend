@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import fondoVet from "../../Imagenes/FondoVet.jpg";
+
+
 import CreateCliente from './CreateCliente';
 import ModifyCliente from './ModifyCliente';
 
@@ -68,7 +71,11 @@ function ClienteList() {
     };
 
     return (
-        <div>
+        <div className="home-screen">
+            <header className="header">
+                <img src={fondoVet} alt="Veterinary Clinic" className="header-image"/>
+            </header>
+            <NavGerente/>
             <h1>Gestión de clientes</h1>
             <CreateCliente/>
             <ModifyCliente/>
