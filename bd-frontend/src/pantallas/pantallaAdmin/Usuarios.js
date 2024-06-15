@@ -24,7 +24,7 @@ function Usuarios() {
             <main className="main-content">
                 <h2>Gestión de Usuarios</h2>
                 <div className="button-container">
-                    <button className="action-button" onClick={() => handleClick('/admin/usuarios/gestion')}>
+                    <button className="action-button" onClick={() => handleClick('/admin/citasMedica/gestion')}>
                         Gestionar Usuarios
                     </button>
                     <button className="action-button" onClick={() => handleClick('/admin/usuarios/modificar')}>

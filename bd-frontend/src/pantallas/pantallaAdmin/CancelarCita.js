@@ -27,6 +27,31 @@ function CancelarCita() {
             .catch(error => console.error('Error fetching citas:', error));
     }, []);
 
+    const enviarCorreo = async (correos, asunto, mensaje) => {
+        try {
+            const response = await fetch('http://localhost:3001/enviarCorreo', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    correos: correos,
+                    asunto: asunto,
+                    mensaje: mensaje
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error('Error al enviar el correo');
+            }
+
+            const data = await response.json();
+            console.log('Correo enviado exitosamente:', data);
+        } catch (error) {
+            console.error('Error al enviar el correo:', error);
+        }
+    };
+
     function handleSubmit(e) {
         e.preventDefault();
 
@@ -47,6 +72,15 @@ function CancelarCita() {
                 logHistorialClick(user, "Cancelar Cita", `Cita ID: ${Cita}`);
                 alert('Cita modificada exitosamente');
                 window.location.reload(); // Recargar la página
+
+                // Obtener los correos electrónicos del dueño y veterinario
+                const citaCancelada = citas.find(cita => cita.IdCitaMed === Cita);
+                if (citaCancelada) {
+                    const correos = [citaCancelada.DuegnoCorreo, citaCancelada.VetCorreo];
+                    const asunto = 'Notificación de Cancelación de Cita Médica';
+                    const mensaje = `La cita médica para la mascota ${citaCancelada.NombreMascota}, del dueño ${citaCancelada.NombrePersona} ha sido cancelada.`;
+                    enviarCorreo(correos, asunto, mensaje);
+                }
             } else {
                 alert('Error al modificar la cita');
             }

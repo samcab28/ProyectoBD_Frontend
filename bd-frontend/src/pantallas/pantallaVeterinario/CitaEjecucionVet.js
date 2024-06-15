@@ -1,4 +1,3 @@
-// CitaEjecucionVet.js
 import fondoVet from "../../Imagenes/FondoVet.jpg";
 import NavCliente from "../pantallaCliente/NavCliente";
 import React, { useState, useEffect, useContext } from "react";
@@ -137,6 +136,33 @@ function CitaEjecucionVet() {
         console.log(selected);
     };
 
+    const handleTerminarCita = () => {
+        const updateData = {
+            campoModificar: 'EstadoCita',
+            valorNuevo: '1' // Valor que indica que la cita fue atendida
+        };
+
+        fetch(`http://localhost:3001/citaMedica/${idCita}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(updateData)
+        })
+        .then(response => {
+            if (response.ok) {
+                alert('Cita terminada exitosamente');
+                logHistorialClick(user, "Terminar cita", `Cita ID: ${idCita} terminada`);
+                handleRegresar(); // Regresar después de terminar la cita
+            } else {
+                alert('Error al terminar la cita');
+            }
+        })
+        .catch(error => {
+            console.error('Error en la solicitud:', error);
+        });
+    };
+
     return (
         <div className="home-screen">
             <header className="header">
@@ -199,8 +225,7 @@ function CitaEjecucionVet() {
                     </label>
                 </form>
 
-                <h3>Nombre de sucursal
-                    seleccionada: {selectedSucursal ? selectedSucursal.NombreSucursal : 'Ninguna'}</h3>
+                <h3>Nombre de sucursal seleccionada: {selectedSucursal ? selectedSucursal.NombreSucursal : 'Ninguna'}</h3>
                 <div className="product-grid">
                     {products.map(product => (
                         <div className="product-card" key={product.IdProducto}>
@@ -235,7 +260,7 @@ function CitaEjecucionVet() {
                 <button
                     style={{ marginTop: '10px', marginBottom: '10px' }}
                     className="form-button"
-                    onClick={() => logHistorialClick(user, "Terminar cita", "Cita médica terminada")}
+                    onClick={handleTerminarCita}
                 >
                     Terminar cita
                 </button>
