@@ -28,7 +28,16 @@ function CitasMedicas() {
             fetch(`http://localhost:3001/citaMedica/${user.IdPersona}/${estadoCita}`)
                 .then(response => response.json())
                 .then(data => {
-                    const sortedCitas = data.sort((a, b) => new Date(b.FechaCita) - new Date(a.FechaCita));
+                    const citasConComentarios = data.reduce((acc, cita) => {
+                        const existingCita = acc.find(c => c.IdCitaMed === cita.IdCitaMed);
+                        if (existingCita) {
+                            existingCita.Comentarios.push(cita.Comentarios);
+                        } else {
+                            acc.push({ ...cita, Comentarios: cita.Comentarios ? [cita.Comentarios] : [] });
+                        }
+                        return acc;
+                    }, []);
+                    const sortedCitas = citasConComentarios.sort((a, b) => new Date(b.FechaCita) - new Date(a.FechaCita));
                     setCitas(sortedCitas);
                 })
                 .catch(error => console.error('Error fetching citas:', error));
@@ -234,13 +243,20 @@ function CitasMedicas() {
                                 <p><strong>Veterinario Correo:</strong> {cita.VetCorreo}</p>
                                 <p><strong>Mascota:</strong> {cita.NombreMascota}</p>
                                 <p><strong>Animal:</strong> {cita.NombreAnimal}</p>
-                                {(cita.EstadoCita === 2 || cita.EstadoCita === 3) && (
+                                {(cita.EstadoCita === 2) && (
                                     <button className="form-button" onClick={() => handleDelete(cita.IdCitaMed)}>Eliminar</button>
                                 )}
                             </div>
                             {selectedCita && selectedCita.IdCitaMed === cita.IdCitaMed && (
                                 <div className="details-container">
-                                    <p><strong>Comentarios:</strong> {cita.Comentarios || 'N/A'}</p>
+                                    <p><strong>Comentarios:</strong></p>
+                                    {cita.Comentarios.length > 0 ? (
+                                        cita.Comentarios.map((comentario, index) => (
+                                            <p key={index}>{comentario}</p>
+                                        ))
+                                    ) : (
+                                        <p>N/A</p>
+                                    )}
                                     {/* Agregar más detalles de la cita si es necesario */}
                                 </div>
                             )}

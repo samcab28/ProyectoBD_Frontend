@@ -18,6 +18,7 @@ function CitaEjecucionVet() {
     const [recetados, setRecetados] = useState([]);
     const [cantidades, setCantidades] = useState({});
     const [citaInfo, setCitaInfo] = useState({});
+    const [mostrarExpediente, setMostrarExpediente] = useState(false);
 
     const handleRegresar = () => {
         logHistorialClick(user, "Regresar", "Regresó a la lista de citas médicas");
@@ -97,9 +98,16 @@ function CitaEjecucionVet() {
         const expedienteData = {
             Comentarios: comentario,
             IdCita: idCita,
-            IdMascota: idMascota,
-            IdVeterinario: user.IdPersona
+            mascota: idMascota,
+            veterinario: user.IdPersona
         };
+
+        if (comentario.trim() === "") {
+            alert('Debe agregar un comentario');
+            return;
+        }
+    
+        console.log(expedienteData);
 
         fetch('http://localhost:3001/expediente', {
             method: 'POST',
@@ -119,7 +127,7 @@ function CitaEjecucionVet() {
             .catch(error => {
                 console.error('Error en la solicitud:', error);
             });
-    }; 
+    };
 
     const handleSucursalChange = (e) => {
         const selectedId = parseInt(e.target.value);
@@ -170,6 +178,22 @@ function CitaEjecucionVet() {
             });
     };
 
+    const handleVerExpediente = () => {
+        if (mostrarExpediente) {
+            setMostrarExpediente(false);
+            setExpedientes([]);
+        } else {
+            fetch(`http://localhost:3001/expediente/mascota/${idMascota}`)
+                .then(response => response.json())
+                .then(data => {
+                    setExpedientes(data);
+                    console.log("Expedientes fetched:", data);
+                    setMostrarExpediente(true);
+                })
+                .catch(error => console.error('Error fetching expedientes:', error));
+        }
+    };
+
     return (
         <div className="home-screen">
             <header className="header">
@@ -180,19 +204,26 @@ function CitaEjecucionVet() {
                 <h2>Id de la cita que está siendo atendida: {idCita}</h2>
                 <h2>Id de la mascota: {idMascota}</h2>
                 <h2>Carga del expediente médico del paciente:</h2>
-                <div className="product-grid">
-                    {expedientes.map(exp => (
-                        <div className="product-card" key={exp.IdExpediente}>
-                            <div className="product-info">
-                                <p><strong>Veterinario:</strong> {exp.NombreVeterinario}</p>
-                                <p><strong>Mascota:</strong> {exp.NombreMascota}</p>
-                                <p><strong>Fecha:</strong> {exp.FechaCita}</p>
-                                <p><strong>Id Cita:</strong> {exp.IdCita}</p>
-                                <p><strong>Comentarios:</strong> {exp.Comentarios}</p>
-                            </div>
-                        </div>
-                    ))}
-                </div>
+                <button onClick={handleVerExpediente} className="form-button">Ver Expediente</button>
+                {mostrarExpediente && (
+                    <div className="list-container">
+                        {expedientes.length === 0 ? (
+                            <p>NO HAY EXPEDIENTES PARA MOSTRAR</p>
+                        ) : (
+                            expedientes.map(exp => (
+                                <div className="list-item" key={exp.IdExpediente}>
+                                    <div className="list-item-content">
+                                        <p><strong>Veterinario:</strong> {exp.Veterinario}</p>
+                                        <p><strong>Mascota:</strong> {exp.Mascota}</p>
+                                        <p><strong>Fecha:</strong> {new Date(exp.FechaCita).toLocaleDateString()}</p>
+                                        <p><strong>Id Cita:</strong> {exp.IdCita}</p>
+                                        <p><strong>Comentarios:</strong> {exp.Comentarios}</p>
+                                    </div>
+                                </div>
+                            ))
+                        )}
+                    </div>
+                )}
 
                 <h2>Productos Recetados</h2>
                 <div className="list-container">
@@ -254,7 +285,7 @@ function CitaEjecucionVet() {
                         <div className="product-card" key={product.IdProducto}>
                             <ProductImage url={product.Dirrecion} alt={product.NombreProducto} />
                             <div className="product-info">
-                                <p><strong>ID:</strong> {parseInt( product.IdMedicamento)}</p>
+                                <p><strong>ID:</strong> {parseInt(product.IdMedicamento)}</p>
                                 <p><strong>Nombre:</strong> {product.NombreProducto}</p>
                                 <p><strong>Precio:</strong> {product.PrecioProducto}</p>
                                 <p><strong>Marca:</strong> {product.NombreMarcaPro}</p>

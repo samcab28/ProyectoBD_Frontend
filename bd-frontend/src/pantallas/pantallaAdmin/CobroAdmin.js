@@ -49,6 +49,11 @@ function CobroCliente() {
     };
 
     const handleCobrar = () => {
+        if (!selectedCita) {
+            alert("Por favor, seleccione una cita.");
+            return;
+        }
+    
         fetch(`http://localhost:3001/pedidoDesdeCita/${selectedCita.IdCitaMed}`, {
             method: 'POST',
             headers: {
