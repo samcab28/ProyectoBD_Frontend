@@ -15,13 +15,14 @@ function CitaEjecucionVet() {
     const [sucursales, setSucursales] = useState([]);
     const [products, setProducts] = useState([]);
     const [selectedSucursal, setSelectedSucursal] = useState(null);
+    const [recetados, setRecetados] = useState([]);
+    const [cantidades, setCantidades] = useState({});
 
     const handleRegresar = () => {
         logHistorialClick(user, "Regresar", "Regresó a la lista de citas médicas");
         navigate('/veterinario/citaMedica');
     };
 
-    //carga de citas de mascotas
     useEffect(() => {
         if (idCita) {
             fetch(`http://localhost:3001/expedienteMascota/${idMascota}`)
@@ -34,7 +35,6 @@ function CitaEjecucionVet() {
         }
     }, [idCita]);
 
-    //carga de sucursales
     useEffect(() => {
         fetch('http://localhost:3001/sucursal')
             .then(response => response.json())
@@ -52,7 +52,6 @@ function CitaEjecucionVet() {
             .catch(error => console.error('Error fetching sucursales:', error));
     }, []);
 
-    //carga de productos segun la sucursal
     useEffect(() => {
         if (selectedSucursal) {
             fetch(`http://localhost:3001/medicamento/sucursal/${selectedSucursal.IdSucursal}`)
@@ -65,6 +64,34 @@ function CitaEjecucionVet() {
         }
     }, [selectedSucursal]);
 
+    const handleRecetar = (product) => {
+        const cantidad = cantidades[product.IdProducto] || 1;
+        const existingProduct = recetados.find(recetado => recetado.IdProducto === product.IdProducto);
+        if (existingProduct) {
+            setRecetados(recetados.map(recetado =>
+                recetado.IdProducto === product.IdProducto
+                    ? { ...recetado, cantidad: cantidad }
+                    : recetado
+            ));
+        } else {
+            setRecetados([...recetados, { ...product, cantidad }]);
+        }
+    };
+
+    const handleCantidadChange = (e, productId) => {
+        const value = parseInt(e.target.value, 10);
+        if (value >= 1) {
+            setCantidades({
+                ...cantidades,
+                [productId]: value
+            });
+        }
+    };
+
+    const handleEliminarRecetado = (idProducto) => {
+        setRecetados(recetados.filter(p => p.IdProducto !== idProducto));
+    };
+
     function handleSubmit(e) {
         e.preventDefault();
         const newExpediente = {
@@ -72,7 +99,10 @@ function CitaEjecucionVet() {
             IdCita: idCita,
             veterinario: user.IdPersona,
             mascota: idMascota,
-            ProductosRecetados: null
+            ProductosRecetados: recetados.map(recetado => ({
+                IdProducto: recetado.IdProducto,
+                Cantidad: recetado.cantidad
+            }))
         };
 
         console.log("Datos que se enviarán al servidor:", newExpediente);
@@ -103,32 +133,6 @@ function CitaEjecucionVet() {
         navigate(`/cliente/resena/${parseInt(IdProducto)}`); // Asegurarse de que IdProducto sea un número
     };
 
-    const handleAddToCart = (IdProducto) => {
-        logHistorialClick(user, "Agregar al carrito", `Producto ID: ${IdProducto}`);
-        if (user && user.IdPersona) {
-            fetch('http://localhost:3001/carrito', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    IdPersona: user.IdPersona,
-                    IdProducto: parseInt(IdProducto), // Asegurarse de que IdProducto sea un número
-                    IdSucursal: selectedSucursal.IdSucursal,
-                    Cantidad: 1
-                })
-            })
-                .then(response => response.json())
-                .then(data => {
-                    console.log("Producto agregado al carrito:", data);
-                    alert("Producto agregado al carrito");
-                })
-                .catch(error => console.error('Error al agregar producto al carrito:', error));
-        } else {
-            console.error('Usuario no autenticado');
-        }
-    };
-
     const handleSucursalChange = (e) => {
         const selectedId = parseInt(e.target.value);
         const selected = sucursales.find(sucursal => sucursal.IdSucursal === selectedId);
@@ -149,18 +153,18 @@ function CitaEjecucionVet() {
             },
             body: JSON.stringify(updateData)
         })
-        .then(response => {
-            if (response.ok) {
-                alert('Cita terminada exitosamente');
-                logHistorialClick(user, "Terminar cita", `Cita ID: ${idCita} terminada`);
-                handleRegresar(); // Regresar después de terminar la cita
-            } else {
-                alert('Error al terminar la cita');
-            }
-        })
-        .catch(error => {
-            console.error('Error en la solicitud:', error);
-        });
+            .then(response => {
+                if (response.ok) {
+                    alert('Cita terminada exitosamente');
+                    logHistorialClick(user, "Terminar cita", `Cita ID: ${idCita} terminada`);
+                    handleRegresar(); // Regresar después de terminar la cita
+                } else {
+                    alert('Error al terminar la cita');
+                }
+            })
+            .catch(error => {
+                console.error('Error en la solicitud:', error);
+            });
     };
 
     return (
@@ -188,6 +192,21 @@ function CitaEjecucionVet() {
                     ))}
                 </div>
 
+                <h2>Productos Recetados</h2>
+                <div className="list-container">
+                    {recetados.map(product => (
+                        <div className="list-item" key={product.IdProducto}>
+                            <div className="list-item-content">
+                                <p><strong>Nombre:</strong> {product.NombreProducto}</p>
+                                <p><strong>Precio:</strong> {product.PrecioProducto}</p>
+                                <p><strong>Marca:</strong> {product.NombreMarcaPro}</p>
+                                <p><strong>Cantidad Recetada:</strong> {product.cantidad}</p>
+                                <button className="form-button" onClick={() => handleEliminarRecetado(product.IdProducto)}>Eliminar</button>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+
                 <form onSubmit={handleSubmit}>
                     <label>
                         Comentarios de la cita:
@@ -206,6 +225,7 @@ function CitaEjecucionVet() {
                         Agregar al expediente
                     </button>
                 </form>
+
                 <h2>Recetar medicamentos</h2>
                 <h3>Seleccione la sucursal donde desea hacer la compra</h3>
                 <form>
@@ -237,12 +257,20 @@ function CitaEjecucionVet() {
                                 <p><strong>Disponibles:</strong> {product.Cantidad}</p>
                                 <p><strong>Descripción:</strong> {product.DescripcionProducto}</p>
                                 <p><strong>Sucursal:</strong> {product.NombreSucursal}</p>
-                                <button style={{ marginBottom: '10px', marginRight: '10px' }}
-                                    onClick={() => handleResenaGo(product.IdProducto)}
-                                    className="form-button">Reseña
-                                </button>
-                                <button onClick={() => handleAddToCart(product.IdProducto)}
-                                    className="form-button">Agregar al Carrito
+                                <input
+                                    type="number"
+                                    min="1"
+                                    max={product.Cantidad}
+                                    onChange={(e) => handleCantidadChange(e, product.IdProducto)}
+                                    placeholder="Cantidad"
+                                    style={{ marginRight: '10px' }}
+                                />
+                                <button
+                                    style={{ marginBottom: '10px' }}
+                                    onClick={() => handleRecetar(product)}
+                                    className="form-button"
+                                >
+                                    Recetar Producto
                                 </button>
                             </div>
                         </div>

@@ -28,15 +28,14 @@ function CitasMedicas() {
             fetch(`http://localhost:3001/citaMedica/${user.IdPersona}/${estadoCita}`)
                 .then(response => response.json())
                 .then(data => {
-                    console.log("Citas fetched:", data);
-                    setCitas(data);
+                    const sortedCitas = data.sort((a, b) => new Date(b.FechaCita) - new Date(a.FechaCita));
+                    setCitas(sortedCitas);
                 })
                 .catch(error => console.error('Error fetching citas:', error));
 
             fetch(`http://localhost:3001/mascotaDuenio/${user.IdPersona}`)
                 .then(response => response.json())
                 .then(data => {
-                    console.log("Mascotas fetched:", data);
                     setMascotas(data);
                 })
                 .catch(error => console.error('Error fetching mascotas:', error));
@@ -44,7 +43,6 @@ function CitasMedicas() {
             fetch('http://localhost:3001/persona/tipo/2')
                 .then(response => response.json())
                 .then(data => {
-                    console.log("Veterinarios fetched:", data);
                     setVeterinarios(data);
                 })
                 .catch(error => console.error('Error fetching veterinarios:', error));
@@ -69,7 +67,7 @@ function CitasMedicas() {
         // Validaciones
         const today = new Date();
         const maxDate = new Date();
-        maxDate.setDate(today.getDate() + 7);
+        maxDate.setDate(today.getDate() + 15);
         const selectedDate = new Date(nuevaCita.FechaCita);
 
         if (selectedDate < today || selectedDate > maxDate) {
@@ -110,8 +108,8 @@ function CitasMedicas() {
             return response.json();
         })
         .then(data => {
-            console.log('Respuesta del servidor:', data);
-            setCitas([...citas, data]);
+            const sortedCitas = [...citas, data].sort((a, b) => new Date(b.FechaCita) - new Date(a.FechaCita));
+            setCitas(sortedCitas);
 
             // Obtener los correos electrónicos del dueño y veterinario
             const citaCreada = data; // Asume que la respuesta contiene la cita creada
@@ -158,7 +156,9 @@ function CitasMedicas() {
         })
         .then(response => response.json())
         .then(data => {
-            setCitas(citas.filter(cita => cita.IdCitaMed !== id));
+            const sortedCitas = citas.filter(cita => cita.IdCitaMed !== id).sort((a, b) => new Date(b.FechaCita) - new Date(a.FechaCita));
+            setCitas(sortedCitas);
+
             // Obtener los correos electrónicos del dueño y veterinario
             const citaEliminada = citas.find(cita => cita.IdCitaMed === id);
             if (citaEliminada) {
