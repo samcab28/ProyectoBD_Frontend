@@ -17,7 +17,12 @@ function CobroCliente() {
                 }
                 return response.json();
             })
-            .then(data => setCitas(data))
+            .then(data => {
+                console.log("Datos de citas obtenidos:", data);
+                const citasAtendidas = data.filter(cita => cita.TipoEstCita === "Atendida"); // Filtrar solo citas "Atendida"
+                setCitas(citasAtendidas);
+                console.log("Citas atendidas:", citasAtendidas);
+            })
             .catch(error => console.error('Error fetching citas:', error));
     }, []);
 
@@ -35,7 +40,7 @@ function CobroCliente() {
     };
 
     const handleCobrar = () => {
-        fetch(`http://localhost:3001/cobrar/${selectedCita.IdCitaMed}`, {
+        fetch(`http://localhost:3001/pedidoDesdeCita/${selectedCita.IdCitaMed}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -49,21 +54,7 @@ function CobroCliente() {
             return response.json();
         })
         .then(data => {
-            alert('Cobro realizado exitosamente');
-            // Actualizar el historial del cliente
-            return fetch(`http://localhost:3001/historialCliente/${selectedCita.IdCitaMed}`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ productos: productosRecetados })
-            });
-        })
-        .then(historialResponse => {
-            if (!historialResponse.ok) {
-                throw new Error('Error al actualizar el historial');
-            }
-            alert('Historial actualizado exitosamente');
+            alert('Cobro realizado exitosamente y pedido creado');
         })
         .catch(error => console.error('Error en la solicitud:', error));
     };
