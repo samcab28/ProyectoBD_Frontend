@@ -1,5 +1,5 @@
 import fondoVet from "../../Imagenes/FondoVet.jpg";
-import NavCliente from "../pantallaCliente/NavCliente";
+import NavVet from "./NavVeterinario";
 import React, { useState, useEffect, useContext } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { UserContext } from "../../context/UserContext";
@@ -17,6 +17,7 @@ function CitaEjecucionVet() {
     const [selectedSucursal, setSelectedSucursal] = useState(null);
     const [recetados, setRecetados] = useState([]);
     const [cantidades, setCantidades] = useState({});
+    const [citaInfo, setCitaInfo] = useState({});
 
     const handleRegresar = () => {
         logHistorialClick(user, "Regresar", "Regresó a la lista de citas médicas");
@@ -25,10 +26,10 @@ function CitaEjecucionVet() {
 
     useEffect(() => {
         if (idCita) {
-            fetch(`http://localhost:3001/expedienteMascota/${idMascota}`)
+            fetch(`http://localhost:3001/citaMedica/${idCita}`)
                 .then(response => response.json())
                 .then(data => {
-                    setExpedientes(data);
+                    setCitaInfo(data);
                     console.log("Datos de la cita médica:", data);
                 })
                 .catch(error => console.error('Error fetching cita medica:', error));
@@ -92,33 +93,25 @@ function CitaEjecucionVet() {
         setRecetados(recetados.filter(p => p.IdProducto !== idProducto));
     };
 
-    function handleSubmit(e) {
-        e.preventDefault();
-        const newExpediente = {
+    const handleAgregarExpediente = () => {
+        const expedienteData = {
             Comentarios: comentario,
             IdCita: idCita,
-            veterinario: user.IdPersona,
-            mascota: idMascota,
-            ProductosRecetados: recetados.map(recetado => ({
-                IdProducto: recetado.IdProducto,
-                Cantidad: recetado.cantidad
-            }))
+            IdMascota: idMascota,
+            IdVeterinario: user.IdPersona
         };
-
-        console.log("Datos que se enviarán al servidor:", newExpediente);
 
         fetch('http://localhost:3001/expediente', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(newExpediente)
+            body: JSON.stringify(expedienteData)
         })
             .then(response => {
                 if (response.ok) {
-                    alert('Agregado al expediente exitosamente');
+                    alert('Expediente actualizado exitosamente');
                     logHistorialClick(user, "Agregar al expediente", `Cita ID: ${idCita}`);
-                    window.location.reload(); // Recargar la página
                 } else {
                     alert('Error al agregar al expediente');
                 }
@@ -126,12 +119,7 @@ function CitaEjecucionVet() {
             .catch(error => {
                 console.error('Error en la solicitud:', error);
             });
-    }
-
-    const handleResenaGo = (IdProducto) => {
-        logHistorialClick(user, "Ver reseña", `Producto ID: ${IdProducto}`);
-        navigate(`/cliente/resena/${parseInt(IdProducto)}`); // Asegurarse de que IdProducto sea un número
-    };
+    }; 
 
     const handleSucursalChange = (e) => {
         const selectedId = parseInt(e.target.value);
@@ -155,6 +143,21 @@ function CitaEjecucionVet() {
         })
             .then(response => {
                 if (response.ok) {
+                    // Guardar productos recetados
+                    recetados.forEach(producto => {
+                        const productoData = {
+                            cantidad: producto.cantidad,
+                            IdMedicamento: producto.IdMedicamento,
+                            IdCita: idCita
+                        };
+                        fetch('http://localhost:3001/ProductoRecetado', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(productoData)
+                        }).catch(error => console.error('Error al crear producto recetado:', error));
+                    });
                     alert('Cita terminada exitosamente');
                     logHistorialClick(user, "Terminar cita", `Cita ID: ${idCita} terminada`);
                     handleRegresar(); // Regresar después de terminar la cita
@@ -172,12 +175,11 @@ function CitaEjecucionVet() {
             <header className="header">
                 <img src={fondoVet} alt="Veterinary Clinic" className="header-image" />
             </header>
-            <NavCliente />
+            <NavVet />
             <main className="main-content">
                 <h2>Id de la cita que está siendo atendida: {idCita}</h2>
                 <h2>Id de la mascota: {idMascota}</h2>
                 <h2>Carga del expediente médico del paciente:</h2>
-
                 <div className="product-grid">
                     {expedientes.map(exp => (
                         <div className="product-card" key={exp.IdExpediente}>
@@ -207,7 +209,7 @@ function CitaEjecucionVet() {
                     ))}
                 </div>
 
-                <form onSubmit={handleSubmit}>
+                <form>
                     <label>
                         Comentarios de la cita:
                         <textarea
@@ -217,14 +219,15 @@ function CitaEjecucionVet() {
                             onChange={e => setComentario(e.target.value)}
                         />
                     </label><br />
-                    <button
-                        style={{ marginTop: '10px', marginBottom: '10px' }}
-                        className="form-button"
-                        type="submit"
-                    >
-                        Agregar al expediente
-                    </button>
                 </form>
+                <br />
+                <button
+                    style={{ marginTop: '10px', marginBottom: '10px' }}
+                    className="form-button"
+                    onClick={handleAgregarExpediente}
+                >
+                    Agregar al Expediente
+                </button>
 
                 <h2>Recetar medicamentos</h2>
                 <h3>Seleccione la sucursal donde desea hacer la compra</h3>
@@ -251,6 +254,7 @@ function CitaEjecucionVet() {
                         <div className="product-card" key={product.IdProducto}>
                             <ProductImage url={product.Dirrecion} alt={product.NombreProducto} />
                             <div className="product-info">
+                                <p><strong>ID:</strong> {parseInt( product.IdMedicamento)}</p>
                                 <p><strong>Nombre:</strong> {product.NombreProducto}</p>
                                 <p><strong>Precio:</strong> {product.PrecioProducto}</p>
                                 <p><strong>Marca:</strong> {product.NombreMarcaPro}</p>
@@ -277,13 +281,6 @@ function CitaEjecucionVet() {
                     ))}
                 </div>
 
-                <button
-                    style={{ marginTop: '10px', marginBottom: '10px' }}
-                    className="form-button"
-                    onClick={() => logHistorialClick(user, "Generar receta", "Generar receta médica")}
-                >
-                    Generar receta
-                </button>
                 <br />
                 <button
                     style={{ marginTop: '10px', marginBottom: '10px' }}

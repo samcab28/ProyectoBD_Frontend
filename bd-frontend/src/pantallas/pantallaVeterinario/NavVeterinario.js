@@ -4,7 +4,7 @@ import '../../Styles/PageContainer.css'; // Importa el archivo de estilos de Nav
 import logHistorialClick from '../../seguridad/historialClick';
 import { UserContext } from '../../context/UserContext';
 
-function NavAdmin() {
+function NavVet() {
     const { user } = useContext(UserContext); // Obtener el contexto del usuario
     const navigate = useNavigate();
 
@@ -40,4 +40,4 @@ function NavAdmin() {
     );
 }
 
-export default NavAdmin;
+export default NavVet;
