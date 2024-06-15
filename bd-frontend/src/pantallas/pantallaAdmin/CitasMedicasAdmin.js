@@ -4,12 +4,12 @@ import NavAdmin from "./NavAdmin";
 import fondoVet from "../../Imagenes/FondoVet.jpg";
 import logHistorialClick from '../../seguridad/historialClick';
 import { UserContext } from '../../context/UserContext';
+import '../../Styles/PageContainer.css';
 
 function CitasCliente() {
-    const { user } = useContext(UserContext); // Obtener el contexto del usuario
+    const { user } = useContext(UserContext);
     const navigate = useNavigate();
 
-    // Función para manejar los clicks y registrar la acción
     const handleClick = (path) => {
         logHistorialClick(user, "Navegacion", `${path}`);
         navigate(path);
@@ -23,23 +23,17 @@ function CitasCliente() {
             <NavAdmin />
             <main className="main-content">
                 <h2>Citas Médicas</h2>
-                <ul>
-                    <li>
-                        <button onClick={() => handleClick('/admin/citasMedica/gestion')}>
-                            Gestionar Citas
-                        </button>
-                    </li>
-                    <li>
-                        <button onClick={() => handleClick('/admin/citasMedica/asignacionPersonal')}>
-                            Asignar Personal
-                        </button>
-                    </li>
-                    <li>
-                        <button onClick={() => handleClick('/admin/citasMedica/cancelarCita')}>
-                            Cancelar Cita
-                        </button>
-                    </li>
-                </ul>
+                <div className="button-container">
+                    <button className="action-button" onClick={() => handleClick('/admin/citasMedica/gestion')}>
+                        Gestionar Citas
+                    </button>
+                    <button className="action-button" onClick={() => handleClick('/admin/citasMedica/asignacionPersonal')}>
+                        Asignar Personal
+                    </button>
+                    <button className="action-button" onClick={() => handleClick('/admin/citasMedica/cancelarCita')}>
+                        Cancelar Cita
+                    </button>
+                </div>
             </main>
         </div>
     );

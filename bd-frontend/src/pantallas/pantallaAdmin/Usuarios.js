@@ -1,12 +1,13 @@
 import React, { useContext } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import NavAdmin from "./NavAdmin";
 import fondoVet from "../../Imagenes/FondoVet.jpg";
 import logHistorialClick from '../../seguridad/historialClick';
 import { UserContext } from '../../context/UserContext';
+import '../../Styles/PageContainer.css';  // Importa los estilos CSS
 
 function Usuarios() {
-    const { user } = useContext(UserContext); // Obtener el contexto del usuario
+    const { user } = useContext(UserContext);
     const navigate = useNavigate();
 
     const handleClick = (path) => {
@@ -22,18 +23,14 @@ function Usuarios() {
             <NavAdmin />
             <main className="main-content">
                 <h2>Gestión de Usuarios</h2>
-                <ul>
-                    <li>
-                        <button onClick={() => handleClick('/admin/citasMedica/gestion')}>
-                            Gestionar Usuarios
-                        </button>
-                    </li>
-                    <li>
-                        <button onClick={() => handleClick('/admin/usuarios/modificar')}>
-                            Modificar Información
-                        </button>
-                    </li>
-                </ul>
+                <div className="button-container">
+                    <button className="action-button" onClick={() => handleClick('/admin/usuarios/gestion')}>
+                        Gestionar Usuarios
+                    </button>
+                    <button className="action-button" onClick={() => handleClick('/admin/usuarios/modificar')}>
+                        Modificar Información
+                    </button>
+                </div>
             </main>
         </div>
     );

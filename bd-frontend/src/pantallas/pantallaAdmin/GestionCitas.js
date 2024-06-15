@@ -1,8 +1,11 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import logHistorialClick from '../../seguridad/historialClick';
 import { UserContext } from '../../context/UserContext'; // Asegúrate de que tengas acceso al contexto del usuario
+import fondoVet from '../../Imagenes/FondoVet.jpg';
+import NavAdmin from "./NavAdmin";
 import CreateCita from './CrearCita';
+import '../../Styles/PageContainer.css'; // Asegúrate de tener un archivo CSS para los estilos
 
 function GestionCitas() {
     const { user } = useContext(UserContext); // Obtener el contexto del usuario
@@ -22,7 +25,7 @@ function GestionCitas() {
         .then(response => {
             if (response.ok) {
                 // Remove the deleted persona from the state
-                setCitas(citas.filter(cita => cita.IdAnimal !== id));
+                setCitas(citas.filter(cita => cita.IdCitaMed !== id));
                 window.location.reload();
             } else {
                 alert('Error deleting cita');
@@ -44,39 +47,35 @@ function GestionCitas() {
     }, []);
 
     return (
-        <div>
-            <h1>Gestión de Citas Médicas</h1>
-            <CreateCita />
-            <h2>Listado de Citas Médicas</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Id</th>
-                        <th>FechaCita</th>
-                        <th>Duracion</th>
-                        <th>Mascota</th>
-                        <th>Encargado</th>
-                        <th>Estado</th>
-                    </tr> 
-                </thead>
-                <tbody>
+        <div className="home-screen">
+            <header className="header">
+                <img src={fondoVet} alt="Veterinary Clinic" className="header-image" />
+            </header>
+            <NavAdmin />
+            <main className="main-content">
+                <h2>Gestión de Citas Médicas</h2>
+                <CreateCita />
+                <h2>Listado de Citas Médicas</h2>
+                <div className="product-grid">
                     {citas.map(cita => (
-                        <tr key={cita.IdCitaMed}>
-                            <td>{cita.IdCitaMed}</td>
-                            <td>{cita.FechaCita}</td>
-                            <td>{cita.Duracion}</td>
-                            <td>{cita.NombreMascota}</td>
-                            <td>{cita.Encargado}</td>
-                            <td>{cita.TipoEstCita}</td>
-                            <td>
-                                <button onClick={() => handleDelete(cita.IdCitaMed)}>Eliminar</button>
-                                <button onClick={() => handleMod(cita.IdCitaMed)}>Modificar</button>
-                            </td>
-                        </tr>
+                        <div className="product-card" key={cita.IdCitaMed}>
+                            <div className="product-info">
+                                <p><strong>Id:</strong> {cita.IdCitaMed}</p>
+                                <p><strong>Fecha de Cita:</strong> {cita.FechaCita}</p>
+                                <p><strong>Duración:</strong> {cita.Duracion}</p>
+                                <p><strong>Mascota:</strong> {cita.NombreMascota}</p>
+                                <p><strong>Encargado:</strong> {cita.Encargado}</p>
+                                <p><strong>Estado:</strong> {cita.TipoEstCita}</p>
+                                <div className="action-buttons">
+                                    <button onClick={() => handleDelete(cita.IdCitaMed)} className="form-button">Eliminar</button>
+                                    <button onClick={() => handleMod(cita.IdCitaMed)} className="form-button">Modificar</button>
+                                </div>
+                            </div>
+                        </div>
                     ))}
-                </tbody>       
-            </table>
-            <button onClick={handleRegresar}>Regresar</button>
+                </div>
+                <button onClick={handleRegresar} className="form-button">Regresar</button>
+            </main>
         </div>
     );
 }

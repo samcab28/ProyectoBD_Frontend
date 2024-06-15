@@ -19,7 +19,7 @@ function NavCliente() {
                 <li>
                     <Link to="/cliente/">
                         <button 
-                            className="nav-button" 
+                            className="action-button" 
                             onClick={() => handleNavigationClick('Navegación', 'Home')}
                         >
                             Home
@@ -29,7 +29,7 @@ function NavCliente() {
                 <li>
                     <Link to="/cliente/producto">
                         <button 
-                            className="nav-button" 
+                            className="action-button" 
                             onClick={() => handleNavigationClick('Navegación', 'Producto')}
                         >
                             Producto
@@ -39,7 +39,7 @@ function NavCliente() {
                 <li>
                     <Link to="/cliente/about">
                         <button 
-                            className="nav-button" 
+                            className="action-button" 
                             onClick={() => handleNavigationClick('Navegación', 'About')}
                         >
                             About
@@ -49,7 +49,7 @@ function NavCliente() {
                 <li>
                     <Link to="/cliente/carrito">
                         <button 
-                            className="nav-button" 
+                            className="action-button" 
                             onClick={() => handleNavigationClick('Navegación', 'Carrito')}
                         >
                             Carrito
@@ -59,7 +59,7 @@ function NavCliente() {
                 <li>
                     <Link to="/cliente/historial">
                         <button 
-                            className="nav-button" 
+                            className="action-button" 
                             onClick={() => handleNavigationClick('Navegación', 'Historial compras')}
                         >
                             Historial compras
@@ -69,7 +69,7 @@ function NavCliente() {
                 <li>
                     <Link to="/cliente/mascotas">
                         <button 
-                            className="nav-button" 
+                            className="action-button" 
                             onClick={() => handleNavigationClick('Navegación', 'Mascotas')}
                         >
                             Mascotas
@@ -79,7 +79,7 @@ function NavCliente() {
                 <li>
                     <Link to="/cliente/citasmedicas">
                         <button 
-                            className="nav-button" 
+                            className="action-button" 
                             onClick={() => handleNavigationClick('Navegación', 'Citas Médicas')}
                         >
                             Citas Médicas
@@ -89,7 +89,7 @@ function NavCliente() {
                 <li>
                     <Link to="/">
                         <button 
-                            className="nav-button" 
+                            className="action-button" 
                             onClick={() => handleNavigationClick('Navegación', 'Logout')}
                         >
                             Logout

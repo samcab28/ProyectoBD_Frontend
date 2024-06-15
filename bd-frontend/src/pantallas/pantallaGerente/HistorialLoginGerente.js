@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
 import '../../Styles/PageContainer.css'; // Importa el archivo de estilos
 import fondoVet from '../../Imagenes/FondoVet.jpg';
 import NavGerente from "./NavGerente";
@@ -55,7 +54,7 @@ function HistorialLogin() {
             <main className="main-content">
                 <h2>Registro de logins fallidos de los últimos cinco minutos</h2>
                 {loginFallido.length > 0 ? (
-                    <table>
+                    <table className="styled-table">
                         <thead>
                         <tr>
                             <th>ID</th>
@@ -82,7 +81,7 @@ function HistorialLogin() {
                 )}
 
                 <h2>Registro completo de logins</h2>
-                <table>
+                <table className="styled-table">
                     <thead>
                     <tr>
                         <th>ID</th>

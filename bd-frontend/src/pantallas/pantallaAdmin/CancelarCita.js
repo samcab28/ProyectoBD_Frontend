@@ -2,6 +2,9 @@ import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import logHistorialClick from '../../seguridad/historialClick'; // Asegúrate de importar la función logHistorialClick
 import { UserContext } from '../../context/UserContext'; // Importar el contexto de usuario
+import fondoVet from '../../Imagenes/FondoVet.jpg';
+import NavAdmin from "./NavAdmin";
+import '../../Styles/PageContainer.css'; // Asegúrate de tener un archivo CSS para los estilos
 
 function CancelarCita() {
     const [Cita, setCita] = useState('');
@@ -54,53 +57,50 @@ function CancelarCita() {
     }
 
     return (
-        <div>
-            <h1>Cancelación de Cita Médica</h1>
-            <form onSubmit={handleSubmit}>
-                <label>
-                    Cita:
-                    <select
-                        name="cita"
-                        value={Cita}
-                        onChange={e => setCita(e.target.value)}
-                    >
-                        <option value="">Seleccione una cita</option>
-                        {citas.map(cita => (
-                            <option key={cita.IdCitaMed} value={cita.IdCitaMed}>
-                                {cita.IdCitaMed}, {cita.FechaCita}, {cita.NombreMascota}
-                            </option>
-                        ))}
-                    </select>
-                </label>
-                <br/>
-                <button type="submit">Cancelar Cita</button>
-            </form>
-            <h2>Listado de Citas Médicas</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Id</th>
-                        <th>FechaCita</th>
-                        <th>Duracion</th>
-                        <th>Mascota</th>
-                        <th>Encargado</th>
-                        <th>Estado</th>
-                    </tr>
-                </thead>
-                <tbody>
+        <div className="home-screen">
+            <header className="header">
+                <img src={fondoVet} alt="Veterinary Clinic" className="header-image" />
+            </header>
+            <NavAdmin />
+            <main className="main-content">
+                <h2>Cancelación de Cita Médica</h2>
+                <form onSubmit={handleSubmit}>
+                    <label>
+                        Cita:
+                        <select
+                            name="cita"
+                            value={Cita}
+                            onChange={e => setCita(e.target.value)}
+                            className="form-select"
+                        >
+                            <option value="">Seleccione una cita</option>
+                            {citas.map(cita => (
+                                <option key={cita.IdCitaMed} value={cita.IdCitaMed}>
+                                    {cita.IdCitaMed}, {cita.FechaCita}, {cita.NombreMascota}
+                                </option>
+                            ))}
+                        </select>
+                    </label>
+                    <br/>
+                    <button type="submit" className="form-button">Cancelar Cita</button>
+                </form>
+                <h2>Listado de Citas Médicas</h2>
+                <div className="product-grid">
                     {citas.map(cita => (
-                        <tr key={cita.IdCitaMed}>
-                            <td>{cita.IdCitaMed}</td>
-                            <td>{cita.FechaCita}</td>
-                            <td>{cita.Duracion}</td>
-                            <td>{cita.NombreMascota}</td>
-                            <td>{cita.Encargado}</td>
-                            <td>{cita.TipoEstCita}</td>
-                        </tr>
+                        <div className="product-card" key={cita.IdCitaMed}>
+                            <div className="product-info">
+                                <p><strong>Id:</strong> {cita.IdCitaMed}</p>
+                                <p><strong>FechaCita:</strong> {cita.FechaCita}</p>
+                                <p><strong>Duracion:</strong> {cita.Duracion}</p>
+                                <p><strong>Mascota:</strong> {cita.NombreMascota}</p>
+                                <p><strong>Encargado:</strong> {cita.Encargado}</p>
+                                <p><strong>Estado:</strong> {cita.TipoEstCita}</p>
+                            </div>
+                        </div>
                     ))}
-                </tbody>
-            </table>
-            <button onClick={handleRegresar}>Regresar</button>
+                </div>
+                <button onClick={handleRegresar} className="form-button">Regresar</button>
+            </main>
         </div>
     );
 }

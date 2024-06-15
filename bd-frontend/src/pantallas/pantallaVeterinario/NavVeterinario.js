@@ -18,22 +18,22 @@ function NavAdmin() {
             <h2>Navegación</h2>
             <ul>
                 <li>
-                    <button className="nav-button" onClick={() => handleNavigation('/veterinario/')}>Home</button>
+                    <button className="action-button" onClick={() => handleNavigation('/veterinario/')}>Home</button>
                 </li>
                 <li>
-                    <button className="nav-button" onClick={() => handleNavigation('/crud/')}>Gestión</button>
+                    <button className="action-button" onClick={() => handleNavigation('/crud/')}>Gestión</button>
                 </li>
                 <li>
-                    <button className="nav-button" onClick={() => handleNavigation('/veterinario/medicamento')}>Medicamentos Disponibles</button>
+                    <button className="action-button" onClick={() => handleNavigation('/veterinario/medicamento')}>Medicamentos Disponibles</button>
                 </li>
                 <li>
-                    <button className="nav-button" onClick={() => handleNavigation('/veterinario/mascota')}>Mascotas</button>
+                    <button className="action-button" onClick={() => handleNavigation('/veterinario/mascota')}>Mascotas</button>
                 </li>
                 <li>
-                    <button className="nav-button" onClick={() => handleNavigation('/veterinario/citaMedica')}>Citas Medicas</button>
+                    <button className="action-button" onClick={() => handleNavigation('/veterinario/citaMedica')}>Citas Medicas</button>
                 </li>
                 <li>
-                    <button className="nav-button" onClick={() => handleNavigation('/')}>Logout</button>
+                    <button className="action-button" onClick={() => handleNavigation('/')}>Logout</button>
                 </li>
             </ul>
         </nav>

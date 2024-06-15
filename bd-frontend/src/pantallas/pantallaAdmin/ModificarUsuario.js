@@ -1,7 +1,10 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import logHistorialClick from '../../seguridad/historialClick';
 import { UserContext } from '../../context/UserContext';
+import fondoVet from '../../Imagenes/FondoVet.jpg';
+import NavAdmin from "./NavAdmin";
+import '../../Styles/PageContainer.css'; // Asegúrate de tener un archivo CSS para los estilos
 
 function ModificarUsuario() {
     const { user } = useContext(UserContext); // Assuming you have a user context to get the current user
@@ -91,73 +94,67 @@ function ModificarUsuario() {
     }
 
     return (
-        <div>
-            <h1>Modificar Información de Usuario</h1>
-            <form onSubmit={handleSubmit}>
-                <label>
-                    Usuario:
-                    <select
-                        name="usuario"
-                        value={usuario}
-                        onChange={e => setUsuario(e.target.value)}
-                    >
-                        <option value="">Seleccione un usuario</option>
-                        {usuarios.map(user => (
-                            <option key={user.IdPersona} value={user.IdPersona}>{user.IdPersona}, {user.NombrePersona} {user.ApellidoPersona}</option>
-                        ))}
-                    </select>
-                </label>
-                <br/>
-                <label>
-                    Campo que desea modificar:
-                    <select
-                        name="campoModificar"
-                        value={campoModificar}
-                        onChange={e => setCampoModificar(e.target.value)}
-                    >
-                        <option value="">Seleccione un campo</option>
-                        {camposModificables}
-                    </select>
-                </label>
-                <br/>
-                <label>
-                    Nuevo Dato: <input name="valorNuevo" type="text" value={valorNuevo} onChange={e => setvalorNuevo(e.target.value)} />
-                </label><br/>
-                <button type="submit">Guardar Cambios</button>
-            </form>
-            <h2>Listado de Personas</h2>
-            <table>
-                <thead>
-                <tr>
-                    <th>Id</th>
-                    <th>Nombre</th>
-                    <th>Apellido</th>
-                    <th>Correo</th>
-                    <th>Teléfono</th>
-                    <th>Usuario</th>
-                    <th>Contraseña</th>
-                    <th>Puesto</th>
-                    <th>Sexo</th>
-                    <th>Acciones</th>
-                </tr>
-                </thead>
-                <tbody>
-                {usuarios.map(persona => (
-                    <tr key={persona.IdPersona}>
-                        <td>{persona.IdPersona}</td>
-                        <td>{persona.NombrePersona}</td>
-                        <td>{persona.ApellidoPersona}</td>
-                        <td>{persona.CorreoPersona}</td>
-                        <td>{persona.TelefonoPersona}</td>
-                        <td>{persona.UsuarioPersona}</td>
-                        <td>{persona.PasswordPersona}</td>
-                        <td>{tiposPersona[persona.TipoPersona]}</td>
-                        <td>{sexos[persona.Sexo]}</td>
-                    </tr>
-                ))}
-                </tbody>
-            </table>
-            <button onClick={handleRegresar}>Regresar</button>
+        <div className="home-screen">
+            <header className="header">
+                <img src={fondoVet} alt="Veterinary Clinic" className="header-image" />
+            </header>
+            <NavAdmin />
+            <main className="main-content">
+                <h2>Modificar Información de Usuario</h2>
+                <form onSubmit={handleSubmit} className="form-container">
+                    <label>
+                        Usuario:
+                        <select
+                            name="usuario"
+                            value={usuario}
+                            onChange={e => setUsuario(e.target.value)}
+                            className="form-select"
+                        >
+                            <option value="">Seleccione un usuario</option>
+                            {usuarios.map(user => (
+                                <option key={user.IdPersona} value={user.IdPersona}>{user.IdPersona}, {user.NombrePersona} {user.ApellidoPersona}</option>
+                            ))}
+                        </select>
+                    </label>
+                    <br/>
+                    <label>
+                        Campo que desea modificar:
+                        <select
+                            name="campoModificar"
+                            value={campoModificar}
+                            onChange={e => setCampoModificar(e.target.value)}
+                            className="form-select"
+                        >
+                            <option value="">Seleccione un campo</option>
+                            {camposModificables}
+                        </select>
+                    </label>
+                    <br/>
+                    <label>
+                        Nuevo Dato: <input name="valorNuevo" type="text" value={valorNuevo} onChange={e => setvalorNuevo(e.target.value)} className="form-input"/>
+                    </label><br/>
+                    <button type="submit" className="form-button">Guardar Cambios</button>
+                </form>
+                <h2>Listado de Personas</h2>
+                <div className="product-grid">
+                    {usuarios.map(persona => (
+                        <div className="product-card" key={persona.IdPersona}>
+                            <div className="product-info">
+                                <p><strong>Id:</strong> {persona.IdPersona}</p>
+                                <p><strong>Nombre:</strong> {persona.NombrePersona}</p>
+                                <p><strong>Apellido:</strong> {persona.ApellidoPersona}</p>
+                                <p><strong>Correo:</strong> {persona.CorreoPersona}</p>
+                                <p><strong>Teléfono:</strong> {persona.TelefonoPersona}</p>
+                                <p><strong>Usuario:</strong> {persona.UsuarioPersona}</p>
+                                <p><strong>Contraseña:</strong> {persona.PasswordPersona}</p>
+                                <p><strong>Puesto:</strong> {tiposPersona[persona.TipoPersona]}</p>
+                                <p><strong>Sexo:</strong> {sexos[persona.Sexo]}</p>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+                <button onClick={handleRegresar} className="form-button">Regresar</button>
+            </main>
         </div>
     );
 }
