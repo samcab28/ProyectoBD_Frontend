@@ -11,6 +11,7 @@ function ClienteList() {
     const [personas, setPersonas] = useState([]);
     const [tiposPersona, setTiposPersona] = useState({});
     const [sexos, setSexos] = useState({});
+    const [sucursales, setSucursales] = useState({});
 
     useEffect(() => {
         // Fetch personas
@@ -49,6 +50,19 @@ function ClienteList() {
                 setSexos(sexosMap);
             })
             .catch(error => console.error('Error fetching sexos:', error));
+        
+            fetch('http://localhost:3001/sucursal')
+            .then(response => response.json())
+            .then(data => {
+                console.log("Sucursales fetched:", data); // Debug line
+                const sucursalesMap = {};
+                data.forEach(sucursal => {
+                    sucursalesMap[sucursal.IdSucursal] = sucursal.NombreSucursal; // Ajusta según la estructura de tu respuesta
+                });
+                console.log("Sucursales Map:", sucursalesMap); // Debug line
+                setSucursales(sucursalesMap);
+            })
+            .catch(error => console.error('Error fetching tiposPersona:', error));
     }, []);
 
     function handleDelete(id) {
@@ -93,6 +107,7 @@ function ClienteList() {
                     <th>Contraseña</th>
                     <th>Puesto</th>
                     <th>Sexo</th>
+                    <th>Sucursal</th>
                     <th>Acciones</th>
                 </tr>
                 </thead>
@@ -108,6 +123,7 @@ function ClienteList() {
                         <td>{persona.PasswordPersona}</td>
                         <td>{tiposPersona[persona.TipoPersona]}</td>
                         <td>{sexos[persona.Sexo]}</td>
+                        <td>{sucursales[persona.Sucursal]}</td>
                         <td>
                             <button onClick={() => handleDelete(persona.IdPersona)}>Eliminar</button>
                         </td>

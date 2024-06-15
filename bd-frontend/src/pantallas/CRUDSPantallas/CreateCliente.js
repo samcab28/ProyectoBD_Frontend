@@ -10,6 +10,7 @@ function CreateCliente() {
     const [contrasena, setContrasena] = useState('');
     const [tipo, setTipo] = useState('Cliente');
     const [sexo, setSexo] = useState('masculino');
+    const [sucursal, setSucursal] = useState('No especificada');
 
     function handleSubmit(e) {
         e.preventDefault();
@@ -38,7 +39,16 @@ function CreateCliente() {
                 sexoValue = 3;
         }
 
-        const order = ["TipoPersona", "Sexo", "NombrePersona", "ApellidoPersona", "TelefonoPersona", "CorreoPersona", "UsuarioPersona", "PasswordPersona"];
+        let sucursalValue;
+        switch (sucursal) {
+            case 'No especificada':
+                sucursalValue = 10;
+                break;
+            default:
+                sucursalValue = 10;
+        }
+
+        const order = ["TipoPersona", "Sexo", "NombrePersona", "ApellidoPersona", "TelefonoPersona", "CorreoPersona", "UsuarioPersona", "PasswordPersona", "Sucursal"];
 
         const formData = order.reduce((acc, key) => {
             switch (key) {
@@ -65,6 +75,9 @@ function CreateCliente() {
                     break;
                 case "PasswordPersona":
                     acc[key] = contrasena;
+                    break;
+                case "Sucursal":
+                    acc[key] = parseInt(sucursalValue);
                     break;
                 default:
                     break;
@@ -134,6 +147,12 @@ function CreateCliente() {
                         <option value="masculino">Masculino</option>
                         <option value="femenino">Femenino</option>
                         <option value="otro">Otro</option>
+                    </select>
+                </label><br/>
+                <label>
+                    Sucursal:
+                    <select name="sucursal" value={sucursal} onChange={e => setSucursal(e.target.value)}>
+                        <option value="noespecificada">No especificada</option>
                     </select>
                 </label><br/>
                 <button type="submit">Guardar</button>
