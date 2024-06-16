@@ -8,11 +8,8 @@ import { UserContext } from '../../context/UserContext';
 
 //falta actualizar a componentes de gerente, actualmente tiene los de admin
 function NavGerente() {
-
-function NavAdmin() {
     const { user } = useContext(UserContext); // Obtener el contexto del usuario
     const navigate = useNavigate();
-
     const handleClick = (path) => {
         logHistorialClick(user, "Navegacion", `${path}`);
         navigate(path);
