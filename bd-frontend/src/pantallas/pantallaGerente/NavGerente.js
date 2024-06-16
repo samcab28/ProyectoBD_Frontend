@@ -29,48 +29,6 @@ function NavGerente() {
                 <li><Link to="/gerente/producto"><button className="nav-button">Producto</button></Link></li>
                 <li><Link to="/gerente/historial"><button className="nav-button">Historial Login</button></Link></li>
                 <li><Link to="/"><button className="nav-button">Logout</button></Link></li>
-                
-
-                <li>
-                    <button className="action-button" onClick={() => handleClick('/gerente/')}>
-                        Home
-                    </button>
-                </li>
-                <li>
-                    <button className="action-button" onClick={() => handleClick('/crud/')}>
-                        Gestión
-                    </button>
-                </li>
-                <li>
-                    <button className="action-button" onClick={() => handleClick('/gerente/citaMedica')}>
-                        Citas Médicas
-                    </button>
-                </li>
-                <li>
-                    <button className="action-button" onClick={() => handleClick('/gerente/cobro')}>
-                        Cobro
-                    </button>
-                </li>
-                <li>
-                    <button className="action-button" onClick={() => handleClick('/gerente/expediente')}>
-                        Expediente Cliente
-                    </button>
-                </li>
-                <li>
-                    <button className="action-button" onClick={() => handleClick('/gerente/producto')}>
-                        Producto
-                    </button>
-                </li>
-                <li>
-                    <button className="action-button" onClick={() => handleClick('/gerente/historial')}>
-                        Historial Login
-                    </button>
-                </li>
-                <li>
-                    <button className="action-button" onClick={() => handleClick('/')}>
-                        Logout
-                    </button>
-                </li>
 
             </ul>
         </nav>
