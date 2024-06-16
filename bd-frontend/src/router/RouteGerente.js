@@ -10,7 +10,7 @@ import ExpedienteGerente from "../pantallas/pantallaGerente/ExpedienteGerente";
 import ProductoGerente from "../pantallas/pantallaGerente/ProductoGerente";
 
 import CRUDMasterGerente from '../pantallas/pantallaGerente/CRUDMasterGerente';
-import ProductoList from '../CRUD_Folder/crudProducto/CrudProducto';
+import ProductList from '../pantallas/CRUDSPantallas/ProductoList';
 import ClienteList from '../pantallas/CRUDSPantallas/ClienteList';
 import AdminList from '../pantallas/CRUDSPantallas/AdminList';
 import VetList from '../pantallas/CRUDSPantallas/VetList'
@@ -31,7 +31,7 @@ const RouteGerente = () => {
             <Route path='/gestion/cliente' element={<ClienteList />} />
             <Route path='/gestion/veterinario' element={<VetList />} />
             <Route path='/gestion/administrador' element={<AdminList />} />
-            <Route path='/gestion/producto' element={<ProductoList />} />
+            <Route path='/gestion/producto' element={<ProductList />} />
             
             
 
