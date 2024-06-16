@@ -1,12 +1,14 @@
-import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useContext, useEffect, useState } from 'react';
 import '../../Styles/PageContainer.css'; // Importa el archivo de estilos
 import fondoVet from '../../Imagenes/FondoVet.jpg';
 import NavGerente from "./NavGerente";
 import NotificacionHistorial from "../../seguridad/NotificacionHistorial";
 import moment from "moment";
+import logHistorialClick from '../../seguridad/historialClick';
+import { UserContext } from '../../context/UserContext';
 
 function HistorialLogin() {
+    const { user } = useContext(UserContext); // Obtener el contexto del usuario
     const [info, setInfo] = useState([]);
     const [loginFallido, setLoginFallido] = useState([]);
 
@@ -39,6 +41,10 @@ function HistorialLogin() {
             .catch(error => console.error('Error:', error));
     };
 
+    const handleRowClick = (type, id) => {
+        logHistorialClick(user, "Ver detalle", `${type} - ID: ${id}`);
+    };
+
     return (
         <div className="home-screen">
             <header className="header">
@@ -48,7 +54,7 @@ function HistorialLogin() {
             <main className="main-content">
                 <h2>Registro de logins fallidos de los últimos cinco minutos</h2>
                 {loginFallido.length > 0 ? (
-                    <table>
+                    <table className="styled-table">
                         <thead>
                         <tr>
                             <th>ID</th>
@@ -60,7 +66,7 @@ function HistorialLogin() {
                         </thead>
                         <tbody>
                         {loginFallido.map(fallido => (
-                            <tr key={fallido.id}>
+                            <tr key={fallido.id} onClick={() => handleRowClick("Login fallido", fallido.id)}>
                                 <td>{fallido.id}</td>
                                 <td>{fallido.acceso ? "Autorizado" : "Denegado"}</td>
                                 <td>{fallido.username}</td>
@@ -75,7 +81,7 @@ function HistorialLogin() {
                 )}
 
                 <h2>Registro completo de logins</h2>
-                <table>
+                <table className="styled-table">
                     <thead>
                     <tr>
                         <th>ID</th>
@@ -87,7 +93,7 @@ function HistorialLogin() {
                     </thead>
                     <tbody>
                     {info.map(inf => (
-                        <tr key={inf.id}>
+                        <tr key={inf.id} onClick={() => handleRowClick("Login completo", inf.id)}>
                             <td>{inf.id}</td>
                             <td>{inf.acceso ? "Autorizado" : "Denegado"}</td>
                             <td>{inf.username}</td>

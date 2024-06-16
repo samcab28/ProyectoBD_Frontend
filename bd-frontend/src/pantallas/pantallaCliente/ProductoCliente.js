@@ -6,6 +6,7 @@ import '../../Styles/PageContainer.css';
 import fondoVet from '../../Imagenes/FondoVet.jpg';
 import NavCliente from "./NavCliente";
 import ProductImage from '../../Imagenes/ProductImage';
+import logHistorialClick from '../../seguridad/historialClick';
 
 function ProductoCliente() {
     const navigate = useNavigate();
@@ -47,8 +48,9 @@ function ProductoCliente() {
     const handleAddToCart = (IdProducto) => {
         const productToAdd = products.find(product => product.IdProducto === IdProducto);
         if (productToAdd) {
+            logHistorialClick(user, 'Agregar al carrito', `Producto ${parseInt(productToAdd.IdProducto)}: ${productToAdd.NombreProducto}`);
             if (user && user.IdPersona === 37) { // Usuario invitado
-                setTemporaryCart([...temporaryCart, { ...productToAdd, Cantidad: 1, IdSucursal: selectedSucursal.IdSucursal , CantidadDisponible : productToAdd.Cantidad}]);
+                setTemporaryCart([...temporaryCart, { ...productToAdd, Cantidad: 1, IdSucursal: selectedSucursal.IdSucursal, CantidadDisponible: productToAdd.Cantidad }]);
                 alert("Producto agregado al carrito temporal");
             } else if (user && user.IdPersona) { // Usuario autenticado
                 fetch('http://localhost:3001/carrito', {
@@ -76,13 +78,15 @@ function ProductoCliente() {
     };
 
     const handleResenaGo = (IdProducto) => {
-        console.log(IdProducto); 
+        const productToAdd = products.find(product => product.IdProducto === IdProducto);
+        logHistorialClick(user, 'Ver reseña', `Producto ${parseInt(productToAdd.IdProducto)}: ${productToAdd.NombreProducto}`);
         navigate(`/cliente/resena/${parseInt(IdProducto)}`);
     };
 
     const handleSucursalChange = (e) => {
         const selectedId = parseInt(e.target.value);
         const selected = sucursales.find(sucursal => sucursal.IdSucursal === selectedId);
+        logHistorialClick(user, "Ver Sucursal", `Sucursal: ${selectedId}`);
         setSelectedSucursal(selected);
         console.log(selected);
     };
@@ -90,9 +94,9 @@ function ProductoCliente() {
     return (
         <div className="home-screen">
             <header className="header">
-                <img src={fondoVet} alt="Veterinary Clinic" className="header-image"/>
+                <img src={fondoVet} alt="Veterinary Clinic" className="header-image" />
             </header>
-            <NavCliente/>
+            <NavCliente />
             <main className="main-content">
                 <h1>Lista de Productos</h1>
                 <h3>Seleccione la sucursal donde desea hacer la compra</h3>

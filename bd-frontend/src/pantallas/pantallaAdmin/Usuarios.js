@@ -1,30 +1,36 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 import NavAdmin from "./NavAdmin";
 import fondoVet from "../../Imagenes/FondoVet.jpg";
+import logHistorialClick from '../../seguridad/historialClick';
+import { UserContext } from '../../context/UserContext';
+import '../../Styles/PageContainer.css';  // Importa los estilos CSS
 
-function Usuarios(){
+function Usuarios() {
+    const { user } = useContext(UserContext);
+    const navigate = useNavigate();
+
+    const handleClick = (path) => {
+        logHistorialClick(user, "Navegacion", `${path}`);
+        navigate(path);
+    };
 
     return (
         <div className="home-screen">
             <header className="header">
-                <img src={fondoVet} alt="Veterinary Clinic" className="header-image"/>
+                <img src={fondoVet} alt="Veterinary Clinic" className="header-image" />
             </header>
-            <NavAdmin/>
+            <NavAdmin />
             <main className="main-content">
                 <h2>Gestión de Usuarios</h2>
-                <ul>
-                <li>
-                    <Link to="/admin/citasMedica/gestion">
-                        <button>Gestionar Usuarios</button>
-                    </Link>
-                </li>
-                <li>
-                    <Link to="/admin/usuarios/modificar">
-                        <button>Modificar Información</button>
-                    </Link>
-                </li>
-                </ul>
+                <div className="button-container">
+                    <button className="action-button" onClick={() => handleClick('/admin/citasMedica/gestion')}>
+                        Gestionar Usuarios
+                    </button>
+                    <button className="action-button" onClick={() => handleClick('/admin/usuarios/modificar')}>
+                        Modificar Información
+                    </button>
+                </div>
             </main>
         </div>
     );

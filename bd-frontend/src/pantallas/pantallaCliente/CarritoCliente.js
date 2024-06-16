@@ -7,6 +7,7 @@ import '../../Styles/PageContainer.css';
 import fondoVet from '../../Imagenes/FondoVet.jpg';
 import NavCliente from "./NavCliente";
 import { TarjetaForm, DireccionForm } from '../../seguridad/Forms';
+import logHistorialClick from '../../seguridad/historialClick';
 import '../../Styles/FormsTarjeta.css';
 
 function CarritoCliente() {
@@ -91,7 +92,8 @@ function CarritoCliente() {
     }, [user, metodoPagoSeleccionado]);
 
     // Función para manejar la eliminación de productos del carrito.
-    const handleDelete = (idCarrito) => {
+    const handleDelete = (idCarrito, idProducto) => {
+        logHistorialClick(user ,"Eliminar del carrito", `Producto id: ${idProducto}`);
         if (user && user.IdPersona !== 37) {
             fetch(`http://localhost:3001/carrito/${idCarrito}`, {
                 method: 'DELETE',
@@ -147,6 +149,11 @@ function CarritoCliente() {
 
     // Función para manejar la creación de pedidos.
     const handleCrearPedido = async () => {
+        logHistorialClick( user,"Generar pedido", `Monto: ${monto}`);
+        if (carrito.length === 0) {
+            alert("No puede generar un pedido sin productos en el carrito.");
+            return;
+        }
         if (!metodoPagoSeleccionado) {
             alert("Seleccione un método de pago.");
             return;
@@ -232,7 +239,7 @@ function CarritoCliente() {
             
             console.log("Pedido creado:", dataPedido);
             alert("Pedido creado exitosamente.");
-            carrito.forEach(item => handleDelete(item.IdCarrito)); 
+            carrito.forEach(item => handleDelete(item.IdCarrito, item.IdProducto)); 
             setCarrito([]);
             setMonto(0);
             setMetodoPagoSeleccionado(null);
@@ -257,6 +264,7 @@ function CarritoCliente() {
     };            
 
     const handleAgregarTarjeta = (tarjetaData) => {
+        logHistorialClick(user,"Agregar nueva tarjeta", `Tarjeta de: ${tarjetaData.NombrePropietario}`);
         if (user.IdPersona !== 37) {
             fetch(`http://localhost:3001/infoTarjeta`, {
                 method: 'POST',
@@ -271,6 +279,7 @@ function CarritoCliente() {
                     alert("Tarjeta agregada exitosamente.");
                     setShowTarjetaForm(false);
                     setTarjetas([...tarjetas, data]); 
+                    window.location.reload(); // Recargar la página
                 })
                 .catch(error => console.error('Error agregando tarjeta:', error));
         } else {
@@ -280,6 +289,7 @@ function CarritoCliente() {
     };
 
     const handleAgregarDireccion = (direccionData) => {
+        logHistorialClick(user, "Agregar nueva dirección", `Dirección: ${direccionData.DireccionCompleta}`);
         if (user.IdPersona !== 37) {
             fetch(`http://localhost:3001/dirPersona`, {
                 method: 'POST',
@@ -294,6 +304,7 @@ function CarritoCliente() {
                     alert("Dirección agregada exitosamente.");
                     setShowDireccionForm(false);
                     setDirecciones([...direcciones, data]);
+                    window.location.reload(); // Recargar la página
                 })
                 .catch(error => console.error('Error agregando dirección:', error));
         } else {
@@ -332,7 +343,7 @@ function CarritoCliente() {
                                         disabled={item.Cantidad >= item.CantidadDisponible}>+
                                     </button>
                                 </div>
-                                <button onClick={() => handleDelete(item.IdCarrito)} className="form-button">Eliminar</button>
+                                <button onClick={() => handleDelete(item.IdCarrito, item.IdProducto)} className="form-button">Eliminar</button>
                             </div>
                         </div>
                     ))}

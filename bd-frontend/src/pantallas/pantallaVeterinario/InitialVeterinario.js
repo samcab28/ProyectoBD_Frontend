@@ -1,4 +1,5 @@
 // InitialVeterinario.js
+import fondoVet from "../../Imagenes/FondoVet.jpg";
 import React from 'react';
 import '../../Styles/PageContainer.css';
 import {Link} from "react-router-dom"; // Importa el archivo de estilos
@@ -7,7 +8,7 @@ function InitialVeterinario() {
     return (
         <div className="home-screen">
             <header className="header">
-                <img src="https://via.placeholder.com/1500x150" alt="Banner" className="header-image"/>
+                <img src={fondoVet} alt="Veterinary Clinic" className="header-image"/>
             </header>
             <NavVeterinario/>
             <main className="main-content">

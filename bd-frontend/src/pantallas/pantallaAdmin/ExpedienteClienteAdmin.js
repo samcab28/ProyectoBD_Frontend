@@ -1,10 +1,12 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
 import fondoVet from "../../Imagenes/FondoVet.jpg";
 import NavAdmin from "./NavAdmin";
+import logHistorialClick from '../../seguridad/historialClick';
+import { UserContext } from '../../context/UserContext';
+import '../../Styles/PageContainer.css';
 
-function ExpedienteClienteAdmin(){
-
+function ExpedienteClienteAdmin() {
+    const { user } = useContext(UserContext);
     const [busqueda, setBusqueda] = useState('');
     const [expedientes, setExpedientes] = useState([]);
     const [expedienteFiltrado, setExpedienteFiltrado] = useState('');
@@ -72,18 +74,19 @@ function ExpedienteClienteAdmin(){
     return (
         <div className="home-screen">
             <header className="header">
-                <img src={fondoVet} alt="Veterinary Clinic" className="header-image"/>
+                <img src={fondoVet} alt="Veterinary Clinic" className="header-image" />
             </header>
-            <NavAdmin/>
+            <NavAdmin />
             <main className="main-content">
                 <h2>Expedientes de los clientes</h2>
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={handleSubmit} className="form-container">
                     <label>
                         Filtrar por:
                         <select
                             name="filtrar"
                             value={expedienteFiltrado}
                             onChange={e => setExpedienteFiltrado(e.target.value)}
+                            className="form-select"
                         >
                             <option value="">Selecciona un filtro</option>
                             <option value="Duegno">Duegno</option>
@@ -98,6 +101,7 @@ function ExpedienteClienteAdmin(){
                                 name="busqueda"
                                 value={busqueda}
                                 onChange={e => setBusqueda(e.target.value)}
+                                className="form-select"
                             >
                                 <option value="">Seleccione un dueño</option>
                                 {usuarios.map(user => (
@@ -115,6 +119,7 @@ function ExpedienteClienteAdmin(){
                                 name="busqueda"
                                 value={busqueda}
                                 onChange={e => setBusqueda(e.target.value)}
+                                className="form-select"
                             >
                                 <option value="">Seleccione una mascota</option>
                                 {mascotas.map(mascota => (
@@ -124,36 +129,26 @@ function ExpedienteClienteAdmin(){
                                 ))}
                             </select>
                         </label>
-                    )}              
-                    <button type="submit">Buscar</button>
-                    <button type="button" onClick={reset}>Reset </button>
+                    )}
+                    <br/>
+                    <button type="submit" className="form-button">Buscar</button>
+                    <button type="button" onClick={reset} className="form-button">Reset</button>
                 </form>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Id</th>
-                            <th>Comentarios</th>
-                            <th>Fecha_Cita</th>
-                            <th>Veterinario</th>
-                            <th>Duegno</th>
-                            <th>Mascota</th>
-                            <th>ProductosRecetados</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {expedientes.map(expediente => (
-                            <tr key={expediente.IdExpediente}>
-                                <td>{expediente.IdExpediente}</td>
-                                <td>{expediente.Comentarios}</td>
-                                <td>{expediente.FechaCita}</td>
-                                <td>{expediente.NombreVeterinario}</td>
-                                <td>{expediente.Duegno}</td>
-                                <td>{expediente.NombreMascota}</td>
-                                <td>{expediente.ProductosRecetados}</td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
+                <div className="product-grid">
+                    {expedientes.map(expediente => (
+                        <div className="product-card" key={expediente.IdExpediente}>
+                            <div className="product-info">
+                                <p><strong>Id:</strong> {expediente.IdExpediente}</p>
+                                <p><strong>Comentarios:</strong> {expediente.Comentarios}</p>
+                                <p><strong>Fecha Cita:</strong> {expediente.FechaCita}</p>
+                                <p><strong>Veterinario:</strong> {expediente.NombreVeterinario}</p>
+                                <p><strong>Duegno:</strong> {expediente.Duegno}</p>
+                                <p><strong>Mascota:</strong> {expediente.NombreMascota}</p>
+                                <p><strong>Productos Recetados:</strong> {expediente.ProductosRecetados}</p>
+                            </div>
+                        </div>
+                    ))}
+                </div>
             </main>
         </div>
     );

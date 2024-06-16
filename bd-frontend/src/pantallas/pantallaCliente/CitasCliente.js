@@ -4,6 +4,7 @@ import '../../Styles/PageContainer.css';
 import '../../Styles/FormsTarjeta.css';
 import fondoVet from '../../Imagenes/FondoVet.jpg';
 import NavCliente from '../../pantallas/pantallaCliente/NavCliente';
+import logHistorialClick from '../../seguridad/historialClick';
 
 function CitasMedicas() {
     const [citas, setCitas] = useState([]);
@@ -11,12 +12,14 @@ function CitasMedicas() {
     const [veterinarios, setVeterinarios] = useState([]);
     const { user } = useContext(UserContext);
     const [estadoCita, setEstadoCita] = useState(1);
+    const [selectedCita, setSelectedCita] = useState(null);
     const [nuevaCita, setNuevaCita] = useState({
         FechaCita: '',
         DuracionCita: '',
         IdMascota: '',
         IdEncargado: '',
-        EstadoCita: 1
+        EstadoCita: 2,
+        Precio: 15000 // Precio predefinido
     });
     const [error, setError] = useState('');
 
@@ -25,15 +28,23 @@ function CitasMedicas() {
             fetch(`http://localhost:3001/citaMedica/${user.IdPersona}/${estadoCita}`)
                 .then(response => response.json())
                 .then(data => {
-                    console.log("Citas fetched:", data);
-                    setCitas(data);
+                    const citasConComentarios = data.reduce((acc, cita) => {
+                        const existingCita = acc.find(c => c.IdCitaMed === cita.IdCitaMed);
+                        if (existingCita) {
+                            existingCita.Comentarios.push(cita.Comentarios);
+                        } else {
+                            acc.push({ ...cita, Comentarios: cita.Comentarios ? [cita.Comentarios] : [] });
+                        }
+                        return acc;
+                    }, []);
+                    const sortedCitas = citasConComentarios.sort((a, b) => new Date(b.FechaCita) - new Date(a.FechaCita));
+                    setCitas(sortedCitas);
                 })
                 .catch(error => console.error('Error fetching citas:', error));
 
             fetch(`http://localhost:3001/mascotaDuenio/${user.IdPersona}`)
                 .then(response => response.json())
                 .then(data => {
-                    console.log("Mascotas fetched:", data);
                     setMascotas(data);
                 })
                 .catch(error => console.error('Error fetching mascotas:', error));
@@ -41,7 +52,6 @@ function CitasMedicas() {
             fetch('http://localhost:3001/persona/tipo/2')
                 .then(response => response.json())
                 .then(data => {
-                    console.log("Veterinarios fetched:", data);
                     setVeterinarios(data);
                 })
                 .catch(error => console.error('Error fetching veterinarios:', error));
@@ -49,6 +59,7 @@ function CitasMedicas() {
     }, [user, estadoCita]);
 
     const handleEstadoChange = (event) => {
+        logHistorialClick(user, "Ver citas", `Estado de citas: ${event.target.value}`);
         setEstadoCita(event.target.value);
     };
 
@@ -65,7 +76,7 @@ function CitasMedicas() {
         // Validaciones
         const today = new Date();
         const maxDate = new Date();
-        maxDate.setDate(today.getDate() + 7);
+        maxDate.setDate(today.getDate() + 15);
         const selectedDate = new Date(nuevaCita.FechaCita);
 
         if (selectedDate < today || selectedDate > maxDate) {
@@ -73,8 +84,8 @@ function CitasMedicas() {
             return;
         }
 
-        if (nuevaCita.DuracionCita < 1 || nuevaCita.DuracionCita > 3) {
-            setError('La duración de la cita debe ser entre 1 y 3 horas.');
+        if (nuevaCita.DuracionCita < 15 || nuevaCita.DuracionCita > 30) {
+            setError('La duración de la cita debe ser entre 15 y 30 minutos.');
             return;
         }
 
@@ -106,8 +117,8 @@ function CitasMedicas() {
             return response.json();
         })
         .then(data => {
-            console.log('Respuesta del servidor:', data);
-            setCitas([...citas, data]);
+            const sortedCitas = [...citas, data].sort((a, b) => new Date(b.FechaCita) - new Date(a.FechaCita));
+            setCitas(sortedCitas);
 
             // Obtener los correos electrónicos del dueño y veterinario
             const citaCreada = data; // Asume que la respuesta contiene la cita creada
@@ -117,6 +128,7 @@ function CitasMedicas() {
                 const asunto = 'Notificación de Creación de Cita Médica';
                 const mensaje = `La cita médica para la mascota ${citaCreada.NombreMascota}, del dueño ${citaCreada.NombrePersona} ha sido creada para el día ${citaCreada.FechaCita}.`;
                 enviarCorreo(correos, asunto, mensaje);
+                logHistorialClick(user, "Generar cita", `Mascota id: ${nuevaCita.IdMascota}, Veterinario id: ${nuevaCita.IdEncargado}`);
             }
         })
         .catch(error => console.error('Error creating cita:', error.message));
@@ -153,7 +165,9 @@ function CitasMedicas() {
         })
         .then(response => response.json())
         .then(data => {
-            setCitas(citas.filter(cita => cita.IdCitaMed !== id));
+            const sortedCitas = citas.filter(cita => cita.IdCitaMed !== id).sort((a, b) => new Date(b.FechaCita) - new Date(a.FechaCita));
+            setCitas(sortedCitas);
+
             // Obtener los correos electrónicos del dueño y veterinario
             const citaEliminada = citas.find(cita => cita.IdCitaMed === id);
             if (citaEliminada) {
@@ -164,6 +178,15 @@ function CitasMedicas() {
             }
         })
         .catch(error => console.error('Error deleting cita:', error));
+    };
+
+    const handleCitaClick = (cita) => {
+        logHistorialClick(user, "Ver detalles de la cita", `Cita id: ${cita.IdCitaMed}`);
+        if (selectedCita && selectedCita.IdCitaMed === cita.IdCitaMed) {
+            setSelectedCita(null); // Oculta los detalles si se vuelve a hacer clic en la cita
+        } else {
+            setSelectedCita(cita);
+        }
     };
 
     return (
@@ -179,8 +202,8 @@ function CitasMedicas() {
                     <form onSubmit={handleSubmit}>
                         <label>Fecha: </label>
                         <input type="date" name="FechaCita" value={nuevaCita.FechaCita} onChange={handleChange} required />
-                        <label>Duración en horas: </label>
-                        <input type="number" name="DuracionCita" value={nuevaCita.DuracionCita} onChange={handleChange} min="1" max="3" required />
+                        <label>Duración en minutos: </label>
+                        <input type="number" name="DuracionCita" value={nuevaCita.DuracionCita} onChange={handleChange} min="15" max="30" required />
                         <label>Mascota: </label>
                         <select name="IdMascota" value={nuevaCita.IdMascota} onChange={handleChange} required>
                             <option value="">-- Seleccione una Mascota --</option>
@@ -207,20 +230,36 @@ function CitasMedicas() {
                         <option value="3">Cancelada</option>
                     </select>
                 </div>
-                <div className="product-grid">
+                <div className="list-container">
                     {citas.map(cita => (
-                        <div className="product-card" key={cita.IdCitaMed}>
-                            <div className="product-info">
-                                <p><strong>Fecha:</strong> {cita.FechaCita}</p>
-                                <p><strong>Duración:</strong> {cita.DuracionCita}</p>
+                        <div className="list-item" key={cita.IdCitaMed} onClick={() => handleCitaClick(cita)}>
+                            <div className="list-item-content">
+                                <p><strong>ID Cita:</strong> {cita.IdCitaMed}</p>
+                                <p><strong>Fecha:</strong> {new Date(cita.FechaCita).toLocaleDateString()}</p>
+                                <p><strong>Duración en minutos:</strong> {cita.DuracionCita}</p>
                                 <p><strong>Estado:</strong> {cita.EstadoCita}</p>
                                 <p><strong>Veterinario:</strong> {cita.NombreVeterinario || 'N/A'} {cita.ApellidoVeterinario || 'N/A'}</p>
                                 <p><strong>Dueño Correo:</strong> {cita.DuegnoCorreo}</p>
                                 <p><strong>Veterinario Correo:</strong> {cita.VetCorreo}</p>
                                 <p><strong>Mascota:</strong> {cita.NombreMascota}</p>
                                 <p><strong>Animal:</strong> {cita.NombreAnimal}</p>
-                                <button className="form-button" onClick={() => handleDelete(cita.IdCitaMed)}>Eliminar</button>
+                                {(cita.EstadoCita === 2) && (
+                                    <button className="form-button" onClick={() => handleDelete(cita.IdCitaMed)}>Eliminar</button>
+                                )}
                             </div>
+                            {selectedCita && selectedCita.IdCitaMed === cita.IdCitaMed && (
+                                <div className="details-container">
+                                    <p><strong>Comentarios:</strong></p>
+                                    {cita.Comentarios.length > 0 ? (
+                                        cita.Comentarios.map((comentario, index) => (
+                                            <p key={index}>{comentario}</p>
+                                        ))
+                                    ) : (
+                                        <p>N/A</p>
+                                    )}
+                                    {/* Agregar más detalles de la cita si es necesario */}
+                                </div>
+                            )}
                         </div>
                     ))}
                 </div>

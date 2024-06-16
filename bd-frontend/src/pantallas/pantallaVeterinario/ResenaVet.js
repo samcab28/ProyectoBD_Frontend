@@ -2,11 +2,11 @@ import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import '../../Styles/PageContainer.css';
 import fondoVet from '../../Imagenes/FondoVet.jpg';
-import NavCliente from "./NavCliente";
+import NavVeterinario from "./NavVeterinario";
 import { UserContext } from "../../context/UserContext";
 import logHistorialClick from '../../seguridad/historialClick';
 
-function ResenaCliente() {
+function ResenaVet() {
     const navigate = useNavigate();
     const [product, setProduct] = useState(null);
     const { id } = useParams();
@@ -19,7 +19,7 @@ function ResenaCliente() {
 
     const handleRegresar = () => {
         logHistorialClick(user, "Navegacion", "Regresar Productos");
-        navigate('/cliente/producto');
+        navigate('/veterinario/medicamento');
     };
 
     // Carga de información del puntaje del producto
@@ -104,7 +104,7 @@ function ResenaCliente() {
             <header className="header">
                 <img src={fondoVet} alt="Veterinary Clinic" className="header-image" />
             </header>
-            <NavCliente />
+            <NavVeterinario />
             <main className="main-content">
                 {product && (
                     <>
@@ -167,4 +167,4 @@ function ResenaCliente() {
     );
 }
 
-export default ResenaCliente;
+export default ResenaVet;

@@ -1,9 +1,10 @@
 import fondoVet from "../../Imagenes/FondoVet.jpg";
-import NavCliente from "../pantallaCliente/NavCliente";
+import NavVet from "./NavVeterinario";
 import React, { useState, useEffect, useContext } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { UserContext } from "../../context/UserContext";
 import ProductImage from "../../Imagenes/ProductImage";
+import logHistorialClick from "../../seguridad/historialClick";
 
 function CitaEjecucionVet() {
     const navigate = useNavigate();
@@ -14,25 +15,28 @@ function CitaEjecucionVet() {
     const [sucursales, setSucursales] = useState([]);
     const [products, setProducts] = useState([]);
     const [selectedSucursal, setSelectedSucursal] = useState(null);
+    const [recetados, setRecetados] = useState([]);
+    const [cantidades, setCantidades] = useState({});
+    const [citaInfo, setCitaInfo] = useState({});
+    const [mostrarExpediente, setMostrarExpediente] = useState(false);
 
     const handleRegresar = () => {
+        logHistorialClick(user, "Regresar", "Regresó a la lista de citas médicas");
         navigate('/veterinario/citaMedica');
     };
 
-    //carga de citas de mascotas
     useEffect(() => {
         if (idCita) {
-            fetch(`http://localhost:3001/expedienteMascota/${idMascota}`)
+            fetch(`http://localhost:3001/citaMedica/${idCita}`)
                 .then(response => response.json())
                 .then(data => {
-                    setExpedientes(data);
+                    setCitaInfo(data);
                     console.log("Datos de la cita médica:", data);
                 })
                 .catch(error => console.error('Error fetching cita medica:', error));
         }
     }, [idCita]);
 
-    //carga de sucursales
     useEffect(() => {
         fetch('http://localhost:3001/sucursal')
             .then(response => response.json())
@@ -50,8 +54,6 @@ function CitaEjecucionVet() {
             .catch(error => console.error('Error fetching sucursales:', error));
     }, []);
 
-
-    //carga de productos segun la sucursal
     useEffect(() => {
         if (selectedSucursal) {
             fetch(`http://localhost:3001/medicamento/sucursal/${selectedSucursal.IdSucursal}`)
@@ -64,30 +66,60 @@ function CitaEjecucionVet() {
         }
     }, [selectedSucursal]);
 
+    const handleRecetar = (product) => {
+        const cantidad = cantidades[product.IdProducto] || 1;
+        const existingProduct = recetados.find(recetado => recetado.IdProducto === product.IdProducto);
+        if (existingProduct) {
+            setRecetados(recetados.map(recetado =>
+                recetado.IdProducto === product.IdProducto
+                    ? { ...recetado, cantidad: cantidad }
+                    : recetado
+            ));
+        } else {
+            setRecetados([...recetados, { ...product, cantidad }]);
+        }
+    };
 
-    function handleSubmit(e) {
-        e.preventDefault();
-        const newExpediente = {
+    const handleCantidadChange = (e, productId) => {
+        const value = parseInt(e.target.value, 10);
+        if (value >= 1) {
+            setCantidades({
+                ...cantidades,
+                [productId]: value
+            });
+        }
+    };
+
+    const handleEliminarRecetado = (idProducto) => {
+        setRecetados(recetados.filter(p => p.IdProducto !== idProducto));
+    };
+
+    const handleAgregarExpediente = () => {
+        const expedienteData = {
             Comentarios: comentario,
             IdCita: idCita,
-            veterinario: user.IdPersona,
             mascota: idMascota,
-            ProductosRecetados: null
+            veterinario: user.IdPersona
         };
 
-        console.log("Datos que se enviarán al servidor:", newExpediente);
+        if (comentario.trim() === "") {
+            alert('Debe agregar un comentario');
+            return;
+        }
+    
+        console.log(expedienteData);
 
         fetch('http://localhost:3001/expediente', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(newExpediente)
+            body: JSON.stringify(expedienteData)
         })
             .then(response => {
                 if (response.ok) {
-                    alert('Agregado al expediente exitosamente');
-                    window.location.reload(); // Recargar la página
+                    alert('Expediente actualizado exitosamente');
+                    logHistorialClick(user, "Agregar al expediente", `Cita ID: ${idCita}`);
                 } else {
                     alert('Error al agregar al expediente');
                 }
@@ -95,37 +127,6 @@ function CitaEjecucionVet() {
             .catch(error => {
                 console.error('Error en la solicitud:', error);
             });
-    }
-
-    const handleResenaGo = (IdProducto) => {
-        console.log(IdProducto);
-        navigate(`/cliente/resena/${parseInt(IdProducto)}`); // Asegurarse de que IdProducto sea un número
-    };
-
-
-    const handleAddToCart = (IdProducto) => {
-        if (user && user.IdPersona) {
-            fetch('http://localhost:3001/carrito', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    IdPersona: user.IdPersona,
-                    IdProducto: parseInt(IdProducto), // Asegurarse de que IdProducto sea un número
-                    IdSucursal: selectedSucursal.IdSucursal,
-                    Cantidad: 1
-                })
-            })
-                .then(response => response.json())
-                .then(data => {
-                    console.log("Producto agregado al carrito:", data);
-                    alert("Producto agregado al carrito");
-                })
-                .catch(error => console.error('Error al agregar producto al carrito:', error));
-        } else {
-            console.error('Usuario no autenticado');
-        }
     };
 
     const handleSucursalChange = (e) => {
@@ -135,32 +136,111 @@ function CitaEjecucionVet() {
         console.log(selected);
     };
 
+    const handleTerminarCita = () => {
+        const updateData = {
+            campoModificar: 'EstadoCita',
+            valorNuevo: '1' // Valor que indica que la cita fue atendida
+        };
+
+        fetch(`http://localhost:3001/citaMedica/${idCita}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(updateData)
+        })
+            .then(response => {
+                if (response.ok) {
+                    // Guardar productos recetados
+                    recetados.forEach(producto => {
+                        const productoData = {
+                            cantidad: producto.cantidad,
+                            IdMedicamento: producto.IdMedicamento,
+                            IdCita: idCita
+                        };
+                        fetch('http://localhost:3001/ProductoRecetado', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(productoData)
+                        }).catch(error => console.error('Error al crear producto recetado:', error));
+                    });
+                    alert('Cita terminada exitosamente');
+                    logHistorialClick(user, "Terminar cita", `Cita ID: ${idCita} terminada`);
+                    handleRegresar(); // Regresar después de terminar la cita
+                } else {
+                    alert('Error al terminar la cita');
+                }
+            })
+            .catch(error => {
+                console.error('Error en la solicitud:', error);
+            });
+    };
+
+    const handleVerExpediente = () => {
+        if (mostrarExpediente) {
+            setMostrarExpediente(false);
+            setExpedientes([]);
+        } else {
+            fetch(`http://localhost:3001/expediente/mascota/${idMascota}`)
+                .then(response => response.json())
+                .then(data => {
+                    setExpedientes(data);
+                    console.log("Expedientes fetched:", data);
+                    setMostrarExpediente(true);
+                })
+                .catch(error => console.error('Error fetching expedientes:', error));
+        }
+    };
+
     return (
         <div className="home-screen">
             <header className="header">
-                <img src={fondoVet} alt="Veterinary Clinic" className="header-image"/>
+                <img src={fondoVet} alt="Veterinary Clinic" className="header-image" />
             </header>
-            <NavCliente/>
+            <NavVet />
             <main className="main-content">
                 <h2>Id de la cita que está siendo atendida: {idCita}</h2>
                 <h2>Id de la mascota: {idMascota}</h2>
                 <h2>Carga del expediente médico del paciente:</h2>
+                <button onClick={handleVerExpediente} className="form-button">Ver Expediente</button>
+                {mostrarExpediente && (
+                    <div className="list-container">
+                        {expedientes.length === 0 ? (
+                            <p>NO HAY EXPEDIENTES PARA MOSTRAR</p>
+                        ) : (
+                            expedientes.map(exp => (
+                                <div className="list-item" key={exp.IdExpediente}>
+                                    <div className="list-item-content">
+                                        <p><strong>Veterinario:</strong> {exp.Veterinario}</p>
+                                        <p><strong>Mascota:</strong> {exp.Mascota}</p>
+                                        <p><strong>Fecha:</strong> {new Date(exp.FechaCita).toLocaleDateString()}</p>
+                                        <p><strong>Id Cita:</strong> {exp.IdCita}</p>
+                                        <p><strong>Comentarios:</strong> {exp.Comentarios}</p>
+                                    </div>
+                                </div>
+                            ))
+                        )}
+                    </div>
+                )}
 
-                <div className="product-grid">
-                    {expedientes.map(exp => (
-                        <div className="product-card" key={exp.IdExpediente}>
-                            <div className="product-info">
-                                <p><strong>Veterinario:</strong> {exp.NombreVeterinario}</p>
-                                <p><strong>Mascota:</strong> {exp.NombreMascota}</p>
-                                <p><strong>Fecha:</strong> {exp.FechaCita}</p>
-                                <p><strong>Id Cita:</strong> {exp.IdCita}</p>
-                                <p><strong>Comentarios:</strong> {exp.Comentarios}</p>
+                <h2>Productos Recetados</h2>
+                <div className="list-container">
+                    {recetados.map(product => (
+                        <div className="list-item" key={product.IdProducto}>
+                            <div className="list-item-content">
+                                <p><strong>Nombre:</strong> {product.NombreProducto}</p>
+                                <p><strong>Precio:</strong> {product.PrecioProducto}</p>
+                                <p><strong>Marca:</strong> {product.NombreMarcaPro}</p>
+                                <p><strong>Cantidad Recetada:</strong> {product.cantidad}</p>
+                                <button className="form-button" onClick={() => handleEliminarRecetado(product.IdProducto)}>Eliminar</button>
                             </div>
                         </div>
                     ))}
                 </div>
 
-                <form onSubmit={handleSubmit}>
+                <form>
                     <label>
                         Comentarios de la cita:
                         <textarea
@@ -169,15 +249,17 @@ function CitaEjecucionVet() {
                             value={comentario}
                             onChange={e => setComentario(e.target.value)}
                         />
-                    </label><br/>
-                    <button
-                        style={{marginTop: '10px', marginBottom: '10px'}}
-                        className="form-button"
-                        type="submit"
-                    >
-                        Agregar al expediente
-                    </button>
+                    </label><br />
                 </form>
+                <br />
+                <button
+                    style={{ marginTop: '10px', marginBottom: '10px' }}
+                    className="form-button"
+                    onClick={handleAgregarExpediente}
+                >
+                    Agregar al Expediente
+                </button>
+
                 <h2>Recetar medicamentos</h2>
                 <h3>Seleccione la sucursal donde desea hacer la compra</h3>
                 <form>
@@ -197,48 +279,50 @@ function CitaEjecucionVet() {
                     </label>
                 </form>
 
-                <h3>Nombre de sucursal
-                    seleccionada: {selectedSucursal ? selectedSucursal.NombreSucursal : 'Ninguna'}</h3>
+                <h3>Nombre de sucursal seleccionada: {selectedSucursal ? selectedSucursal.NombreSucursal : 'Ninguna'}</h3>
                 <div className="product-grid">
                     {products.map(product => (
                         <div className="product-card" key={product.IdProducto}>
-                            <ProductImage url={product.Dirrecion} alt={product.NombreProducto}/>
+                            <ProductImage url={product.Dirrecion} alt={product.NombreProducto} />
                             <div className="product-info">
+                                <p><strong>ID:</strong> {parseInt(product.IdMedicamento)}</p>
                                 <p><strong>Nombre:</strong> {product.NombreProducto}</p>
                                 <p><strong>Precio:</strong> {product.PrecioProducto}</p>
                                 <p><strong>Marca:</strong> {product.NombreMarcaPro}</p>
                                 <p><strong>Disponibles:</strong> {product.Cantidad}</p>
                                 <p><strong>Descripción:</strong> {product.DescripcionProducto}</p>
                                 <p><strong>Sucursal:</strong> {product.NombreSucursal}</p>
-                                <button style={{marginBottom: '10px', marginRight: '10px'}}
-                                        onClick={() => handleResenaGo(product.IdProducto)}
-                                        className="form-button">Reseña
-                                </button>
-                                <button onClick={() => handleAddToCart(product.IdProducto)}
-                                        className="form-button">Agregar al Carrito
+                                <input
+                                    type="number"
+                                    min="1"
+                                    max={product.Cantidad}
+                                    onChange={(e) => handleCantidadChange(e, product.IdProducto)}
+                                    placeholder="Cantidad"
+                                    style={{ marginRight: '10px' }}
+                                />
+                                <button
+                                    style={{ marginBottom: '10px' }}
+                                    onClick={() => handleRecetar(product)}
+                                    className="form-button"
+                                >
+                                    Recetar Producto
                                 </button>
                             </div>
                         </div>
                     ))}
                 </div>
 
-
+                <br />
                 <button
-                    style={{marginTop: '10px', marginBottom: '10px'}}
+                    style={{ marginTop: '10px', marginBottom: '10px' }}
                     className="form-button"
-                >
-                    Generar receta
-                </button>
-                <br/>
-                <button
-                    style={{marginTop: '10px', marginBottom: '10px'}}
-                    className="form-button"
+                    onClick={handleTerminarCita}
                 >
                     Terminar cita
                 </button>
-                <br/>
+                <br />
                 <button
-                    style={{marginTop: '10px', marginBottom: '10px'}}
+                    style={{ marginTop: '10px', marginBottom: '10px' }}
                     onClick={handleRegresar}
                     className="form-button"
                 >

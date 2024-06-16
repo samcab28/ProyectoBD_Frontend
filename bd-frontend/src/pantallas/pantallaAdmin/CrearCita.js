@@ -1,6 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react'; // Importar useContext desde React
+import logHistorialClick from '../../seguridad/historialClick';
+import { UserContext } from '../../context/UserContext'; // Asegúrate de tener acceso al contexto del usuario
 
-function CreateCita(){
+function CreateCita() {
+    const { user } = useContext(UserContext); // Obtener el contexto del usuario
     const [FechaCita, setFechaCita] = useState('');
     const [Duracion, setDuracion] = useState('');
     const [Encargado, setEncargado] = useState('');
@@ -13,32 +16,57 @@ function CreateCita(){
 
     useEffect(() => {
         // Fetch personas (veterinarios)
-        fetch('http://localhost:3001/persona/tipo/2') 
+        fetch('http://localhost:3001/persona/tipo/2')
             .then(response => response.json())
             .then(data => {
                 console.log("personas fetched:", data); // Debug line
                 setPersonas(data);
             })
             .catch(error => console.error('Error fetching personas:', error));
-        
+
         // Fetch estados (de cita)
-        fetch('http://localhost:3001/estadoCita') 
+        fetch('http://localhost:3001/estadoCita')
             .then(response => response.json())
             .then(data => {
-                console.log("personas fetched:", data); // Debug line
+                console.log("estados fetched:", data); // Debug line
                 setEstados(data);
             })
-            .catch(error => console.error('Error fetching personas:', error));
+            .catch(error => console.error('Error fetching estados:', error));
 
         // Fetch animales
         fetch('http://localhost:3001/mascota')
             .then(response => response.json())
             .then(data => {
-                console.log("productos fetched:", data); // Debug line
+                console.log("mascotas fetched:", data); // Debug line
                 setMascotas(data);
             })
-            .catch(error => console.error('Error fetching productos:', error));
+            .catch(error => console.error('Error fetching mascotas:', error));
     }, []);
+
+    const enviarCorreo = async (correos, asunto, mensaje) => {
+        try {
+            const response = await fetch('http://localhost:3001/enviarCorreo', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    correos: correos,
+                    asunto: asunto,
+                    mensaje: mensaje
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error('Error al enviar el correo');
+            }
+
+            const data = await response.json();
+            console.log('Correo enviado exitosamente:', data);
+        } catch (error) {
+            console.error('Error al enviar el correo:', error);
+        }
+    };
 
     function handleSubmit(e) {
         e.preventDefault();
@@ -48,7 +76,7 @@ function CreateCita(){
             DuracionCita: Duracion,
             IdMascota: parseInt(Mascota),
             IdEncargado: parseInt(Encargado),
-            EstadoCita : parseInt(Estado)
+            EstadoCita: parseInt(Estado)
         };
 
         fetch('http://localhost:3001/citaMedica', {
@@ -60,22 +88,46 @@ function CreateCita(){
         })
             .then(response => {
                 if (response.ok) {
-                    alert('Cita creada exitosamente');
-                    window.location.reload(); // Recargar la página
+                    return response.json(); // Return the response JSON for further processing
                 } else {
-                    alert('Error al crear cita');
+                    throw new Error('Error al crear cita');
                 }
+            })
+            .then(data => {
+                alert('Cita creada exitosamente');
+                logHistorialClick(user, "Crear cita", `Cita para mascota ID: ${Mascota} con encargado ID: ${Encargado}`);
+                
+                // Obtener los correos electrónicos del dueño y veterinario
+                const citaCreada = data;
+                if (citaCreada) {
+                    const correos = [citaCreada.DuegnoCorreo, citaCreada.VetCorreo];
+                    const asunto = 'Notificación de Creación de Cita Médica';
+                    const mensaje = `La cita médica para la mascota ${citaCreada.NombreMascota}, del dueño ${citaCreada.NombrePersona} ha sido creada para el día ${citaCreada.FechaCita}.`;
+                    enviarCorreo(correos, asunto, mensaje);
+                }
+
+                window.location.reload(); // Recargar la página
             })
             .catch(error => {
                 console.error('Error en la solicitud:', error);
+                alert('Error al crear cita');
             });
     }
 
-    return(
+    function handleReset(e) {
+        logHistorialClick(user, "Resetear formulario", "Formulario de creación de cita reseteado");
+        setFechaCita('');
+        setDuracion('');
+        setEncargado('');
+        setMacota('');
+        setEstado('');
+    }
+
+    return (
         <div>
             <h2>Crear Cita</h2>
             <form onSubmit={handleSubmit}>
-            <label>
+                <label>
                     Fecha:
                     <input
                         name="fechaCita"
@@ -84,7 +136,7 @@ function CreateCita(){
                         onChange={e => setFechaCita(e.target.value)}
                     />
                 </label>
-                <br/>
+                <br />
                 <label>
                     Duración:
                     <input
@@ -94,7 +146,7 @@ function CreateCita(){
                         onChange={e => setDuracion(e.target.value)}
                     />
                 </label>
-                <br/>
+                <br />
                 <label>
                     Encargado:
                     <select
@@ -108,7 +160,7 @@ function CreateCita(){
                         ))}
                     </select>
                 </label>
-                <br/>
+                <br />
                 <label>
                     Mascota:
                     <select
@@ -122,7 +174,7 @@ function CreateCita(){
                         ))}
                     </select>
                 </label>
-                <br/>
+                <br />
                 <label>
                     Estado:
                     <select
@@ -136,8 +188,8 @@ function CreateCita(){
                         ))}
                     </select>
                 </label>
-                <br/>
-                <button type="reset">Reset data</button>
+                <br />
+                <button type="reset" onClick={handleReset}>Reset data</button>
                 <button type="submit">Guardar</button>
             </form>
         </div>
