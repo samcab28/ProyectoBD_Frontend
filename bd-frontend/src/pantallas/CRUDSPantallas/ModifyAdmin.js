@@ -1,8 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { UserContext } from '../../context/UserContext';
 import { useNavigate } from 'react-router-dom';
 
 function ModifyAdmin(){
+    const { user } = useContext(UserContext);
     const [usuario, setUsuario] = useState('');
     const [campoModificar, setCampoModificar] = useState('');
     const [valorNuevo, setvalorNuevo] = useState('');
@@ -23,10 +24,14 @@ function ModifyAdmin(){
     };
 
     useEffect(() => {
-        fetch('http://localhost:3001/persona/tipo/1')
+        // Fetch personas 
+        fetch(`http://localhost:3001/persona/sucursal/${user.Sucursal}`)
             .then(response => response.json())
-            .then(data => setUsuarios(data))
-            .catch(error => console.error('Error fetching citas:', error));
+            .then(data => {
+                console.log("Personas fetched:", data); // Debug line
+                setUsuarios(data);
+            })
+            .catch(error => console.error('Error fetching personas:', error));
 
         // Fetch tipos de persona
         fetch('http://localhost:3001/tipoPersona')

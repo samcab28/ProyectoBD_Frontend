@@ -110,7 +110,6 @@ function AdminList() {
                             <th>Contraseña</th>
                             <th>Puesto</th>
                             <th>Sexo</th>
-                            <th>Acciones</th>
                             <th>Sucursal</th>
                         </tr>
                     </thead>
