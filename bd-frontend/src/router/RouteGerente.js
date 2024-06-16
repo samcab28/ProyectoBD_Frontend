@@ -13,7 +13,7 @@ import CRUDMasterGerente from '../pantallas/pantallaGerente/CRUDMasterGerente';
 import ProductoList from '../CRUD_Folder/crudProducto/CrudProducto';
 import ClienteList from '../pantallas/CRUDSPantallas/ClienteList';
 import AdminList from '../pantallas/CRUDSPantallas/AdminList';
-import VetList from '../pantallas/CRUDSPantallas/VetList';
+import VetList from '../pantallas/CRUDSPantallas/VetList'
 import HistorialLogin from "../pantallas/pantallaGerente/HistorialLoginGerente";
 
 
