@@ -94,7 +94,6 @@ function VetList() {
                     <th>Contraseña</th>
                     <th>Puesto</th>
                     <th>Sexo</th>
-                    <th>Acciones</th>
                 </tr>
                 </thead>
                 <tbody>
