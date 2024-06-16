@@ -1,7 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
+import { UserContext } from '../../context/UserContext';
 
 
 function CreateAdmin() {
+    const { user } = useContext(UserContext);
+
     const [nombre, setNombre] = useState('');
     const [apellido, setApellido] = useState('');
     const [correo, setCorreo] = useState('');
@@ -10,9 +13,12 @@ function CreateAdmin() {
     const [contrasena, setContrasena] = useState('');
     const [tipo, setTipo] = useState('Administrador');
     const [sexo, setSexo] = useState('masculino');
+    const sucursal = `${user.Sucursal}`;
 
     function handleSubmit(e) {
         e.preventDefault();
+
+        
 
         let tipoPersonaValue;
         switch (tipo) {
@@ -38,7 +44,7 @@ function CreateAdmin() {
                 sexoValue = 3;
         }
 
-        const order = ["TipoPersona", "Sexo", "NombrePersona", "ApellidoPersona", "TelefonoPersona", "CorreoPersona", "UsuarioPersona", "PasswordPersona"];
+        const order = ["TipoPersona", "Sexo", "NombrePersona", "ApellidoPersona", "TelefonoPersona", "CorreoPersona", "UsuarioPersona", "PasswordPersona", "Sucursal"];
 
         const formData = order.reduce((acc, key) => {
             switch (key) {
@@ -65,6 +71,9 @@ function CreateAdmin() {
                     break;
                 case "PasswordPersona":
                     acc[key] = contrasena;
+                    break;
+                case "Sucursal":
+                    acc[key] = sucursal;
                     break;
                 default:
                     break;

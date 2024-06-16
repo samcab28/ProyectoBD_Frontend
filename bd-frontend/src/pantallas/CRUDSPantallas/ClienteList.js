@@ -11,7 +11,7 @@ function ClienteList() {
     const [personas, setPersonas] = useState([]);
     const [tiposPersona, setTiposPersona] = useState({});
     const [sexos, setSexos] = useState({});
-    const [sucursales, setSucursales] = useState({});
+
 
     useEffect(() => {
         // Fetch personas
@@ -50,19 +50,7 @@ function ClienteList() {
                 setSexos(sexosMap);
             })
             .catch(error => console.error('Error fetching sexos:', error));
-        
-            fetch('http://localhost:3001/sucursal')
-            .then(response => response.json())
-            .then(data => {
-                console.log("Sucursales fetched:", data); // Debug line
-                const sucursalesMap = {};
-                data.forEach(sucursal => {
-                    sucursalesMap[sucursal.IdSucursal] = sucursal.NombreSucursal; // Ajusta según la estructura de tu respuesta
-                });
-                console.log("Sucursales Map:", sucursalesMap); // Debug line
-                setSucursales(sucursalesMap);
-            })
-            .catch(error => console.error('Error fetching tiposPersona:', error));
+
     }, []);
 
     function handleDelete(id) {
@@ -87,52 +75,50 @@ function ClienteList() {
     return (
         <div className="home-screen">
             <header className="header">
-                <img src={fondoVet} alt="Veterinary Clinic" className="header-image"/>
+                <img src={fondoVet} alt="Veterinary Clinic" className="header-image" />
             </header>
-            <NavGerente/>
+            <NavGerente />
             <main className="crud">
-            <h1>Gestión de clientes</h1>
-            <CreateCliente/>
-            <ModifyCliente/>
-            <h2>Listado de Personas</h2>
-            <table>
-                <thead>
-                <tr>
-                    <th>Id</th>
-                    <th>Nombre</th>
-                    <th>Apellido</th>
-                    <th>Correo</th>
-                    <th>Teléfono</th>
-                    <th>Usuario</th>
-                    <th>Contraseña</th>
-                    <th>Puesto</th>
-                    <th>Sexo</th>
-                    <th>Sucursal</th>
-                    <th>Acciones</th>
-                </tr>
-                </thead>
-                <tbody>
-                {personas.map(persona => (
-                    <tr key={persona.IdPersona}>
-                        <td>{persona.IdPersona}</td>
-                        <td>{persona.NombrePersona}</td>
-                        <td>{persona.ApellidoPersona}</td>
-                        <td>{persona.CorreoPersona}</td>
-                        <td>{persona.TelefonoPersona}</td>
-                        <td>{persona.UsuarioPersona}</td>
-                        <td>{persona.PasswordPersona}</td>
-                        <td>{tiposPersona[persona.TipoPersona]}</td>
-                        <td>{sexos[persona.Sexo]}</td>
-                        <td>{sucursales[persona.Sucursal]}</td>
-                        <td>
-                            <button onClick={() => handleDelete(persona.IdPersona)}>Eliminar</button>
-                        </td>
-                    </tr>
-                ))}
-                </tbody>
-            </table>
+                <h1>Gestión de clientes</h1>
+                <CreateCliente />
+                <ModifyCliente />
+                <h2>Listado de Personas</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Nombre</th>
+                            <th>Apellido</th>
+                            <th>Correo</th>
+                            <th>Teléfono</th>
+                            <th>Usuario</th>
+                            <th>Contraseña</th>
+                            <th>Puesto</th>
+                            <th>Sexo</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {personas.map(persona => (
+                            <tr key={persona.IdPersona}>
+                                <td>{persona.IdPersona}</td>
+                                <td>{persona.NombrePersona}</td>
+                                <td>{persona.ApellidoPersona}</td>
+                                <td>{persona.CorreoPersona}</td>
+                                <td>{persona.TelefonoPersona}</td>
+                                <td>{persona.UsuarioPersona}</td>
+                                <td>{persona.PasswordPersona}</td>
+                                <td>{tiposPersona[persona.TipoPersona]}</td>
+                                <td>{sexos[persona.Sexo]}</td>
+                                <td>
+                                    <button onClick={() => handleDelete(persona.IdPersona)}>Eliminar</button>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
             </main>
-       </div>
+        </div>
     );
 }
 
