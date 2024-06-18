@@ -65,9 +65,9 @@ function CreateProduct() {
             PrecioProducto: parseFloat(precioProducto),
             DescripcionProducto: descripcionProducto,
             CantidadDisponible: parseInt(cantidadDisponible),
-            NombreSucursal: nombreSucursal,
-            TipoProducto: tipoProducto,
-            NombreMarcaPro: nombreMarcaPro,
+            NombreSucursal: parseInt(nombreSucursal),
+            TipoProducto: parseInt(tipoProducto),
+            NombreMarcaPro: parseInt(nombreMarcaPro),
             Direccion: parseInt(url)
         };
 
@@ -158,7 +158,7 @@ function CreateProduct() {
                     >
                         <option value="">Selecciona un tipo de producto</option>
                         {tiposProducto.map(tipo => (
-                            <option key={tipo.IdTipoPro} value={tipo.NombreTipoPro}>{tipo.NombreTipoPro}</option>
+                            <option key={tipo.IdTipoPro} value={tipo.TipoProducto}>{tipo.TipoProducto}</option>
                         ))}
                     </select>
                 </label>
@@ -186,7 +186,7 @@ function CreateProduct() {
                     >
                         <option value="">Selecciona una URL</option>
                         {urls.map(urlObj => (
-                            <option key={urlObj.IdURL} value={urlObj.Direccion}>{urlObj.Direccion}</option>
+                            <option key={urlObj.IdUrl} value={urlObj.Dirrecion}>{urlObj.Dirrecion}</option>
                         ))}
                     </select>
                 </label>

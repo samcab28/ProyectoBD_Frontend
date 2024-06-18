@@ -13,7 +13,8 @@ import CRUDMasterGerente from '../pantallas/pantallaGerente/CRUDMasterGerente';
 import ProductList from '../pantallas/CRUDSPantallas/ProductoList';
 import ClienteList from '../pantallas/CRUDSPantallas/ClienteList';
 import AdminList from '../pantallas/CRUDSPantallas/AdminList';
-import VetList from '../pantallas/CRUDSPantallas/VetList'
+import VetList from '../pantallas/CRUDSPantallas/VetList';
+import ResenaList from '../pantallas/CRUDSPantallas/ResenaList';
 import HistorialLogin from "../pantallas/pantallaGerente/HistorialLoginGerente";
 
 
@@ -32,7 +33,7 @@ const RouteGerente = () => {
             <Route path='/gestion/veterinario' element={<VetList />} />
             <Route path='/gestion/administrador' element={<AdminList />} />
             <Route path='/gestion/producto' element={<ProductList />} />
-            
+            <Route path='/gestion/resena' element={<ResenaList />} />
             
 
             <Route path='/historial' element={<HistorialLogin />} />
