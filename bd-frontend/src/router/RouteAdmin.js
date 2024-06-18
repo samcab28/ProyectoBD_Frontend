@@ -13,7 +13,6 @@ import ProductoAdmin from "../pantallas/pantallaAdmin/ProductoAdmin";
 import GestionCitas from '../pantallas/pantallaAdmin/GestionCitas';
 import AsignacionPersonal from '../pantallas/pantallaAdmin/AsignacionPersonal';
 import CancelarCita from '../pantallas/pantallaAdmin/CancelarCita';
-import Usuarios from '../pantallas/pantallaAdmin/Usuarios';
 import ModificarUsuario from '../pantallas/pantallaAdmin/ModificarUsuario';
 import CarritosDeCompra from '../pantallas/pantallaAdmin/CarritosDeCompra';
 
@@ -34,7 +33,7 @@ const RouteAdmin = () => {
             <Route path='/citasMedica/cancelarCita' element={<CancelarCita />} />
             <Route path='/carritos' element={<CarritosDeCompra />} />
             <Route path='/cobro' element={<CobroAdmin />} />
-            <Route path='/usuarios' element={<Usuarios />} />
+            
             <Route path='/usuarios/modificar' element={<ModificarUsuario />} />
             <Route path='/expedienteCliente' element={<ExpedienteClienteAdmin />} />
             <Route path='/producto' element={<ProductoAdmin />} />

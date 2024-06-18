@@ -4,10 +4,15 @@ import { Routes, Route } from 'react-router-dom';
 
 // Importación de componentes de gerente
 import InitialGerente from '../pantallas/pantallaGerente/InitialGerente';
+
 import CitaMedicaGerente from "../pantallas/pantallaGerente/CitaMedicaGerente";
+import GestionCitasGerente from '../pantallas/pantallaGerente/GestionCitasGerente';
+import AsignacionPersonalGerente from '../pantallas/pantallaGerente/AsignacionPersonalGerente';
+
 import CobroGerente from "../pantallas/pantallaGerente/CobroGerente";
-import ExpedienteGerente from "../pantallas/pantallaGerente/ExpedienteGerente";
+import ExpedienteClienteGerente from "../pantallas/pantallaGerente/ExpedienteGerente";
 import ProductoGerente from "../pantallas/pantallaGerente/ProductoGerente";
+import CancelarCitaGerente from '../pantallas/pantallaGerente/CancelarCitaGerente';
 
 import CRUDMasterGerente from '../pantallas/pantallaGerente/CRUDMasterGerente';
 import ProductList from '../pantallas/pantallaGerente/ProductoListGerente';
@@ -24,8 +29,11 @@ const RouteGerente = () => {
         <Routes>
             <Route path='/' element={<InitialGerente />} />
             <Route path='/citaMedica' element={<CitaMedicaGerente />} />
+            <Route path='/citaMedica/gestion' element={<GestionCitasGerente />} />
+            <Route path='/citaMedica/asignacionPersonal' element={<AsignacionPersonalGerente />} />
+            <Route path='/citaMedica/cancelarCita' element={<CancelarCitaGerente />} />
             <Route path='/cobro' element={<CobroGerente />} />
-            <Route path='/expediente' element={<ExpedienteGerente />} />
+            <Route path='/expediente' element={<ExpedienteClienteGerente />} />
             <Route path='/producto' element={<ProductoGerente />} />
 
             <Route path='/gestion' element={<CRUDMasterGerente />} />

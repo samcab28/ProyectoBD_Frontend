@@ -41,11 +41,7 @@ function NavAdmin() {
                         <button className="action-button" onClick={() => handleClick('Navegación', 'Expediente Cliente')}>Expediente Cliente</button>
                     </Link>
                 </li>
-                <li>
-                    <Link to="/admin/producto">
-                        <button className="action-button" onClick={() => handleClick('Navegación', 'Productos')}>Productos</button>
-                    </Link>
-                </li>
+        
                 <li>
                     <Link to="/">
                         <button className="action-button" onClick={() => handleClick('Navegación', 'Logout')}>Logout</button>
