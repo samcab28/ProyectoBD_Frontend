@@ -15,6 +15,7 @@ import AsignacionPersonal from '../pantallas/pantallaAdmin/AsignacionPersonal';
 import CancelarCita from '../pantallas/pantallaAdmin/CancelarCita';
 import ModificarUsuario from '../pantallas/pantallaAdmin/ModificarUsuario';
 import CarritosDeCompra from '../pantallas/pantallaAdmin/CarritosDeCompra';
+import HistorialLoginAdmin from "../pantallas/pantallaAdmin/HistorialLoginAdmin";
 
 import CRUDMasterAdmin from '../pantallas/pantallaAdmin/CRUDMasterAdmin';
 import ResenaListAdmin from '../pantallas/pantallaAdmin/ResenaListAdmin';
@@ -38,11 +39,15 @@ const RouteAdmin = () => {
             <Route path='/expedienteCliente' element={<ExpedienteClienteAdmin />} />
             <Route path='/producto' element={<ProductoAdmin />} />
 
+
             <Route path='/gestion' element={<CRUDMasterAdmin />} />
             <Route path='/gestion/cliente' element={<ClienteListAdmin />} />
             <Route path='/gestion/veterinario' element={<VetListAdmin />} />
             <Route path='/gestion/producto' element={<ProductoListAdmin />} />
             <Route path='/gestion/resena' element={<ResenaListAdmin />} />
+
+            <Route path='/historial' element={<HistorialLoginAdmin />} />
+
         </Routes>
     );
 };

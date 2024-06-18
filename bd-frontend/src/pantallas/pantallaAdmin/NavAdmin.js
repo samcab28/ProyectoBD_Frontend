@@ -17,34 +17,75 @@ function NavAdmin() {
             <ul>
                 <li>
                     <Link to="/admin/">
-                        <button className="action-button" onClick={() => handleClick('Navegación', 'Home')}>Home</button>
+                        <button className="action-button" onClick={() => handleClick('Navegación', 'Home')}>Home
+                        </button>
                     </Link>
                 </li>
                 <li>
+
                     <Link to="/admin/gestion">
                         <button className="action-button" onClick={() => handleClick('Navegación', 'Gestión General')}>Gestión General</button>
+
+                    <Link to="/crud/">
+                        <button className="action-button"
+                                onClick={() => handleClick('Navegación', 'Gestión General')}>Gestión General
+                        </button>
+
                     </Link>
                 </li>
                 <li>
                     <Link to="/admin/citasMedica">
-                        <button className="action-button" onClick={() => handleClick('Navegación', 'Citas Médicas')}>Citas Médicas</button>
+                        <button className="action-button"
+                                onClick={() => handleClick('Navegación', 'Citas Médicas')}>Citas Médicas
+                        </button>
                     </Link>
                 </li>
+
                 
+
+                <li>
+                    <Link to="/admin/usuarios">
+                        <button className="action-button"
+                                onClick={() => handleClick('Navegación', 'Usuarios')}>Usuarios
+                        </button>
+                    </Link>
+                </li>
+
                 <li>
                     <Link to="/admin/cobro">
-                        <button className="action-button" onClick={() => handleClick('Navegación', 'Cobro')}>Cobro</button>
+                        <button className="action-button" onClick={() => handleClick('Navegación', 'Cobro')}>Cobro
+                        </button>
                     </Link>
                 </li>
                 <li>
                     <Link to="/admin/expedienteCliente">
-                        <button className="action-button" onClick={() => handleClick('Navegación', 'Expediente Cliente')}>Expediente Cliente</button>
+                        <button className="action-button"
+                                onClick={() => handleClick('Navegación', 'Expediente Cliente')}>Expediente Cliente
+                        </button>
                     </Link>
                 </li>
+
         
+
+                <li>
+                    <Link to="/admin/producto">
+                        <button className="action-button"
+                                onClick={() => handleClick('Navegación', 'Productos')}>Productos
+                        </button>
+                    </Link>
+                </li>
+                <li>
+                    <Link to="/admin/historial">
+                        <button className="action-button"
+                                onClick={() => handleClick('Navegación', 'Productos')}>Historial de Login
+                        </button>
+                    </Link>
+                </li>
+
                 <li>
                     <Link to="/">
-                        <button className="action-button" onClick={() => handleClick('Navegación', 'Logout')}>Logout</button>
+                        <button className="action-button" onClick={() => handleClick('Navegación', 'Logout')}>Logout
+                        </button>
                     </Link>
                 </li>
             </ul>
