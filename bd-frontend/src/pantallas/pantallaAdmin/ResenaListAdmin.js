@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import fondoVet from "../../Imagenes/FondoVet.jpg";
-import NavGerente from '../pantallaGerente/NavGerente';
+import NavAdmin from './NavAdmin';
 
-function ResenaList() {
+function ResenaListAdmin() {
     const navigate = useNavigate();
     const [resenas, setResenas] = useState([]);
     const handleRegresar = () => {
@@ -40,7 +40,7 @@ function ResenaList() {
             <header className="header">
                 <img src={fondoVet} alt="Veterinary Clinic" className="header-image" />
             </header>
-            <NavGerente />
+            <NavAdmin />
             <main className="crud">
                 <h1>Crud de resenas</h1>
                 <h2>Listado de resenas</h2>
@@ -78,4 +78,4 @@ function ResenaList() {
     )
 }
 
-export default ResenaList;
+export default ResenaListAdmin;

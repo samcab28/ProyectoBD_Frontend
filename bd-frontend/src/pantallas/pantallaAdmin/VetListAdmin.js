@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import fondoVet from "../../Imagenes/FondoVet.jpg";
-import NavGerente from '../pantallaGerente/NavGerente';
+import NavAdmin from './NavAdmin';
 
-import CreateVet from './CreateVet';
-import ModifyVet from './ModifiyVet';
+import CreateVet from '../CRUDSPantallas/CreateVet';
+import ModifyVet from '../CRUDSPantallas/ModifiyVet';
 
-function VetList() {
+function VetListAdmin() {
     const navigate = useNavigate();
     const [personas, setPersonas] = useState([]);
     const [tiposPersona, setTiposPersona] = useState({});
@@ -76,7 +76,7 @@ function VetList() {
             <header className="header">
                 <img src={fondoVet} alt="Veterinary Clinic" className="header-image"/>
             </header>
-            <NavGerente/>
+            <NavAdmin/>
             <main className="crud">
             <h1>Gestión de Veterinarios</h1>
             <CreateVet/>
@@ -120,4 +120,4 @@ function VetList() {
     );
 }
 
-export default VetList
+export default VetListAdmin;

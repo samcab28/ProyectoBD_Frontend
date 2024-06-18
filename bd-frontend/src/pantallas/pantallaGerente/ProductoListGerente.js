@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom'
 import fondoVet from "../../Imagenes/FondoVet.jpg";
-import NavGerente from '../pantallaGerente/NavGerente';
+import NavGerente from './NavGerente';
 import { UserContext } from '../../context/UserContext';
 
-import CreateProduct from './CreateProduct';
+import CreateProduct from '../CRUDSPantallas/CreateProduct';
 
 function ProductList() {
     const { user } = useContext(UserContext);

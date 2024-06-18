@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import fondoVet from "../../Imagenes/FondoVet.jpg";
-import NavGerente from '../pantallaGerente/NavGerente';
+import NavGerente from './NavGerente';
 
-import CreateCliente from './CreateCliente';
-import ModifyCliente from './ModifyCliente';
+import CreateCliente from '../CRUDSPantallas/CreateCliente';
+import ModifyCliente from '../CRUDSPantallas/ModifyCliente';
 
 function ClienteList() {
     const navigate = useNavigate();

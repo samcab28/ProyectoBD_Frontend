@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import fondoVet from "../../Imagenes/FondoVet.jpg";
-import NavGerente from '../pantallaGerente/NavGerente';
+import NavGerente from './NavGerente';
 
-import CreateVet from './CreateVet';
-import ModifyVet from './ModifiyVet';
+import CreateVet from '../CRUDSPantallas/CreateVet';
+import ModifyVet from '../CRUDSPantallas/ModifiyVet';
 
 function VetList() {
     const navigate = useNavigate();

@@ -10,11 +10,11 @@ import ExpedienteGerente from "../pantallas/pantallaGerente/ExpedienteGerente";
 import ProductoGerente from "../pantallas/pantallaGerente/ProductoGerente";
 
 import CRUDMasterGerente from '../pantallas/pantallaGerente/CRUDMasterGerente';
-import ProductList from '../pantallas/CRUDSPantallas/ProductoList';
-import ClienteList from '../pantallas/CRUDSPantallas/ClienteList';
-import AdminList from '../pantallas/CRUDSPantallas/AdminList';
-import VetList from '../pantallas/CRUDSPantallas/VetList';
-import ResenaList from '../pantallas/CRUDSPantallas/ResenaList';
+import ProductList from '../pantallas/pantallaGerente/ProductoListGerente';
+import ClienteList from '../pantallas/pantallaGerente/ClienteListGerente';
+import AdminList from '../pantallas/pantallaGerente/AdminListGerente';
+import VetList from '../pantallas/pantallaGerente/VetListGerente';
+import ResenaList from '../pantallas/pantallaGerente/ResenaListGerente';
 import HistorialLogin from "../pantallas/pantallaGerente/HistorialLoginGerente";
 
 

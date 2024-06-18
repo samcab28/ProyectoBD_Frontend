@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom'
 import fondoVet from "../../Imagenes/FondoVet.jpg";
-import NavGerente from '../pantallaGerente/NavGerente';
+import NavAdmin from './NavAdmin';
 import { UserContext } from '../../context/UserContext';
 
-import CreateProduct from './CreateProduct';
+import CreateProduct from '../CRUDSPantallas/CreateProduct';
 
-function ProductList() {
+function ProductListAdmin() {
     const { user } = useContext(UserContext);
     const navigate = useNavigate();
     const [productos, setProductos] = useState([]);
@@ -37,13 +37,7 @@ function ProductList() {
             .catch(error => console.error('Error deleting producto:', error));
     }
 
-    const handleRegresar = () => {
-        navigate('/crud'); // Cambia '/another' por la ruta deseada
-    };
-
-    const handleMod = () => {
-        console.log("implementar");
-    };
+    
 
 
     return (
@@ -51,7 +45,7 @@ function ProductList() {
             <header className="header">
                 <img src={fondoVet} alt="Veterinary Clinic" className="header-image" />
             </header>
-            <NavGerente />
+            <NavAdmin />
             <main className="crud">
                 <h1>Gestión de Productos</h1>
                 <CreateProduct/>
@@ -95,4 +89,4 @@ function ProductList() {
     )
 }
 
-export default ProductList;
+export default ProductListAdmin;

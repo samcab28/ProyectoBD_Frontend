@@ -1,23 +1,21 @@
-import React, { useState, useEffect, useContext} from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import fondoVet from "../../Imagenes/FondoVet.jpg";
-import NavGerente from '../pantallaGerente/NavGerente';
-import { UserContext } from '../../context/UserContext';
-import CreateAdmin from './CreateAdmin';
-import ModifyAdmin from './ModifyAdmin';
+import NavAdmin from './NavAdmin';
 
-function AdminList() {
+import CreateCliente from '../CRUDSPantallas/CreateCliente';
+import ModifyCliente from '../CRUDSPantallas/ModifyCliente';
+
+function ClienteListAdmin() {
     const navigate = useNavigate();
     const [personas, setPersonas] = useState([]);
     const [tiposPersona, setTiposPersona] = useState({});
     const [sexos, setSexos] = useState({});
-    const [sucursales, setSucursales] = useState({});
 
-    const { user } = useContext(UserContext);
 
     useEffect(() => {
-        // Fetch personas 
-        fetch(`http://localhost:3001/persona/sucursal/${user.Sucursal}`)
+        // Fetch personas
+        fetch('http://localhost:3001/persona/tipo/3')
             .then(response => response.json())
             .then(data => {
                 console.log("Personas fetched:", data); // Debug line
@@ -39,20 +37,7 @@ function AdminList() {
             })
             .catch(error => console.error('Error fetching tiposPersona:', error));
 
-        // Fetch sucursales
-        fetch('http://localhost:3001/sucursal')
-            .then(response => response.json())
-            .then(data => {
-                console.log("Sucursales fetched:", data); // Debug line
-                const sucursalesMap = {};
-                data.forEach(sucursal => {
-                    sucursalesMap[sucursal.IdSucursal] = sucursal.NombreSucursal; // Ajusta según la estructura de tu respuesta
-                });
-                console.log("Sucursales Map:", sucursalesMap); // Debug line
-                setSucursales(sucursalesMap);
-            })
-            .catch(error => console.error('Error fetching sucursales:', error));
-        //fetch sexos
+        // Fetch sexos
         fetch('http://localhost:3001/sexo')
             .then(response => response.json())
             .then(data => {
@@ -65,8 +50,8 @@ function AdminList() {
                 setSexos(sexosMap);
             })
             .catch(error => console.error('Error fetching sexos:', error));
-    }, []);
 
+    }, []);
 
     function handleDelete(id) {
         fetch(`http://localhost:3001/persona/${id}`, {
@@ -83,20 +68,17 @@ function AdminList() {
             .catch(error => console.error('Error deleting persona:', error));
     }
 
-    const handleRegresar = () => {
-        navigate('/gerente/gestion'); // Cambia '/another' por la ruta deseada
-    };
 
     return (
         <div className="home-screen">
             <header className="header">
                 <img src={fondoVet} alt="Veterinary Clinic" className="header-image" />
             </header>
-            <NavGerente />
+            <NavAdmin />
             <main className="crud">
-                <h1>Gestión de Administradores</h1>
-                <CreateAdmin />
-                <ModifyAdmin />
+                <h1>Gestión de clientes</h1>
+                <CreateCliente />
+                <ModifyCliente />
                 <h2>Listado de Personas</h2>
                 <table>
                     <thead>
@@ -110,7 +92,6 @@ function AdminList() {
                             <th>Contraseña</th>
                             <th>Puesto</th>
                             <th>Sexo</th>
-                            <th>Sucursal</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -125,7 +106,6 @@ function AdminList() {
                                 <td>{persona.PasswordPersona}</td>
                                 <td>{tiposPersona[persona.TipoPersona]}</td>
                                 <td>{sexos[persona.Sexo]}</td>
-                                <td>{sucursales[persona.Sucursal]}</td>
                                 <td>
                                     <button onClick={() => handleDelete(persona.IdPersona)}>Eliminar</button>
                                 </td>
@@ -138,4 +118,4 @@ function AdminList() {
     );
 }
 
-export default AdminList
+export default ClienteListAdmin;

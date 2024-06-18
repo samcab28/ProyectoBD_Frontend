@@ -17,6 +17,9 @@ import Usuarios from '../pantallas/pantallaAdmin/Usuarios';
 import ModificarUsuario from '../pantallas/pantallaAdmin/ModificarUsuario';
 import CarritosDeCompra from '../pantallas/pantallaAdmin/CarritosDeCompra';
 
+import CRUDMasterAdmin from '../pantallas/pantallaAdmin/CRUDMasterAdmin';
+
+
 const RouteAdmin = () => {
     return (
         <Routes>
@@ -31,6 +34,12 @@ const RouteAdmin = () => {
             <Route path='/usuarios/modificar' element={<ModificarUsuario />} />
             <Route path='/expedienteCliente' element={<ExpedienteClienteAdmin />} />
             <Route path='/producto' element={<ProductoAdmin />} />
+
+            <Route path='/gestion' element={<CRUDMasterAdmin />} />
+            <Route path='/gestion/cliente' element={<ClienteListAdmin />} />
+            <Route path='/gestion/veterinario' element={<VetListAdmin />} />
+            <Route path='/gestion/producto' element={<ProductListAdmin />} />
+            <Route path='/gestion/resena' element={<ResenaListAdmin />} />
         </Routes>
     );
 };
