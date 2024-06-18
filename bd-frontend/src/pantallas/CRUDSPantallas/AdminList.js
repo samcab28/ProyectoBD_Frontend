@@ -1,8 +1,8 @@
-import React, { useState, useEffect} from 'react';
+import React, { useState, useEffect, useContext} from 'react';
 import { useNavigate } from 'react-router-dom';
 import fondoVet from "../../Imagenes/FondoVet.jpg";
 import NavGerente from '../pantallaGerente/NavGerente';
-
+import { UserContext } from '../../context/UserContext';
 import CreateAdmin from './CreateAdmin';
 import ModifyAdmin from './ModifyAdmin';
 
@@ -13,9 +13,11 @@ function AdminList() {
     const [sexos, setSexos] = useState({});
     const [sucursales, setSucursales] = useState({});
 
+    const { user } = useContext(UserContext);
+
     useEffect(() => {
         // Fetch personas 
-        fetch('http://localhost:3001/persona/tipo/1')
+        fetch(`http://localhost:3001/persona/sucursal/${user.Sucursal}`)
             .then(response => response.json())
             .then(data => {
                 console.log("Personas fetched:", data); // Debug line
@@ -108,7 +110,6 @@ function AdminList() {
                             <th>Contraseña</th>
                             <th>Puesto</th>
                             <th>Sexo</th>
-                            <th>Acciones</th>
                             <th>Sucursal</th>
                         </tr>
                     </thead>
