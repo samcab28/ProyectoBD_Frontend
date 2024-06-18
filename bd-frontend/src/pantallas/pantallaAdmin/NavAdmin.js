@@ -30,11 +30,7 @@ function NavAdmin() {
                         <button className="action-button" onClick={() => handleClick('Navegación', 'Citas Médicas')}>Citas Médicas</button>
                     </Link>
                 </li>
-                <li>
-                    <Link to="/admin/usuarios">
-                        <button className="action-button" onClick={() => handleClick('Navegación', 'Usuarios')}>Usuarios</button>
-                    </Link>
-                </li>
+                
                 <li>
                     <Link to="/admin/cobro">
                         <button className="action-button" onClick={() => handleClick('Navegación', 'Cobro')}>Cobro</button>

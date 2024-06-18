@@ -21,9 +21,6 @@ function NavVet() {
                     <button className="action-button" onClick={() => handleNavigation('/veterinario/')}>Home</button>
                 </li>
                 <li>
-                    <button className="action-button" onClick={() => handleNavigation('/crud/')}>Gestión</button>
-                </li>
-                <li>
                     <button className="action-button" onClick={() => handleNavigation('/veterinario/medicamento')}>Medicamentos Disponibles</button>
                 </li>
                 <li>
