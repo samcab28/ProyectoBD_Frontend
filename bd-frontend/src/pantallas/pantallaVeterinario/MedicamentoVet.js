@@ -64,7 +64,7 @@ function MedicamentoVet() {
             </header>
             <NavVeterinario />
             <main className="main-content">
-                <h1>Lista de Productos</h1>
+                <h2>Lista de Productos</h2>
                 <h3>Seleccione la sucursal donde desea ver los productos</h3>
                 <form>
                     <label>

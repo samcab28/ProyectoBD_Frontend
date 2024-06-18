@@ -9,7 +9,6 @@ import InitialAdmin from '../pantallas/pantallaAdmin/InitialAdmin';
 import CitasMedicasAdmin from "../pantallas/pantallaAdmin/CitasMedicasAdmin";
 import CobroAdmin from "../pantallas/pantallaAdmin/CobroAdmin";
 import ExpedienteClienteAdmin from "../pantallas/pantallaAdmin/ExpedienteClienteAdmin";
-import ProductoAdmin from "../pantallas/pantallaAdmin/ProductoAdmin";
 import GestionCitas from '../pantallas/pantallaAdmin/GestionCitas';
 import AsignacionPersonal from '../pantallas/pantallaAdmin/AsignacionPersonal';
 import CancelarCita from '../pantallas/pantallaAdmin/CancelarCita';
