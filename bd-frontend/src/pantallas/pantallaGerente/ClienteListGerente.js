@@ -1,20 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import fondoVet from "../../Imagenes/FondoVet.jpg";
-import NavGerente from '../pantallaGerente/NavGerente';
+import NavGerente from './NavGerente';
 
-import CreateVet from './CreateVet';
-import ModifyVet from './ModifiyVet';
+import CreateCliente from '../CRUDSPantallas/CreateCliente';
+import ModifyCliente from '../CRUDSPantallas/ModifyCliente';
 
-function VetList() {
+function ClienteList() {
     const navigate = useNavigate();
     const [personas, setPersonas] = useState([]);
     const [tiposPersona, setTiposPersona] = useState({});
     const [sexos, setSexos] = useState({});
 
+
     useEffect(() => {
         // Fetch personas
-        fetch('http://localhost:3001/persona/tipo/2')
+        fetch('http://localhost:3001/persona/tipo/3')
             .then(response => response.json())
             .then(data => {
                 console.log("Personas fetched:", data); // Debug line
@@ -49,8 +50,8 @@ function VetList() {
                 setSexos(sexosMap);
             })
             .catch(error => console.error('Error fetching sexos:', error));
-    }, []);
 
+    }, []);
 
     function handleDelete(id) {
         fetch(`http://localhost:3001/persona/${id}`, {
@@ -74,51 +75,50 @@ function VetList() {
     return (
         <div className="home-screen">
             <header className="header">
-                <img src={fondoVet} alt="Veterinary Clinic" className="header-image"/>
+                <img src={fondoVet} alt="Veterinary Clinic" className="header-image" />
             </header>
-            <NavGerente/>
+            <NavGerente />
             <main className="crud">
-            <h1>Gestión de Veterinarios</h1>
-            <CreateVet/>
-            <ModifyVet/>
-            <h3>Listado de Veterinarios</h3>
-            <table>
-                <thead>
-                <tr>
-                    <th>Id</th>
-                    <th>Nombre</th>
-                    <th>Apellido</th>
-                    <th>Correo</th>
-                    <th>Teléfono</th>
-                    <th>Usuario</th>
-                    <th>Contraseña</th>
-                    <th>Puesto</th>
-                    <th>Sexo</th>
-                    <th>Acciones</th>
-                </tr>
-                </thead>
-                <tbody>
-                {personas.map(persona => (
-                    <tr key={persona.IdPersona}>
-                        <td>{persona.IdPersona}</td>
-                        <td>{persona.NombrePersona}</td>
-                        <td>{persona.ApellidoPersona}</td>
-                        <td>{persona.CorreoPersona}</td>
-                        <td>{persona.TelefonoPersona}</td>
-                        <td>{persona.UsuarioPersona}</td>
-                        <td>{persona.PasswordPersona}</td>
-                        <td>{tiposPersona[persona.TipoPersona]}</td>
-                        <td>{sexos[persona.Sexo]}</td>
-                        <td>
-                            <button onClick={() => handleDelete(persona.IdPersona)}>Eliminar</button>
-                        </td>
-                    </tr>
-                ))}
-                </tbody>
-            </table>
+                <h1>Gestión de clientes</h1>
+                <CreateCliente />
+                <ModifyCliente />
+                <h2>Listado de Personas</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Nombre</th>
+                            <th>Apellido</th>
+                            <th>Correo</th>
+                            <th>Teléfono</th>
+                            <th>Usuario</th>
+                            <th>Contraseña</th>
+                            <th>Puesto</th>
+                            <th>Sexo</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {personas.map(persona => (
+                            <tr key={persona.IdPersona}>
+                                <td>{persona.IdPersona}</td>
+                                <td>{persona.NombrePersona}</td>
+                                <td>{persona.ApellidoPersona}</td>
+                                <td>{persona.CorreoPersona}</td>
+                                <td>{persona.TelefonoPersona}</td>
+                                <td>{persona.UsuarioPersona}</td>
+                                <td>{persona.PasswordPersona}</td>
+                                <td>{tiposPersona[persona.TipoPersona]}</td>
+                                <td>{sexos[persona.Sexo]}</td>
+                                <td>
+                                    <button onClick={() => handleDelete(persona.IdPersona)}>Eliminar</button>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
             </main>
-       </div>
+        </div>
     );
 }
 
-export default VetList
+export default ClienteList

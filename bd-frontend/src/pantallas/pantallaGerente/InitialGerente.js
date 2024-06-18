@@ -21,7 +21,7 @@ function InitialGerente() {
             </header>
             <NavGerente/>
             <main className="main-content">
-                <h2>expediente gerente</h2>
+                <h2>Expediente Gerente</h2>
             </main>
         </div>
     );
