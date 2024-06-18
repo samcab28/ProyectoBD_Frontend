@@ -37,8 +37,6 @@ const RouteAdmin = () => {
             
             <Route path='/usuarios/modificar' element={<ModificarUsuario />} />
             <Route path='/expedienteCliente' element={<ExpedienteClienteAdmin />} />
-            <Route path='/producto' element={<ProductoAdmin />} />
-
 
             <Route path='/gestion' element={<CRUDMasterAdmin />} />
             <Route path='/gestion/cliente' element={<ClienteListAdmin />} />

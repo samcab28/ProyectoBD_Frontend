@@ -26,12 +26,7 @@ function NavAdmin() {
                     <Link to="/admin/gestion">
                         <button className="action-button" onClick={() => handleClick('Navegación', 'Gestión General')}>Gestión General</button>
                     </Link>
-                    <Link to="/crud/">
-                        <button className="action-button"
-                                onClick={() => handleClick('Navegación', 'Gestión General')}>Gestión General
-                        </button>
-
-                    </Link>
+                    
                 </li>
                 <li>
                     <Link to="/admin/citasMedica">
@@ -41,15 +36,6 @@ function NavAdmin() {
                     </Link>
                 </li>
 
-                
-
-                <li>
-                    <Link to="/admin/usuarios">
-                        <button className="action-button"
-                                onClick={() => handleClick('Navegación', 'Usuarios')}>Usuarios
-                        </button>
-                    </Link>
-                </li>
 
                 <li>
                     <Link to="/admin/cobro">
@@ -65,15 +51,6 @@ function NavAdmin() {
                     </Link>
                 </li>
 
-        
-
-                <li>
-                    <Link to="/admin/producto">
-                        <button className="action-button"
-                                onClick={() => handleClick('Navegación', 'Productos')}>Productos
-                        </button>
-                    </Link>
-                </li>
                 <li>
                     <Link to="/admin/historial">
                         <button className="action-button"
