@@ -16,6 +16,7 @@ import CancelarCita from '../pantallas/pantallaAdmin/CancelarCita';
 import Usuarios from '../pantallas/pantallaAdmin/Usuarios';
 import ModificarUsuario from '../pantallas/pantallaAdmin/ModificarUsuario';
 import CarritosDeCompra from '../pantallas/pantallaAdmin/CarritosDeCompra';
+import HistorialLoginAdmin from "../pantallas/pantallaAdmin/HistorialLoginAdmin";
 
 const RouteAdmin = () => {
     return (
@@ -31,6 +32,7 @@ const RouteAdmin = () => {
             <Route path='/usuarios/modificar' element={<ModificarUsuario />} />
             <Route path='/expedienteCliente' element={<ExpedienteClienteAdmin />} />
             <Route path='/producto' element={<ProductoAdmin />} />
+            <Route path='/historial' element={<HistorialLoginAdmin />} />
         </Routes>
     );
 };
