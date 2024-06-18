@@ -18,6 +18,10 @@ import ModificarUsuario from '../pantallas/pantallaAdmin/ModificarUsuario';
 import CarritosDeCompra from '../pantallas/pantallaAdmin/CarritosDeCompra';
 
 import CRUDMasterAdmin from '../pantallas/pantallaAdmin/CRUDMasterAdmin';
+import ResenaListAdmin from '../pantallas/pantallaAdmin/ResenaListAdmin';
+import VetListAdmin from '../pantallas/pantallaAdmin/VetListAdmin';
+import ProductoListAdmin from '../pantallas/pantallaAdmin/ProductoListAdmin';
+import ClienteListAdmin from '../pantallas/pantallaAdmin/ClienteListAdmin';
 
 
 const RouteAdmin = () => {
@@ -38,7 +42,7 @@ const RouteAdmin = () => {
             <Route path='/gestion' element={<CRUDMasterAdmin />} />
             <Route path='/gestion/cliente' element={<ClienteListAdmin />} />
             <Route path='/gestion/veterinario' element={<VetListAdmin />} />
-            <Route path='/gestion/producto' element={<ProductListAdmin />} />
+            <Route path='/gestion/producto' element={<ProductoListAdmin />} />
             <Route path='/gestion/resena' element={<ResenaListAdmin />} />
         </Routes>
     );

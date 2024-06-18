@@ -78,7 +78,7 @@ function ProductListAdmin() {
                                 <td>{productos.Dirrecion}</td>
                                 <td>
                                     <button onClick={() => handleDelete(productos.IdProducto)}>Eliminar</button>
-                                    <button onClick={() => handleMod(productos.IdProducto)}>Modificar</button>
+                                   
                                 </td>
                             </tr>
                         ))}

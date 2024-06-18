@@ -21,7 +21,7 @@ function NavAdmin() {
                     </Link>
                 </li>
                 <li>
-                    <Link to="/crud/">
+                    <Link to="/admin/gestion">
                         <button className="action-button" onClick={() => handleClick('Navegación', 'Gestión General')}>Gestión General</button>
                     </Link>
                 </li>
