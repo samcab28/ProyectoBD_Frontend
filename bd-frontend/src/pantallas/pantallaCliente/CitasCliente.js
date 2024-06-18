@@ -75,9 +75,11 @@ function CitasMedicas() {
         event.preventDefault();
         // Validaciones
         const today = new Date();
+        console.log(today);
         const maxDate = new Date();
         maxDate.setDate(today.getDate() + 15);
         const selectedDate = new Date(nuevaCita.FechaCita);
+        console.log(selectedDate);
 
         if (selectedDate < today || selectedDate > maxDate) {
             setError('La fecha debe estar entre hoy y una semana a partir de hoy.');
@@ -112,6 +114,7 @@ function CitasMedicas() {
         })
         .then(response => {
             if (!response.ok) {
+                alert("Cita no creada")
                 return response.json().then(error => { throw new Error(error.message) });
             }
             return response.json();

@@ -59,18 +59,18 @@ function CreateProduct() {
 
     function handleSubmit(e) {
         e.preventDefault();
-
+    
         const newProducto = {
             NombreProducto: nombreProducto,
             PrecioProducto: parseFloat(precioProducto),
             DescripcionProducto: descripcionProducto,
-            CantidadDisponible: parseInt(cantidadDisponible),
-            NombreSucursal: parseInt(nombreSucursal),
-            TipoProducto: parseInt(tipoProducto),
-            NombreMarcaPro: parseInt(nombreMarcaPro),
-            Direccion: parseInt(url)
+            Cantidad: parseInt(cantidadDisponible),
+            IdSucursal: parseInt(nombreSucursal),
+            IdTipoPro: parseInt(tipoProducto),
+            IdMarcaPro: parseInt(nombreMarcaPro),
+            IdURL: url
         };
-
+    
         fetch('http://localhost:3001/producto', {
             method: 'POST',
             headers: {
@@ -144,7 +144,7 @@ function CreateProduct() {
                     >
                         <option value="">Selecciona una sucursal</option>
                         {sucursales.map(sucursal => (
-                            <option key={sucursal.IdSucursal} value={sucursal.NombreSucursal}>{sucursal.NombreSucursal}</option>
+                            <option key={sucursal.IdSucursal} value={sucursal.IdSucursal}>{sucursal.NombreSucursal}</option>
                         ))}
                     </select>
                 </label>
@@ -158,7 +158,7 @@ function CreateProduct() {
                     >
                         <option value="">Selecciona un tipo de producto</option>
                         {tiposProducto.map(tipo => (
-                            <option key={tipo.IdTipoPro} value={tipo.TipoProducto}>{tipo.TipoProducto}</option>
+                            <option key={tipo.IdTipoPro} value={tipo.IdTipoPro}>{tipo.TipoProducto}</option>
                         ))}
                     </select>
                 </label>
@@ -172,7 +172,7 @@ function CreateProduct() {
                     >
                         <option value="">Selecciona una marca</option>
                         {marcasProducto.map(marca => (
-                            <option key={marca.IdMarcaPro} value={marca.NombreMarcaPro}>{marca.NombreMarcaPro}</option>
+                            <option key={marca.IdMarcaPro} value={marca.IdMarcaPro}>{marca.NombreMarcaPro}</option>
                         ))}
                     </select>
                 </label>
@@ -186,7 +186,7 @@ function CreateProduct() {
                     >
                         <option value="">Selecciona una URL</option>
                         {urls.map(urlObj => (
-                            <option key={urlObj.IdUrl} value={urlObj.Dirrecion}>{urlObj.Dirrecion}</option>
+                            <option key={urlObj.IdUrl} value={urlObj.IdUrl}>{urlObj.Dirrecion}</option>
                         ))}
                     </select>
                 </label>
