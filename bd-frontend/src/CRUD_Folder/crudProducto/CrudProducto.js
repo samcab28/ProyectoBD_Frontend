@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom';
 import CreateProducto from './CreateProducto';
 
-function ProductoList(){
+function ProductoList() {
     const navigate = useNavigate();
     const [productos, setProductos] = useState([]);
-    
+
     // fetch producto
     useEffect(() => {
         fetch('http://localhost:3001/producto')
@@ -15,7 +15,7 @@ function ProductoList(){
                 setProductos(data);
             })
             .catch(error => console.error('Error fetching producto:', error));
-    }, [])
+    }, []);
 
     function handleDelete(id) {
         fetch(`http://localhost:3001/producto/${id}`, {
@@ -23,8 +23,7 @@ function ProductoList(){
         })
             .then(response => {
                 if (response.ok) {
-                    setProductos(productos.filter(productos => productos.IdProducto!== id));
-                    window.location.reload();
+                    setProductos(productos.filter(producto => producto.IdProducto !== id));
                 } else {
                     alert('Error deleting producto');
                 }
@@ -33,56 +32,56 @@ function ProductoList(){
     }
 
     const handleRegresar = () => {
-        navigate('/crud'); // Cambia '/another' por la ruta deseada
+        navigate('/crud'); // Cambia '/crud' por la ruta deseada
     };
 
-    const handleMod = () => {
-        console.log("implementar");
+    const handleMod = (id) => {
+        console.log("Modificar producto con Id:", id);
     };
 
-
-    return(
+    return (
         <div>
             <h1>Crud de productos</h1>
-            <CreateProducto/>
+            <CreateProducto />
             <h2>Listado de productos</h2>
             <table>
                 <thead>
-                <tr>
-                    <th>Id</th>
-                    <th>Nombre</th>
-                    <th>Precio</th>
-                    <th>Decripcion</th>
-                    <th>Cantidad</th>
-                    <th>Sucursal</th>
-                    <th>Tipo de producto</th>
-                    <th>Marca</th>
-                    <th>URL</th>
-                </tr>
+                    <tr>
+                        <th>Id</th>
+                        <th>Nombre</th>
+                        <th>Precio</th>
+                        <th>Descripcion</th>
+                        <th>Cantidad</th>
+                        <th>Sucursal</th>
+                        <th>Tipo de producto</th>
+                        <th>Marca</th>
+                        <th>URL</th>
+                        <th>Acciones</th>
+                    </tr>
                 </thead>
                 <tbody>
-                {productos.map(productos => (
-                    <tr key={productos.IdProducto}>
-                        <td>{productos.IdProducto}</td>
-                        <td>{productos.NombreProducto}</td>
-                        <td>{productos.PrecioProducto}</td>
-                        <td>{productos.DescripcionProducto}</td>
-                        <td>{productos.CantidadDisponible}</td>
-                        <td>{productos.NombreSucursal}</td>
-                        <td>{productos.TipoProducto}</td>
-                        <td>{productos.NombreMarcaPro}</td>
-                        <td>{productos.Dirrecion}</td>
-                        <td>
-                            <button onClick={() => handleDelete(productos.IdProducto)}>Eliminar</button>
-                            <button onClick={() => handleMod(productos.IdProducto)}>Modificar</button>
-                        </td>
-                    </tr>
-                ))}
+                    {productos.map(producto => (
+                        <tr key={producto.IdProducto}>
+                            <td>{producto.IdProducto}</td>
+                            <td>{producto.NombreProducto}</td>
+                            <td>{producto.PrecioProducto}</td>
+                            <td>{producto.DescripcionProducto}</td>
+                            <td>{producto.CantidadDisponible}</td>
+                            <td>{producto.NombreSucursal}</td>
+                            <td>{producto.TipoProducto}</td>
+                            <td>{producto.NombreMarcaPro}</td>
+                            <td>{producto.Dirrecion}</td>
+                            <td>
+                                <button onClick={() => handleDelete(producto.IdProducto)}>Eliminar</button>
+                                <button onClick={() => handleMod(producto.IdProducto)}>Modificar</button>
+                            </td>
+                        </tr>
+                    ))}
                 </tbody>
             </table>
-            <button onClick={handleRegresar}>regresar</button>
+            <button onClick={handleRegresar}>Regresar</button>
         </div>
-    )
+    );
 }
 
 export default ProductoList;

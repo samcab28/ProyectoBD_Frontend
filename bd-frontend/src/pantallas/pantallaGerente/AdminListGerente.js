@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useContext} from 'react';
 import { useNavigate } from 'react-router-dom';
 import fondoVet from "../../Imagenes/FondoVet.jpg";
-import NavGerente from '../pantallaGerente/NavGerente';
+import NavGerente from './NavGerente';
 import { UserContext } from '../../context/UserContext';
-import CreateAdmin from './CreateAdmin';
-import ModifyAdmin from './ModifyAdmin';
+import CreateAdmin from '../CRUDSPantallas/CreateAdmin';
+import ModifyAdmin from '../CRUDSPantallas/ModifyAdmin';
 
 function AdminList() {
     const navigate = useNavigate();

@@ -34,7 +34,7 @@ function CitaMedicaVet() {
             </header>
             <NavVeterinario />
             <main className="main-content">
-                <h2>citas medicas veterinario</h2>
+                <h2>Citas Médicas</h2>
                 <div className="product-grid">
                     {citas.length > 0 ? (
                         citas.map(cita => (

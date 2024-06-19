@@ -27,7 +27,7 @@ function MascotaCliente() {
                 setSexos(data);
             })
             .catch(error => console.error('Error fetching sexos:', error));
-        
+
 
         // Fetch animales
         fetch('http://localhost:3001/animal')
@@ -72,7 +72,7 @@ function MascotaCliente() {
             .then(response => {
                 if (response.ok) {
                     alert('mascota creada exitosamente');
-                    logHistorialClick( user,"Nueva Mascota", `${newMascota.NombreMascota}`);
+                    logHistorialClick(user, "Nueva Mascota", `${newMascota.NombreMascota}`);
                     window.location.reload(); // Recargar la página
                 } else {
                     alert('Error al crear mascota');
@@ -83,13 +83,13 @@ function MascotaCliente() {
             });
     }
 
-    if(mascotas!=0){
+    if (mascotas != 0) {
         return (
             <div className="home-screen">
                 <header className="header">
-                    <img src={fondoVet} alt="Veterinary Clinic" className="header-image"/>
+                    <img src={fondoVet} alt="Veterinary Clinic" className="header-image" />
                 </header>
-                <NavCliente/>
+                <NavCliente />
                 <main className="main-content">
                     <h2>Lista de Mascotas</h2>
                     <div className="product-grid">
@@ -116,7 +116,7 @@ function MascotaCliente() {
                                 onChange={e => setNombreMascota(e.target.value)}
                             />
                         </label>
-                        <br/>
+                        <br />
 
                         <label>
                             Edad:
@@ -127,7 +127,7 @@ function MascotaCliente() {
                                 onChange={e => setEdad(e.target.value)}
                             />
                         </label>
-                        <br/>
+                        <br />
 
                         <label>
                             Tipo Sexo:
@@ -142,7 +142,7 @@ function MascotaCliente() {
                                 ))}
                             </select>
                         </label>
-                        <br/>
+                        <br />
 
                         <label>
                             Nombre Animal:
@@ -157,7 +157,7 @@ function MascotaCliente() {
                                 ))}
                             </select>
                         </label>
-                        <br/>
+                        <br />
                         <button className="form-button" type="submit">Agregar mascota</button>
                     </form>
                 </main>
@@ -167,15 +167,71 @@ function MascotaCliente() {
         return (
             <div className="home-screen">
                 <header className="header">
-                    <img src={fondoVet} alt="Veterinary Clinic" className="header-image"/>
+                    <img src={fondoVet} alt="Veterinary Clinic" className="header-image" />
                 </header>
-                <NavCliente/>
+                <NavCliente />
                 <main className="main-content">
                     <h2>Lista de Mascotas</h2>
-                    <br/>
+                    <br />
                     <h2>El cliente no cuenta con mascotas registradas en el sistema</h2>
+                    <h2>Agregar mascota</h2>
+                    <form onSubmit={handleSubmit}>
+                        <label>
+                            Nombre Mascota:
+                            <input
+                                name="nombreMascota"
+                                type="text"
+                                value={nombreMascota}
+                                onChange={e => setNombreMascota(e.target.value)}
+                            />
+                        </label>
+                        <br />
+
+                        <label>
+                            Edad:
+                            <input
+                                name="edad"
+                                type="text"
+                                value={edad}
+                                onChange={e => setEdad(e.target.value)}
+                            />
+                        </label>
+                        <br />
+
+                        <label>
+                            Tipo Sexo:
+                            <select
+                                name="tipoSexo"
+                                value={tipoSexo}
+                                onChange={e => setTipoSexo(e.target.value)}
+                            >
+                                <option value="">Selecciona un sexo</option>
+                                {sexos.map(sexo => (
+                                    <option key={sexo.IdSexo} value={sexo.IdSexo}>{sexo.TipoSexo}</option>
+                                ))}
+                            </select>
+                        </label>
+                        <br />
+
+                        <label>
+                            Nombre Animal:
+                            <select
+                                name="nombreAnimal"
+                                value={nombreAnimal}
+                                onChange={e => setNombreAnimal(e.target.value)}
+                            >
+                                <option value="">Selecciona un animal</option>
+                                {animales.map(animal => (
+                                    <option key={animal.IdAnimal} value={animal.IdAnimal}>{animal.NombreAnimal}</option>
+                                ))}
+                            </select>
+                        </label>
+                        <br />
+                        <button className="form-button" type="submit">Agregar mascota</button>
+                    </form>
                 </main>
             </div>
+
         );
     }
 
