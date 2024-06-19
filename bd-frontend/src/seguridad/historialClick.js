@@ -2,7 +2,7 @@
 
 const logHistorialClick = async (user, accion, detalle) => {
     try {
-        await fetch('http://localhost:3001/HistorialClick', {
+        const response = await fetch('http://localhost:3001/HistorialClick', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -14,6 +14,10 @@ const logHistorialClick = async (user, accion, detalle) => {
                 Detalle: detalle
             }),
         });
+
+        if (!response.ok) {
+            console.error('Error al registrar el historial de clics:', response.statusText);
+        }
     } catch (error) {
         console.error('Error logging historial click:', error);
     }

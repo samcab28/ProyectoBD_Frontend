@@ -23,8 +23,10 @@ function CitasMedicas() {
     });
     const [error, setError] = useState('');
 
+    const esClienteContado = user && user.IdPersona === 37;
+
     useEffect(() => {
-        if (user && user.IdPersona) {
+        if (user && user.IdPersona && !esClienteContado) {
             fetch(`http://localhost:3001/citaMedica/${user.IdPersona}/${estadoCita}`)
                 .then(response => response.json())
                 .then(data => {
@@ -112,6 +114,7 @@ function CitasMedicas() {
         })
         .then(response => {
             if (!response.ok) {
+                alert("Cita no creada")
                 return response.json().then(error => { throw new Error(error.message) });
             }
             return response.json();
@@ -196,31 +199,39 @@ function CitasMedicas() {
             </header>
             <NavCliente />
             <main className="main-content">
-                <h2>Crear Nueva Cita Médica</h2>
-                {error && <p className="error-message">{error}</p>}
-                <div className="form-container">
-                    <form onSubmit={handleSubmit}>
-                        <label>Fecha: </label>
-                        <input type="date" name="FechaCita" value={nuevaCita.FechaCita} onChange={handleChange} required />
-                        <label>Duración en minutos: </label>
-                        <input type="number" name="DuracionCita" value={nuevaCita.DuracionCita} onChange={handleChange} min="15" max="30" required />
-                        <label>Mascota: </label>
-                        <select name="IdMascota" value={nuevaCita.IdMascota} onChange={handleChange} required>
-                            <option value="">-- Seleccione una Mascota --</option>
-                            {mascotas.map(mascota => (
-                                <option key={mascota.IdMascota} value={mascota.IdMascota}>{mascota.NombreMascota}</option>
-                            ))}
-                        </select>
-                        <label>Veterinario: </label>
-                        <select name="IdEncargado" value={nuevaCita.IdEncargado} onChange={handleChange} required>
-                            <option value="">-- Seleccione un Veterinario --</option>
-                            {veterinarios.map(vet => (
-                                <option key={vet.IdPersona} value={vet.IdPersona}>{vet.NombrePersona} {vet.ApellidoPersona}</option>
-                            ))}
-                        </select>
-                        <button type="submit">Crear Cita</button>
-                    </form>
-                </div>
+                {esClienteContado ? (
+                    <div className="warning">
+                        <p>Para generar una cita médica, debe registrarse. Esta funcionalidad está deshabilitada para el cliente contado.</p>
+                    </div>
+                ) : (
+                    <>
+                        <h2>Crear Nueva Cita Médica</h2>
+                        {error && <p className="error-message">{error}</p>}
+                        <div className="form-container">
+                            <form onSubmit={handleSubmit}>
+                                <label>Fecha: </label>
+                                <input type="date" name="FechaCita" value={nuevaCita.FechaCita} onChange={handleChange} required />
+                                <label>Duración en minutos: </label>
+                                <input type="number" name="DuracionCita" value={nuevaCita.DuracionCita} onChange={handleChange} min="15" max="30" required />
+                                <label>Mascota: </label>
+                                <select name="IdMascota" value={nuevaCita.IdMascota} onChange={handleChange} required>
+                                    <option value="">-- Seleccione una Mascota --</option>
+                                    {mascotas.map(mascota => (
+                                        <option key={mascota.IdMascota} value={mascota.IdMascota}>{mascota.NombreMascota}</option>
+                                    ))}
+                                </select>
+                                <label>Veterinario: </label>
+                                <select name="IdEncargado" value={nuevaCita.IdEncargado} onChange={handleChange} required>
+                                    <option value="">-- Seleccione un Veterinario --</option>
+                                    {veterinarios.map(vet => (
+                                        <option key={vet.IdPersona} value={vet.IdPersona}>{vet.NombrePersona} {vet.ApellidoPersona}</option>
+                                    ))}
+                                </select>
+                                <button type="submit">Crear Cita</button>
+                            </form>
+                        </div>
+                    </>
+                )}
                 <h2>Lista de Citas Médicas</h2>
                 <div className="form-container">
                     <label>Estado de la Cita: </label>

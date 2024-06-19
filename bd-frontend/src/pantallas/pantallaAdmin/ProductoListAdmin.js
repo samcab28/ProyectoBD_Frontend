@@ -5,6 +5,7 @@ import NavAdmin from './NavAdmin';
 import { UserContext } from '../../context/UserContext';
 
 import CreateProduct from '../CRUDSPantallas/CreateProduct';
+import ModifyProduct from '../CRUDSPantallas/ModifyProduct';
 
 function ProductListAdmin() {
     const { user } = useContext(UserContext);
@@ -26,18 +27,20 @@ function ProductListAdmin() {
         fetch(`http://localhost:3001/producto/${id}`, {
             method: 'DELETE',
         })
+        
             .then(response => {
                 if (response.ok) {
-                    setProductos(productos.filter(productos => productos.IdProducto !== id));
+                    setProductos(productos.filter(producto => producto.IdProducto !== id));
                     window.location.reload();
                 } else {
                     alert('Error deleting producto');
                 }
             })
             .catch(error => console.error('Error deleting producto:', error));
+            
     }
 
-    
+
 
 
     return (
@@ -48,7 +51,8 @@ function ProductListAdmin() {
             <NavAdmin />
             <main className="crud">
                 <h1>Gestión de Productos</h1>
-                <CreateProduct/>
+                <CreateProduct />
+                <ModifyProduct />
                 <h2>Listado de productos</h2>
                 <table>
                     <thead>
@@ -78,13 +82,13 @@ function ProductListAdmin() {
                                 <td>{productos.Dirrecion}</td>
                                 <td>
                                     <button onClick={() => handleDelete(productos.IdProducto)}>Eliminar</button>
-                                   
+
                                 </td>
                             </tr>
                         ))}
                     </tbody>
                 </table>
-                </main>
+            </main>
         </div>
     )
 }
