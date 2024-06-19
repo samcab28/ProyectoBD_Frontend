@@ -112,7 +112,7 @@ function Login() {
         }
     };
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
         const foundPersona = personas.find(persona => persona.UsuarioPersona === username && persona.PasswordPersona === password);
 
@@ -122,7 +122,7 @@ function Login() {
                 return;
             }
 
-            registroHistorialLogin(true, username, password);
+            await registroHistorialLogin(true, username, password);
             setUser(foundPersona); // Almacena el usuario en el contexto y en localStorage
             switch (foundPersona.TipoPersona) {
                 case 1:
@@ -141,7 +141,7 @@ function Login() {
                     break;
             }
         } else {
-            registroHistorialLogin(false, username, password);
+            await registroHistorialLogin(false, username, password);
             console.log('Invalid username or password');
         }
         setUsername('');
