@@ -37,16 +37,6 @@ function NavCliente() {
                     </Link>
                 </li>
                 <li>
-                    <Link to="/cliente/about">
-                        <button 
-                            className="action-button" 
-                            onClick={() => handleNavigationClick('Navegación', 'About')}
-                        >
-                            About
-                        </button>
-                    </Link>
-                </li>
-                <li>
                     <Link to="/cliente/carrito">
                         <button 
                             className="action-button" 
