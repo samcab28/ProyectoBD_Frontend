@@ -1,3 +1,4 @@
+// seguridad/NotificacionHistorial.js
 const checkHistorialLoginMinuto = async () => {
     try {
         const moment = require('moment');
@@ -15,6 +16,10 @@ const checkHistorialLoginMinuto = async () => {
 
             if (cantidad > 2) {
                 alert('¡Alerta! Hay más indicios de login de lo normal');
+
+                // Bloquear al usuario
+                const username = data[0].username; // Ajusta esto según el formato de tus datos
+                await bloquearUsuario(username);
             }
         } else {
             console.error('Error: el formato de los datos no es el esperado o el campo cantidad está ausente.');
@@ -24,4 +29,19 @@ const checkHistorialLoginMinuto = async () => {
     }
 };
 
-export default {checkHistorialLoginMinuto};
+const bloquearUsuario = async (username) => {
+    try {
+        await fetch('http://localhost:3001/persona/bloquear', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ username }),
+        });
+        console.log(`Usuario ${username} ha sido bloqueado.`);
+    } catch (error) {
+        console.error('Error al bloquear el usuario:', error);
+    }
+};
+
+export default { checkHistorialLoginMinuto };

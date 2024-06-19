@@ -11,6 +11,7 @@ function HistorialLogin() {
     const { user } = useContext(UserContext); // Obtener el contexto del usuario
     const [info, setInfo] = useState([]);
     const [loginFallido, setLoginFallido] = useState([]);
+    const [usuariosBloqueados, setUsuariosBloqueados] = useState([]);
 
     useEffect(() => {
         // Fetch de historial completo login
@@ -32,6 +33,7 @@ function HistorialLogin() {
             })
             .catch(error => console.error('Error fetching informacion:', error));
 
+        fetchUsuariosBloqueados();
         confirmacionLoginFallido();
     }, []);
 
@@ -39,6 +41,32 @@ function HistorialLogin() {
         NotificacionHistorial.checkHistorialLoginMinuto()
             .then(cantidad => console.log(cantidad))
             .catch(error => console.error('Error:', error));
+    };
+
+    const fetchUsuariosBloqueados = () => {
+        fetch('http://localhost:3001/personas/bloqueadas')
+            .then(response => response.json())
+            .then(data => {
+                console.log("Usuarios bloqueados fetched:", data);
+                setUsuariosBloqueados(data);
+            })
+            .catch(error => console.error('Error fetching usuarios bloqueados:', error));
+    };
+
+    const handleDesbloquearUsuario = (id) => {
+        fetch(`http://localhost:3001/persona/desbloquear/${id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Error al desbloquear el usuario');
+            }
+            fetchUsuariosBloqueados(); // Actualizar la lista de usuarios bloqueados
+        })
+        .catch(error => console.error('Error desbloqueando usuario:', error));
     };
 
     const handleRowClick = (type, id) => {
@@ -52,6 +80,39 @@ function HistorialLogin() {
             </header>
             <NavGerente />
             <main className="main-content">
+                <h2>Usuarios Bloqueados</h2>
+                {usuariosBloqueados.length > 0 ? (
+                    <table className="styled-table">
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nombre</th>
+                            <th>Correo</th>
+                            <th>Acción</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {usuariosBloqueados.map(usuario => (
+                            <tr key={usuario.IdPersona}>
+                                <td>{usuario.IdPersona}</td>
+                                <td>{usuario.NombrePersona} {usuario.ApellidoPersona}</td>
+                                <td>{usuario.CorreoPersona}</td>
+                                <td>
+                                    <button 
+                                        className="form-button" 
+                                        onClick={() => handleDesbloquearUsuario(usuario.IdPersona)}
+                                    >
+                                        Desbloquear
+                                    </button>
+                                </td>
+                            </tr>
+                        ))}
+                        </tbody>
+                    </table>
+                ) : (
+                    <p>No hay usuarios bloqueados actualmente.</p>
+                )}
+
                 <h2>Registro de logins fallidos de los últimos cinco minutos</h2>
                 {loginFallido.length > 0 ? (
                     <table className="styled-table">

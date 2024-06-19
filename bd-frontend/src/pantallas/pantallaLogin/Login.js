@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { UserContext } from '../../context/UserContext';
 import '../../Styles/Login.css';
+import moment from 'moment';
 
 function Login() {
     const [username, setUsername] = useState('');
@@ -28,34 +29,87 @@ function Login() {
         setPassword(event.target.value);
     };
 
-    const registroHistorialLogin = (estado, username, password) => {
-        const moment = require('moment');
+    const registroHistorialLogin = async (estado, username, password) => {
         const horaActual = moment().format('YYYY-MM-DD HH:mm:ss');
 
         const newHistorial = {
-            "username" : username,
-            "passwordUser" : password,
-            "hora" : horaActual,
+            "username": username,
+            "passwordUser": password,
+            "hora": horaActual,
             "acceso": estado
         }
 
-        fetch('http://localhost:3001/HistorialLogin', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(newHistorial)
-        })
-            .then(response => {
-                if (response.ok) {
-                    console.log("registro de login exitoso")
-                } else {
-                    console.log("error en el registro de login")
-                }
-            })
-            .catch(error => {
-                console.error('Error en la solicitud:', error);
+        try {
+            const response = await fetch('http://localhost:3001/HistorialLogin', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(newHistorial)
             });
+
+            if (response.ok) {
+                console.log("registro de login exitoso")
+            } else {
+                console.log("error en el registro de login")
+            }
+        } catch (error) {
+            console.error('Error en el registro de login:', error);
+        }
+
+        if (!estado) {
+            const response = await fetch(`http://localhost:3001/HistorialLoginMinutoAll/${encodeURIComponent(horaActual)}`);
+            const data = await response.json();
+
+            const usernameFailedAttempts = data.filter(entry => entry.username === username && !entry.acceso);
+
+            if (usernameFailedAttempts.length >= 3) {
+                const foundPersona = personas.find(persona => persona.UsuarioPersona === username);
+
+                if (foundPersona) {
+                    try {
+                        await fetch(`http://localhost:3001/persona/bloquear/${foundPersona.IdPersona}`, {
+                            method: 'PUT',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            }
+                        });
+
+                        // Enviar correo de notificación
+                        await enviarCorreo([foundPersona.CorreoPersona], 'Cuenta Bloqueada', `Su cuenta ha sido bloqueada debido a múltiples intentos fallidos de inicio de sesión.`);
+
+                        alert(`El usuario ${username} ha sido bloqueado por múltiples intentos fallidos de inicio de sesión.`);
+                    } catch (error) {
+                        console.error('Error bloqueando el usuario:', error);
+                    }
+                }
+            }
+        }
+    };
+
+    const enviarCorreo = async (correos, asunto, mensaje) => {
+        try {
+            const response = await fetch('http://localhost:3001/enviarCorreo', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    correos: correos,
+                    asunto: asunto,
+                    mensaje: mensaje
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error('Error al enviar el correo');
+            }
+
+            const data = await response.json();
+            console.log('Correo enviado exitosamente:', data);
+        } catch (error) {
+            console.error('Error al enviar el correo:', error);
+        }
     };
 
     const handleSubmit = (event) => {
@@ -63,6 +117,11 @@ function Login() {
         const foundPersona = personas.find(persona => persona.UsuarioPersona === username && persona.PasswordPersona === password);
 
         if (foundPersona) {
+            if (foundPersona.Bloqueado) {
+                alert('Esta cuenta está bloqueada. Contacte al administrador.');
+                return;
+            }
+
             registroHistorialLogin(true, username, password);
             setUser(foundPersona); // Almacena el usuario en el contexto y en localStorage
             switch (foundPersona.TipoPersona) {
@@ -89,19 +148,16 @@ function Login() {
         setPassword('');
     };
 
-
     const handleContinueWithoutLogin = () => {
         const foundPersona = personas.find(persona => persona.UsuarioPersona === "UsuarioInvitado" && persona.PasswordPersona === "123");
 
-        if(foundPersona){
+        if (foundPersona) {
             setUser(foundPersona)
             navigate('/cliente');
-        }
-        else{
-            alert("error a la hora de la sesion")
+        } else {
+            alert("Error a la hora de la sesión");
         }
     };
-
 
     return (
         <div className="login-body">

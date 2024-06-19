@@ -12,8 +12,10 @@ function HistorialCompraCliente() {
     const [selectedPedido, setSelectedPedido] = useState(null);
     const [sortOption, setSortOption] = useState('antiguedad-desc');
 
+    const esClienteContado = user && user.IdPersona === 37;
+
     useEffect(() => {
-        if (user && user.IdPersona) {
+        if (user && user.IdPersona && !esClienteContado) {
             fetch(`http://localhost:3001/pedido/cliente/${user.IdPersona}`)
                 .then(response => response.json())
                 .then(data => {
@@ -81,41 +83,49 @@ function HistorialCompraCliente() {
             </header>
             <NavCliente/>
             <main className="main-content">
-                <h2>Historial del cliente</h2>
-                <label>Ordenar por: </label>
-                <select value={sortOption} onChange={handleSortChange}>
-                    <option value="antiguedad-asc">Antigüedad Ascendente</option>
-                    <option value="antiguedad-desc">Antigüedad Descendente</option>
-                    <option value="monto-asc">Monto Ascendente</option>
-                    <option value="monto-desc">Monto Descendente</option>
-                </select>
-                <div className="list-container">
-                    {pedidos.map(pedido => (
-                        <div className="list-item" key={pedido.IdPedido} onClick={() => handlePedidoClick(pedido)}>
-                            <div className="list-item-content">
-                                <p><strong>ID Pedido:</strong> {pedido.IdPedido}</p>
-                                <p><strong>Fecha:</strong> {new Date(pedido.FechaPedido).toLocaleDateString()}</p>
-                                <p><strong>Monto Total:</strong> {pedido.MontoTotal}</p>
-                                <p><strong>Estado:</strong> {pedido.EstadoPedido}</p>
-                            </div>
-                            {selectedPedido && selectedPedido.IdPedido === pedido.IdPedido && (
-                                <div className="details-container">
-                                    {detallesPedido.map(detalle => (
-                                        <div className="list-item-detail" key={detalle.IdProducto}>
-                                            <div className="list-item-detail-content">
-                                                <p><strong>Producto:</strong> {detalle.NombreProducto}</p>
-                                                <p><strong>Descripción:</strong> {detalle.DescripcionProducto}</p>
-                                                <p><strong>Marca:</strong> {detalle.NombreMarcaPro}</p>
-                                                <p><strong>Cantidad:</strong> {detalle.Cantidad}</p>
-                                                <p><strong>Precio:</strong> {detalle.PrecioProducto}</p>
-                                            </div>
+                {esClienteContado ? (
+                    <div className="warning">
+                        <p>Para ver el historial de compras, debe registrarse. Esta funcionalidad está deshabilitada para el cliente contado.</p>
+                    </div>
+                ) : (
+                    <>
+                        <h2>Historial del cliente</h2>
+                        <label>Ordenar por: </label>
+                        <select value={sortOption} onChange={handleSortChange}>
+                            <option value="antiguedad-asc">Antigüedad Ascendente</option>
+                            <option value="antiguedad-desc">Antigüedad Descendente</option>
+                            <option value="monto-asc">Monto Ascendente</option>
+                            <option value="monto-desc">Monto Descendente</option>
+                        </select>
+                        <div className="list-container">
+                            {pedidos.map(pedido => (
+                                <div className="list-item" key={pedido.IdPedido} onClick={() => handlePedidoClick(pedido)}>
+                                    <div className="list-item-content">
+                                        <p><strong>ID Pedido:</strong> {pedido.IdPedido}</p>
+                                        <p><strong>Fecha:</strong> {new Date(pedido.FechaPedido).toLocaleDateString()}</p>
+                                        <p><strong>Monto Total:</strong> {pedido.MontoTotal}</p>
+                                        <p><strong>Estado:</strong> {pedido.EstadoPedido}</p>
+                                    </div>
+                                    {selectedPedido && selectedPedido.IdPedido === pedido.IdPedido && (
+                                        <div className="details-container">
+                                            {detallesPedido.map(detalle => (
+                                                <div className="list-item-detail" key={detalle.IdProducto}>
+                                                    <div className="list-item-detail-content">
+                                                        <p><strong>Producto:</strong> {detalle.NombreProducto}</p>
+                                                        <p><strong>Descripción:</strong> {detalle.DescripcionProducto}</p>
+                                                        <p><strong>Marca:</strong> {detalle.NombreMarcaPro}</p>
+                                                        <p><strong>Cantidad:</strong> {detalle.Cantidad}</p>
+                                                        <p><strong>Precio:</strong> {detalle.PrecioProducto}</p>
+                                                    </div>
+                                                </div>
+                                            ))}
                                         </div>
-                                    ))}
+                                    )}
                                 </div>
-                            )}
+                            ))}
                         </div>
-                    ))}
-                </div>
+                    </>
+                )}
             </main>
         </div>
     );

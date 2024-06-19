@@ -17,6 +17,7 @@ function MascotaCliente() {
     const [tipoSexo, setTipoSexo] = useState('');
     const [nombreMascota, setNombreMascota] = useState('');
 
+    const esClienteContado = user && user.IdPersona === 37;
 
     useEffect(() => {
         // Fetch sexos
@@ -27,7 +28,6 @@ function MascotaCliente() {
                 setSexos(data);
             })
             .catch(error => console.error('Error fetching sexos:', error));
-
 
         // Fetch animales
         fetch('http://localhost:3001/animal')
@@ -83,15 +83,20 @@ function MascotaCliente() {
             });
     }
 
-    if (mascotas != 0) {
-        return (
-            <div className="home-screen">
-                <header className="header">
-                    <img src={fondoVet} alt="Veterinary Clinic" className="header-image" />
-                </header>
-                <NavCliente />
-                <main className="main-content">
-                    <h2>Lista de Mascotas</h2>
+    return (
+        <div className="home-screen">
+            <header className="header">
+                <img src={fondoVet} alt="Veterinary Clinic" className="header-image" />
+            </header>
+            <NavCliente />
+            <main className="main-content">
+                {esClienteContado && (
+                    <div className="warning">
+                        <p>Para agregar una nueva mascota, debe registrarse. La funcionalidad está deshabilitada para el cliente contado.</p>
+                    </div>
+                )}
+                <h2>Lista de Mascotas</h2>
+                {mascotas.length > 0 ? (
                     <div className="product-grid">
                         {mascotas.map(mascota => (
                             <div className="product-card" key={mascota.IdMascota}>
@@ -104,137 +109,72 @@ function MascotaCliente() {
                             </div>
                         ))}
                     </div>
+                ) : (
+                    <p>No hay mascotas registradas.</p>
+                )}
 
-                    <h2>Agregar mascota</h2>
-                    <form onSubmit={handleSubmit}>
-                        <label>
-                            Nombre Mascota:
-                            <input
-                                name="nombreMascota"
-                                type="text"
-                                value={nombreMascota}
-                                onChange={e => setNombreMascota(e.target.value)}
-                            />
-                        </label>
-                        <br />
-
-                        <label>
-                            Edad:
-                            <input
-                                name="edad"
-                                type="text"
-                                value={edad}
-                                onChange={e => setEdad(e.target.value)}
-                            />
-                        </label>
-                        <br />
-
-                        <label>
-                            Tipo Sexo:
-                            <select
-                                name="tipoSexo"
-                                value={tipoSexo}
-                                onChange={e => setTipoSexo(e.target.value)}
-                            >
-                                <option value="">Selecciona un sexo</option>
-                                {sexos.map(sexo => (
-                                    <option key={sexo.IdSexo} value={sexo.IdSexo}>{sexo.TipoSexo}</option>
-                                ))}
-                            </select>
-                        </label>
-                        <br />
-
-                        <label>
-                            Nombre Animal:
-                            <select
-                                name="nombreAnimal"
-                                value={nombreAnimal}
-                                onChange={e => setNombreAnimal(e.target.value)}
-                            >
-                                <option value="">Selecciona un animal</option>
-                                {animales.map(animal => (
-                                    <option key={animal.IdAnimal} value={animal.IdAnimal}>{animal.NombreAnimal}</option>
-                                ))}
-                            </select>
-                        </label>
-                        <br />
-                        <button className="form-button" type="submit">Agregar mascota</button>
-                    </form>
-                </main>
-            </div>
-        );
-    } else {
-        return (
-            <div className="home-screen">
-                <header className="header">
-                    <img src={fondoVet} alt="Veterinary Clinic" className="header-image" />
-                </header>
-                <NavCliente />
-                <main className="main-content">
-                    <h2>Lista de Mascotas</h2>
+                <h2>Agregar mascota</h2>
+                <form onSubmit={handleSubmit}>
+                    <label>
+                        Nombre Mascota:
+                        <input
+                            name="nombreMascota"
+                            type="text"
+                            value={nombreMascota}
+                            onChange={e => setNombreMascota(e.target.value)}
+                            disabled={esClienteContado}
+                        />
+                    </label>
                     <br />
-                    <h2>El cliente no cuenta con mascotas registradas en el sistema</h2>
-                    <h2>Agregar mascota</h2>
-                    <form onSubmit={handleSubmit}>
-                        <label>
-                            Nombre Mascota:
-                            <input
-                                name="nombreMascota"
-                                type="text"
-                                value={nombreMascota}
-                                onChange={e => setNombreMascota(e.target.value)}
-                            />
-                        </label>
-                        <br />
 
-                        <label>
-                            Edad:
-                            <input
-                                name="edad"
-                                type="text"
-                                value={edad}
-                                onChange={e => setEdad(e.target.value)}
-                            />
-                        </label>
-                        <br />
+                    <label>
+                        Edad:
+                        <input
+                            name="edad"
+                            type="text"
+                            value={edad}
+                            onChange={e => setEdad(e.target.value)}
+                            disabled={esClienteContado}
+                        />
+                    </label>
+                    <br />
 
-                        <label>
-                            Tipo Sexo:
-                            <select
-                                name="tipoSexo"
-                                value={tipoSexo}
-                                onChange={e => setTipoSexo(e.target.value)}
-                            >
-                                <option value="">Selecciona un sexo</option>
-                                {sexos.map(sexo => (
-                                    <option key={sexo.IdSexo} value={sexo.IdSexo}>{sexo.TipoSexo}</option>
-                                ))}
-                            </select>
-                        </label>
-                        <br />
+                    <label>
+                        Tipo Sexo:
+                        <select
+                            name="tipoSexo"
+                            value={tipoSexo}
+                            onChange={e => setTipoSexo(e.target.value)}
+                            disabled={esClienteContado}
+                        >
+                            <option value="">Selecciona un sexo</option>
+                            {sexos.map(sexo => (
+                                <option key={sexo.IdSexo} value={sexo.IdSexo}>{sexo.TipoSexo}</option>
+                            ))}
+                        </select>
+                    </label>
+                    <br />
 
-                        <label>
-                            Nombre Animal:
-                            <select
-                                name="nombreAnimal"
-                                value={nombreAnimal}
-                                onChange={e => setNombreAnimal(e.target.value)}
-                            >
-                                <option value="">Selecciona un animal</option>
-                                {animales.map(animal => (
-                                    <option key={animal.IdAnimal} value={animal.IdAnimal}>{animal.NombreAnimal}</option>
-                                ))}
-                            </select>
-                        </label>
-                        <br />
-                        <button className="form-button" type="submit">Agregar mascota</button>
-                    </form>
-                </main>
-            </div>
-
-        );
-    }
-
+                    <label>
+                        Nombre Animal:
+                        <select
+                            name="nombreAnimal"
+                            value={nombreAnimal}
+                            onChange={e => setNombreAnimal(e.target.value)}
+                            disabled={esClienteContado}
+                        >
+                            <option value="">Selecciona un animal</option>
+                            {animales.map(animal => (
+                                <option key={animal.IdAnimal} value={animal.IdAnimal}>{animal.NombreAnimal}</option>
+                            ))}
+                        </select>
+                    </label>
+                    <br />
+                    <button className="form-button" type="submit" disabled={esClienteContado}>Agregar mascota</button>
+                </form>
+            </main>
+        </div>
+    );
 }
 
 export default MascotaCliente;
