@@ -5,6 +5,7 @@ import NavGerente from './NavGerente';
 import { UserContext } from '../../context/UserContext';
 
 import CreateProduct from '../CRUDSPantallas/CreateProduct';
+import ModifyProduct from '../CRUDSPantallas/ModifyProduct';
 
 function ProductList() {
     const { user } = useContext(UserContext);
@@ -22,13 +23,15 @@ function ProductList() {
             .catch(error => console.error('Error fetching producto:', error));
     }, [])
 
+    console.log(productos);
+
     function handleDelete(id) {
         fetch(`http://localhost:3001/producto/${id}`, {
             method: 'DELETE',
         })
             .then(response => {
                 if (response.ok) {
-                    setProductos(productos.filter(productos => productos.IdProducto !== id));
+                    setProductos(productos.filter(producto => producto.IdProducto !== id));
                     window.location.reload();
                 } else {
                     alert('Error deleting producto');
@@ -55,6 +58,7 @@ function ProductList() {
             <main className="crud">
                 <h1>Gestión de Productos</h1>
                 <CreateProduct/>
+                <ModifyProduct/>
                 <h2>Listado de productos</h2>
                 <table>
                     <thead>
@@ -71,20 +75,19 @@ function ProductList() {
                         </tr>
                     </thead>
                     <tbody>
-                        {productos.map(productos => (
-                            <tr key={productos.IdProducto}>
-                                <td>{productos.IdProducto}</td>
-                                <td>{productos.NombreProducto}</td>
-                                <td>{productos.PrecioProducto}</td>
-                                <td>{productos.DescripcionProducto}</td>
-                                <td>{productos.Cantidad}</td>
-                                <td>{productos.NombreSucursal}</td>
-                                <td>{productos.TipoProducto}</td>
-                                <td>{productos.NombreMarcaPro}</td>
-                                <td>{productos.Dirrecion}</td>
+                        {productos.map(producto => (
+                            <tr key={producto.IdProducto}>
+                                <td>{producto.IdProducto}</td>
+                                <td>{producto.NombreProducto}</td>
+                                <td>{producto.PrecioProducto}</td>
+                                <td>{producto.DescripcionProducto}</td>
+                                <td>{producto.Cantidad}</td>
+                                <td>{producto.NombreSucursal}</td>
+                                <td>{producto.TipoProducto}</td>
+                                <td>{producto.NombreMarcaPro}</td>
+                                <td>{producto.Dirrecion}</td>
                                 <td>
-                                    <button onClick={() => handleDelete(productos.IdProducto)}>Eliminar</button>
-                                    <button onClick={() => handleMod(productos.IdProducto)}>Modificar</button>
+                                    <button onClick={() => handleDelete(producto.IdProducto)}>Eliminar</button>
                                 </td>
                             </tr>
                         ))}

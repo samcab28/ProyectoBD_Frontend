@@ -64,6 +64,7 @@ function ModifyVet(){
             campoModificar: campoModificar,
             valorNuevo: valorNuevo
         };
+        console.log("Perosna: ", usuario)
     
         fetch(`http://localhost:3001/persona/${usuario}`, {
             method: 'PUT',
